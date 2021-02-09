@@ -56,6 +56,9 @@ function List() {
           {(provided) => (
             <Grid
               className={classes.column}
+              container
+              direction="column"
+              justify="center"
               {...provided.droppableProps}
               ref={provided.innerRef}>
               {list.map((e, idx) => (
