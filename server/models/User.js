@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Board = require('./Board');
 
 const UserSchema = new Schema({
 	firstName: {
@@ -22,7 +23,7 @@ const UserSchema = new Schema({
 		type: String,
 		required: true
 	}
-});
+}, {collection: 'User'});
 
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
