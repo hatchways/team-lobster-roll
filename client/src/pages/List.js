@@ -1,41 +1,42 @@
 import { Typography } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Card from "@material-ui/core/Card";
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const useStyles = makeStyles({
   mainContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: '5rem',
-    backgroundColor: '#FFFFFF'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: "5rem",
+    backgroundColor: "#FFFFFF",
   },
-  ul: {
+  column: {
     margin: 0,
     padding: 0,
     backgroundColor: "#F4F6FF",
-    borderRadius: '8px',
-    width: '320px'
+    borderRadius: "8px",
+    width: "320px",
   },
-  li: {
-    listStyle: 'none',
-    margin: '1rem',
-    padding: '1rem',
-    backgroundColor: '#FFFFFF',
-    borderRadius: '8px',
-    boxShadow: '0px 0px 10px 1px rgba(0,0,0,0.1)',
-    fontWeight: 'bold'
+  card: {
+    listStyle: "none",
+    margin: "1rem",
+    padding: "1rem",
+    backgroundColor: "#FFFFFF",
+    borderRadius: "8px",
+    boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.1)",
+    fontWeight: "bold",
   },
   placeholder: {
-    listStyle: 'none',
-  }
+    listStyle: "none",
+  },
 });
 
-
 function List() {
-  const classes = useStyles()
+  const classes = useStyles();
   const examples = ["math", "english", "science", "history"];
   const [list, setList] = useState(examples);
 
@@ -49,28 +50,31 @@ function List() {
 
   return (
     <div className={classes.mainContainer}>
-      <Typography variant="h1">
-        List
-      </Typography>
+      <Typography variant="h1">List</Typography>
       <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="example">
+        <Droppable droppableId="column">
           {(provided) => (
-            <ul className={classes.ul} {...provided.droppableProps} ref={provided.innerRef}>
+            <Grid
+              className={classes.column}
+              {...provided.droppableProps}
+              ref={provided.innerRef}>
               {list.map((e, idx) => (
                 <Draggable key={e} draggableId={e} index={idx}>
                   {(provided) => (
-                    <li
-                      className={classes.li}
+                    <Card
+                      className={classes.card}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       ref={provided.innerRef}>
                       {e}
-                    </li>
+                    </Card>
                   )}
                 </Draggable>
               ))}
-              <span className={classes.placeholder}>{provided.placeholder}</span>
-            </ul>
+              <span className={classes.placeholder}>
+                {provided.placeholder}
+              </span>
+            </Grid>
           )}
         </Droppable>
       </DragDropContext>
