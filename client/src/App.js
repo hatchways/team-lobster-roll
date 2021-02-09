@@ -13,7 +13,7 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         <Route path="/list" component={List} />
-        {/* <Route path="/" component={LandingPage} /> */}
+        <Route path="/" component={LandingPage} />
       </BrowserRouter>
     </MuiThemeProvider>
   );
