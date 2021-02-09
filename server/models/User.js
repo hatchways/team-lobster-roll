@@ -18,10 +18,11 @@ const UserSchema = new Schema({
 		minlength: 5,
 		unique: true
 	},
-	pass: {
+	password: {
 		type: String,
 		required: true
 	}
-}, {collection: 'users'});
+});
 
-module.exports = User = mongoose.model('users', UserSchema);
+const User = mongoose.model('User', UserSchema);
+module.exports = User;
