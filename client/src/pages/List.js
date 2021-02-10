@@ -29,6 +29,10 @@ const useStyles = makeStyles({
     minHeight: "500px",
   },
   card: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
     listStyle: "none",
     margin: "1rem",
     padding: "1rem",
@@ -45,16 +49,27 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
   },
+  cardStatus: {
+    height: "0px",
+    width: "40px",
+    borderRadius: "8px",
+    padding: "5px",
+    margin: "0.5rem 0"
+  },
+  note: {
+    color: "#aaa"
+  }
 });
-
+const sampleArr1 = [{title:"art",status: "red", note: "March 14"}, {title:"philosophy",status: "red"}, {title:"cooking",status: "red"}, {title:"gym",status: "red"}]
+const sampleArr2 = [{title:"math", status: "green"}, {title:"english",status: "green"}, {title:"science",status: "green"}, {title:"history",status: "green"}]
 const columnTypes = {
   ToDo: {
     name: "To do",
-    items: ["math", "english", "science", "history"],
+    items: sampleArr1,
   },
   InProgress: {
     name: "In progress",
-    items: ["art", "philosophy", "cooking", "gym"],
+    items: sampleArr2,
   },
 };
 
@@ -121,14 +136,20 @@ function List() {
                       {...provided.droppableProps}
                       ref={provided.innerRef}>
                       {column.items.map((e, idx) => (
-                        <Draggable key={e} draggableId={e} index={idx}>
+                        <Draggable key={`${idx} ${e.title}`} draggableId={`${idx} ${e.title}`} index={idx}>
                           {(provided) => (
                             <Card
                               className={classes.card}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                               ref={provided.innerRef}>
-                              {e}
+                              <span className={classes.cardStatus} style={{"backgroundColor":e.status}}></span>
+                              <Typography variant="h6">
+                                {e.title}
+                              </Typography>
+                              {e.note 
+                                ? <Typography variant="body1" className={classes.note}>{e.note}</Typography> 
+                                : ""}
                             </Card>
                           )}
                         </Draggable>
