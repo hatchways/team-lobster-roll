@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import { theme } from "./themes/theme";
 import LandingPage from "./pages/Landing";
+import List from "./pages/List";
 import "./App.css";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" exact component={LandingPage} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={SignUp} />
+        <Route path="/list" component={List} />
       </BrowserRouter>
     </MuiThemeProvider>
   );
