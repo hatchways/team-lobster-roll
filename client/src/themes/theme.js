@@ -7,7 +7,7 @@ export const theme = createMuiTheme({
     h1: {
       fontSize: 18,
       fontWeight: 600,
-      marginBottom: "25px"
+      marginBottom: 25
     },
     h5:{
       fontSize:12,
