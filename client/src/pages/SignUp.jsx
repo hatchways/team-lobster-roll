@@ -37,6 +37,7 @@ function SignUp() {
               />
               <TextField 
                 className={classes.textField}
+                type="password"
                 variant="outlined"
                 label="Password"
                 value={password}

@@ -38,6 +38,7 @@ function Login() {
               <TextField 
                 className={classes.textField}
                 variant="outlined"
+                type="password"
                 label="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
