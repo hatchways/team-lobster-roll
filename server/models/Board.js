@@ -10,7 +10,7 @@ const BoardSchema = new Schema({
 	columns: [Column.schema]
 }, {collection: 'Board'});
 
-// Creates a new instance of the Board model and saves it in the "Board" collection
+// creates a new instance of the Board model and returns the saved instance
 BoardSchema.statics.createNewBoard = async function(name) {
 	const inProgressCol = new Column({
 		name: 'In Progress'
@@ -29,6 +29,23 @@ BoardSchema.statics.createNewBoard = async function(name) {
 	await board.save();
 	
 	return board;
+};
+
+// deletes a Board in the db by its _id
+BoardSchema.statics.deleteBoard = function(boardId) {
+	this.deleteOne({ _id: mongoose.Types.ObjectId(boardId)}).exec();
+};
+
+// adds a Column model into the Board's columns array
+BoardSchema.methods.addNewColumn = function(column) {
+	this.columns.push(column);
+	await this.save();
+};
+
+// removes a Column model by _id from the Board's columns array
+BoardSchema.methods.removeColumn = function(columnId) {
+	this.columns.pull({ _id: columnId });
+	await this.save();
 };
 
 const Board = mongoose.model('Board', BoardSchema);
