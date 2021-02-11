@@ -74,7 +74,7 @@ BoardSchema.methods.moveCard = async function (
   const fromCol = Column.findOne({
     _id: mongoose.Types.ObjectId(fromColumnId),
   });
-  const toCol = Column.findOne({ _id: mongoose.Types.ObjectId(columnId) });
+  const toCol = Column.findOne({ _id: mongoose.Types.ObjectId(toColumnId) });
   await Promise.all([fromCol, toCol]);
   await Promise.all([fromCol.removeCard(cardId), toCol.addCard(cardId)]);
 };
