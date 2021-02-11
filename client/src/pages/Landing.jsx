@@ -3,6 +3,16 @@ import {Link} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core';
 
 const useStyles = makeStyles({
+  '@keyframes titleMove':{
+    from: {
+      transform: "translate(50px,-20px)"
+    }
+  },
+  '@keyframes sloganMove':{
+    from: {
+      transform: "translate(-50px, 20px)"
+    }
+  },
   main:{
     width: "100%",
     height: "100vh",
@@ -14,7 +24,12 @@ const useStyles = makeStyles({
   },
   title:{
     fontSize: "72px",
-    marginBottom: "-30px"
+    marginBottom: "-30px",
+    animation: "$titleMove 2s ease"
+    
+  },
+  slogan:{
+    animation: "$sloganMove 2s ease"
   },
   link:{
     marginRight: "20px",
