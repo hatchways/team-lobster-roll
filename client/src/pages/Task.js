@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import { Typography } from "@material-ui/core";
 
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Draggable } from "react-beautiful-dnd";
 
 const useStyles = makeStyles({
   card: {
@@ -35,10 +35,7 @@ function Task(props) {
   const classes = useStyles(props);
   const { task, idx } = props;
   return (
-    <Draggable
-      key={`${idx} ${task.title}`}
-      draggableId={`${idx} ${task.title}`}
-      index={idx}>
+    <Draggable draggableId={task.id} index={idx}>
       {(provided) => (
         <Card
           className={classes.card}

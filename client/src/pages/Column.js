@@ -2,10 +2,9 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import MoreHoriz from "@material-ui/icons/MoreHoriz";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 import Task from "./Task";
 
 const useStyles = makeStyles({
@@ -64,35 +63,41 @@ const useStyles = makeStyles({
 });
 
 function Column(props) {
-  const { id, column } = props;
+  const { column, tasks, idx } = props;
   const classes = useStyles();
 
   return (
-    <>
-      <Droppable droppableId={id}>
-        {(provided) => (
-          <Grid
-            className={classes.column}
-            container
-            direction="column"
-            justify="flex-start"
-            {...provided.droppableProps}
-            ref={provided.innerRef}>
-            <div className={classes.cardHeader}>
-              <Typography variant="h5">{column.name}</Typography>
-              <MoreHoriz className={classes.moreHoriz} />
-            </div>
-            {column.items.map((task, idx) => (
-              <Task task={task} idx={idx} />
-            ))}
-            <span className={classes.placeholder}>{provided.placeholder}</span>
-            <Button variant="contained" className={classes.addButton}>
-              <Typography variant="body1"> Add a card</Typography>
-            </Button>
-          </Grid>
-        )}
-      </Droppable>
-    </>
+    <Draggable draggableId={column.id} index={idx}>
+      {(provided) => (
+        <Grid
+          className={classes.column}
+          container
+          direction="column"
+          justify="flex-start"
+          {...provided.draggableProps}
+          ref={provided.innerRef}>
+          <div className={classes.cardHeader} {...provided.dragHandleProps}>
+            <Typography variant="h5">{column.name}</Typography>
+            <MoreHoriz className={classes.moreHoriz} />
+          </div>
+          <Droppable droppableId={column.id} type="task">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {tasks.map((task, idx) => (
+                  <Task key={task.id} task={task} idx={idx} />
+                ))}
+                <span className={classes.placeholder}>
+                  {provided.placeholder}
+                </span>
+                <Button variant="contained" className={classes.addButton}>
+                  <Typography variant="body1"> Add a card</Typography>
+                </Button>
+              </div>
+            )}
+          </Droppable>
+        </Grid>
+      )}
+    </Draggable>
   );
 }
 

@@ -20,81 +20,132 @@ const useStyles = makeStyles({
     alignItems: "flex-start",
   },
 });
-const sampleArr1 = [
-  { title: "art", status: "red", note: "March 14" },
-  { title: "philosophy", status: "red" },
-  { title: "cooking", status: "red" },
-  { title: "gym", status: "red" },
-];
-const sampleArr2 = [
-  { title: "math", status: "green" },
-  { title: "english", status: "green" },
-  { title: "science", status: "green" },
-  { title: "history", status: "green" },
-];
+
+const taskTypes = {
+  "task-1": { id: "task-1", title: "art", status: "red", note: "March 14" },
+  "task-2": { id: "task-2", title: "philosophy", status: "red" },
+  "task-3": { id: "task-3", title: "cooking", status: "red" },
+  "task-4": { id: "task-4", title: "gym", status: "red" },
+  "task-5": { id: "task-5", title: "math", status: "green" },
+  "task-6": { id: "task-6", title: "english", status: "green" },
+  "task-7": { id: "task-7", title: "science", status: "green" },
+  "task-8": { id: "task-8", title: "history", status: "green" },
+};
+
 const columnTypes = {
-  ToDo: {
+  "col-1": {
+    id: "col-1",
     name: "To do",
-    items: sampleArr1,
+    taskIds: [...Object.keys(taskTypes)],
   },
-  InProgress: {
+  "col-2": {
+    id: "col-2",
     name: "In progress",
-    items: sampleArr2,
+    taskIds: [],
   },
+};
+
+const initialData = {
+  columns: columnTypes,
+  tasks: taskTypes,
+  columnOrder: [...Object.keys(columnTypes)],
 };
 
 function List() {
   const classes = useStyles();
-  const [columns, setColumns] = useState(columnTypes);
+  const [data, setData] = useState(initialData);
 
-  function handleOnDragEnd(result, columns, setColumns) {
-    if (!result.destination) return;
-    const { source, destination } = result;
-
-    if (source.droppableId !== destination.droppableId) {
-      const sourceColumn = columns[source.droppableId];
-      const destinationColumn = columns[destination.droppableId];
-      const sourceItems = [...sourceColumn.items];
-      const destinationItems = [...destinationColumn.items];
-      const [removed] = sourceItems.splice(source.index, 1);
-      destinationItems.splice(destination.index, 0, removed);
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...sourceColumn,
-          items: sourceItems,
-        },
-        [destination.droppableId]: {
-          ...destinationColumn,
-          items: destinationItems,
-        },
-      });
-    } else {
-      const column = columns[source.droppableId];
-      const copiedItems = [...column.items];
-      const [removed] = copiedItems.splice(source.index, 1);
-      copiedItems.splice(destination.index, 0, removed);
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...column,
-          items: copiedItems,
-        },
-      });
+  function handleOnDragEnd(result) {
+    const { source, destination, draggableId, type } = result;
+    if (!destination) {
+      return;
     }
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    if (type === "column") {
+      const newColumnOrder = [...data.columnOrder];
+      newColumnOrder.splice(source.index, 1);
+      newColumnOrder.splice(destination.index, 0, draggableId);
+      const newState = {
+        ...data,
+        columnOrder: newColumnOrder,
+      };
+      setData(newState);
+      return;
+    }
+
+    const start = data.columns[source.droppableId];
+    const finish = data.columns[destination.droppableId];
+
+    if (start === finish) {
+      const newTaskIds = [...start.taskIds];
+      newTaskIds.splice(source.index, 1);
+      newTaskIds.splice(destination.index, 0, draggableId);
+
+      const newColumn = { ...start, taskIds: newTaskIds };
+      const newState = {
+        ...data,
+        columns: {
+          ...data.columns,
+          [newColumn.id]: newColumn,
+        },
+      };
+
+      setData(newState);
+      return;
+    }
+    const startTaskIds = [...start.taskIds];
+    startTaskIds.splice(source.index, 1);
+    const newStart = {
+      ...start,
+      taskIds: startTaskIds,
+    };
+    const finishTaskIds = [...finish.taskIds];
+    finishTaskIds.splice(destination.index, 0, draggableId);
+    const newFinish = {
+      ...finish,
+      taskIds: finishTaskIds,
+    };
+    const newState = {
+      ...data,
+      columns: {
+        ...data.columns,
+        [newStart.id]: newStart,
+        [newFinish.id]: newFinish,
+      },
+    };
+    setData(newState);
   }
 
   return (
-    <div className={classes.mainContainer}>
-      <DragDropContext
-        onDragEnd={(result) => handleOnDragEnd(result, columns, setColumns)}>
-        <div className={classes.columnsContainer}>
-          {Object.entries(columns).map(([id, column]) => {
-            return <Column id={id} column={column} />;
-          })}
-        </div>
-      </DragDropContext>
-    </div>
+    <DragDropContext onDragEnd={(result) => handleOnDragEnd(result)}>
+      <Droppable droppableId="all-columns" direction="horizontal" type="column">
+        {(provided) => (
+          <div
+            className={classes.columnsContainer}
+            {...provided.droppableProps}
+            ref={provided.innerRef}>
+            {data.columnOrder.map((columnId, idx) => {
+              const column = data.columns[columnId];
+              const tasks = column.taskIds.map((taskId) => data.tasks[taskId]);
+              return (
+                <Column
+                  key={column.id}
+                  column={column}
+                  tasks={tasks}
+                  idx={idx}
+                />
+              );
+            })}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 }
 
