@@ -1,11 +1,11 @@
 import React from "react";
 import { MuiThemeProvider } from "@material-ui/core";
 import { BrowserRouter, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
+import Login from "./pages/Login.jsx";
+import SignUp from "./pages/SignUp.jsx";
 import { theme } from "./themes/theme";
-import LandingPage from "./pages/Landing";
-import Board from './pages/Board'
+import LandingPage from "./pages/Landing.jsx";
+import Board from "./pages/Board";
 
 import "./App.css";
 
