@@ -6,6 +6,7 @@ import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import MoreHoriz from "@material-ui/icons/MoreHoriz";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import Task from "./Task";
 
 const useStyles = makeStyles({
   column: {
@@ -81,31 +82,8 @@ function Column(props) {
               <Typography variant="h5">{column.name}</Typography>
               <MoreHoriz className={classes.moreHoriz} />
             </div>
-            {column.items.map((e, idx) => (
-              <Draggable
-                key={`${idx} ${e.title}`}
-                draggableId={`${idx} ${e.title}`}
-                index={idx}>
-                {(provided) => (
-                  <Card
-                    className={classes.card}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}>
-                    <span
-                      className={classes.cardStatus}
-                      style={{ backgroundColor: e.status }}></span>
-                    <Typography variant="h6">{e.title}</Typography>
-                    {e.note ? (
-                      <Typography variant="body1" className={classes.note}>
-                        {e.note}
-                      </Typography>
-                    ) : (
-                      ""
-                    )}
-                  </Card>
-                )}
-              </Draggable>
+            {column.items.map((task, idx) => (
+              <Task task={task} idx={idx} />
             ))}
             <span className={classes.placeholder}>{provided.placeholder}</span>
             <Button variant="contained" className={classes.addButton}>
