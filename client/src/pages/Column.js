@@ -22,12 +22,16 @@ const useStyles = makeStyles({
   placeholder: {
     listStyle: "none",
   },
-  cardHeader: {
+  columnHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    margin: "1.5rem",
-    marginBottom: "1rem",
+    margin: ".75rem 1.5rem",
+    marginBottom: "0.25rem",
+  },
+  columnTitle: {
+    fontSize: "1.3rem",
+    fontWeight: "500",
   },
   lightGray: {
     color: "#D5DBF7",
@@ -46,10 +50,6 @@ const useStyles = makeStyles({
       backgroundColor: "#759CFC",
     },
   },
-  droppableArea: {
-    minHeight: "400px",
-    height: "100%",
-  },
 });
 
 function Column(props) {
@@ -66,18 +66,17 @@ function Column(props) {
           justify="flex-start"
           {...provided.draggableProps}
           ref={provided.innerRef}>
-          <div className={classes.cardHeader} {...provided.dragHandleProps}>
-            <Typography variant="h5">{column.name}</Typography>
+          <div className={classes.columnHeader} {...provided.dragHandleProps}>
+            <Typography variant="h5" className={classes.columnTitle}>
+              {column.name}
+            </Typography>
             <IconButton className={classes.lightGray}>
               <MoreHoriz />
             </IconButton>
           </div>
           <Droppable droppableId={column.id} type="task">
             {(provided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className={classes.droppableArea}>
+              <div {...provided.droppableProps} ref={provided.innerRef}>
                 {tasks.map((task, idx) => (
                   <Task key={task.id} task={task} idx={idx} />
                 ))}

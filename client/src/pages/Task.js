@@ -20,7 +20,6 @@ const useStyles = makeStyles({
     fontWeight: "bold",
     width: "290px",
     minHeight: "60px",
-    height: "100%",
     boxSizing: "border-box",
     "&:hover": {
       border: "2px solid #80A3FB",
