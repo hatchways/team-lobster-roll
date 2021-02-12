@@ -11,9 +11,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
   title: {
     flexGrow: 1,
   },
@@ -28,15 +25,12 @@ function Board() {
     <div className={classes.root}>
       <AppBar position="static" className={classes.blue}>
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"></IconButton>
           <Typography variant="h6" className={classes.title}>
             My School Board
           </Typography>
-          <MenuIcon />
+          <IconButton color="inherit">
+            <MenuIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <List />

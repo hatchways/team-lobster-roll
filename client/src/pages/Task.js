@@ -39,6 +39,24 @@ const useStyles = makeStyles({
   note: {
     color: "#aaa",
   },
+  red: {
+    backgroundColor: "#FF5D48",
+  },
+  green: {
+    backgroundColor: "#5ACD76",
+  },
+  blue: {
+    backgroundColor: "#59B0FF",
+  },
+  yellow: {
+    backgroundColor: "#EDAB1D",
+  },
+  purple: {
+    backgroundColor: "#D460F7",
+  },
+  noColor: {
+    backgroundColor: "transparent",
+  },
 });
 
 function Task(props) {
@@ -53,8 +71,9 @@ function Task(props) {
           {...provided.dragHandleProps}
           ref={provided.innerRef}>
           <span
-            className={classes.cardStatus}
-            style={{ backgroundColor: task.status }}></span>
+            className={`${classes.cardStatus} ${
+              task.status ? classes[task.status] : classes.noColor
+            }`}></span>
           <Typography variant="h6">{task.title}</Typography>
           {task.note ? (
             <Typography variant="body1" className={classes.note}>

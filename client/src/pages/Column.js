@@ -2,6 +2,7 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import MoreHoriz from "@material-ui/icons/MoreHoriz";
 import { Droppable, Draggable } from "react-beautiful-dnd";
@@ -14,7 +15,6 @@ const useStyles = makeStyles({
     backgroundColor: "#F4F6FF",
     borderRadius: "8px",
     width: "320px",
-    minHeight: "500px",
     "&:hover": {
       boxShadow: "0px 0px 10px 1px rgba(208,213,223,0.8)",
     },
@@ -29,7 +29,7 @@ const useStyles = makeStyles({
     margin: "1.5rem",
     marginBottom: "1rem",
   },
-  moreHoriz: {
+  lightGray: {
     color: "#D5DBF7",
   },
   addButton: {
@@ -68,7 +68,9 @@ function Column(props) {
           ref={provided.innerRef}>
           <div className={classes.cardHeader} {...provided.dragHandleProps}>
             <Typography variant="h5">{column.name}</Typography>
-            <MoreHoriz className={classes.moreHoriz} />
+            <IconButton className={classes.lightGray}>
+              <MoreHoriz />
+            </IconButton>
           </div>
           <Droppable droppableId={column.id} type="task">
             {(provided) => (
