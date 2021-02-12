@@ -15,19 +15,9 @@ const useStyles = makeStyles({
     borderRadius: "8px",
     width: "320px",
     minHeight: "500px",
-  },
-  card: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    listStyle: "none",
-    margin: "0.5rem 1rem",
-    padding: "1rem",
-    backgroundColor: "#FFFFFF",
-    borderRadius: "8px",
-    boxShadow: "0px 0px 10px 1px rgba(208,213,223,0.4)",
-    fontWeight: "bold",
+    "&:hover": {
+      boxShadow: "0px 0px 10px 1px rgba(208,213,223,0.8)",
+    },
   },
   placeholder: {
     listStyle: "none",
@@ -37,17 +27,7 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
     margin: "1.5rem",
-    marginBottom: "0.5rem",
-  },
-  cardStatus: {
-    height: "0px",
-    width: "40px",
-    borderRadius: "8px",
-    padding: "5px",
-    margin: "0.5rem 0",
-  },
-  note: {
-    color: "#aaa",
+    marginBottom: "1rem",
   },
   moreHoriz: {
     color: "#D5DBF7",
@@ -59,6 +39,16 @@ const useStyles = makeStyles({
     boxShadow: "0px 0px 0px rgba(0,0,0,0)",
     margin: "1.5rem",
     borderRadius: "8px",
+    "&:hover": {
+      backgroundColor: "#759CFC",
+    },
+    "&:active": {
+      backgroundColor: "#759CFC",
+    },
+  },
+  droppableArea: {
+    minHeight: "400px",
+    height: "100%",
   },
 });
 
@@ -82,19 +72,22 @@ function Column(props) {
           </div>
           <Droppable droppableId={column.id} type="task">
             {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className={classes.droppableArea}>
                 {tasks.map((task, idx) => (
                   <Task key={task.id} task={task} idx={idx} />
                 ))}
                 <span className={classes.placeholder}>
                   {provided.placeholder}
                 </span>
-                <Button variant="contained" className={classes.addButton}>
-                  <Typography variant="body1"> Add a card</Typography>
-                </Button>
               </div>
             )}
           </Droppable>
+          <Button variant="contained" className={classes.addButton}>
+            <Typography variant="body1"> Add a card</Typography>
+          </Button>
         </Grid>
       )}
     </Draggable>

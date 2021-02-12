@@ -18,6 +18,16 @@ const useStyles = makeStyles({
     borderRadius: "8px",
     boxShadow: "0px 0px 10px 1px rgba(208,213,223,0.4)",
     fontWeight: "bold",
+    width: "290px",
+    minHeight: "60px",
+    height: "100%",
+    boxSizing: "border-box",
+    "&:hover": {
+      border: "2px solid #80A3FB",
+    },
+    "&:active": {
+      boxShadow: "0px 0px 10px 1px rgba(128,163,251,0.8)",
+    },
   },
   cardStatus: {
     height: "0px",
