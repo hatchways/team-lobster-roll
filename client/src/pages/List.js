@@ -43,6 +43,16 @@ const columnTypes = {
     name: "In progress",
     taskIds: [],
   },
+  "col-3": {
+    id: "col-3",
+    name: "Review",
+    taskIds: [],
+  },
+  "col-4": {
+    id: "col-4",
+    name: "Completed",
+    taskIds: [],
+  },
 };
 
 const initialData = {
