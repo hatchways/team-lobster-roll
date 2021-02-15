@@ -18,6 +18,5 @@ export default function buildCalendar(value) {
         })
     );
   }
-  console.log(calendar);
   return calendar;
 }

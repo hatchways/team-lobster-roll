@@ -1,35 +1,17 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
+import { DragDropContext } from "react-beautiful-dnd";
 import Container from "@material-ui/core/Container";
-import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 import buildCalendar from "../utils/buildCalendar";
+import CalendarCell from "./CalendarCell";
 
 const useStyles = makeStyles({
   h1: {
     textAlign: "center",
     margin: "20px",
   },
-
-  p: {
-    margin: "0",
-    fontWeight: "bold",
-    fontSize: "14px",
-  },
-
-  cardCount: {
-    display: "inline-block",
-    margin: "0px 5px 0px 5px",
-    fontSize: "12px",
-    color: "lightsteelblue",
-  },
-
-  dayNumber: {
-    display: "inline-block",
-    fontSize: "16px",
-  },
-
   day: {
     display: "inline-block",
     position: "relative",
@@ -43,69 +25,24 @@ const useStyles = makeStyles({
     fontWeight: "bold",
     color: "gray",
   },
-
   names: {
     textAlign: "center",
     backgroundColor: "white",
     height: "40px",
     border: "none",
   },
-
-  card: {
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    listStyle: "none",
-    margin: "5px 0px 5px 0px",
-    padding: "2px 10px 0px 10px",
-    backgroundColor: "#FFFFFF",
-    borderRadius: "8px",
-    boxShadow: "0px 0px 10px 1px rgba(208,213,223,0.4)",
-
-    width: "100%",
-    height: "40px",
-    boxSizing: "border-box",
-    "&:hover": {
-      border: "2px solid #80A3FB",
-    },
-    "&:active": {
-      boxShadow: "0px 0px 10px 1px rgba(128,163,251,0.8)",
-    },
-  },
-
-  cardStatus: {
-    height: "0px",
-    width: "30px",
-    borderRadius: "8px",
-    padding: "3px",
-    margin: "0",
-  },
-
-  note: {
-    color: "#aaa",
-  },
-  red: {
-    backgroundColor: "#FF5D48",
-  },
-  green: {
-    backgroundColor: "#5ACD76",
-  },
-  blue: {
-    backgroundColor: "#59B0FF",
-  },
-  yellow: {
-    backgroundColor: "#EDAB1D",
-  },
-  purple: {
-    backgroundColor: "#D460F7",
-  },
-  noColor: {
-    backgroundColor: "transparent",
-  },
 });
 
+const taskTypes = {
+  "task-1": { id: "task-1", title: "art", status: "red", note: "March 14" },
+  "task-2": { id: "task-2", title: "philosophy", status: "red" },
+  "task-3": { id: "task-3", title: "cooking", status: "red" },
+  "task-4": { id: "task-4", title: "gym", status: "red" },
+  "task-5": { id: "task-5", title: "math", status: "green" },
+  "task-6": { id: "task-6", title: "english", status: "green" },
+  "task-7": { id: "task-7", title: "science", status: "green" },
+  "task-8": { id: "task-8", title: "history", status: "green" },
+};
 
 // Calendar component
 function Calendar() {
@@ -117,6 +54,8 @@ function Calendar() {
   }, [value]);
 
   const classes = useStyles();
+
+  const onDragEnd = () => {};
 
   return (
     <div>
@@ -134,29 +73,13 @@ function Calendar() {
         <Box className={`${classes.day} ${classes.names}`}>Sat</Box>
       </Container>
 
-      <Container>
-        {calendar.map((week) => (
-          <div>
-            {week.map((day) => (
-              <Box className={classes.day}>
-                <span>
-                  <p className={`${classes.p} ${classes.dayNumber}`}>
-                    {day.day.format("D")}
-                  </p>
-                  <p className={`${classes.p} ${classes.cardCount}`}>1 Card</p>
-                </span>
-
-                <Card className={classes.card}>
-                  <span
-                    className={`${classes.cardStatus} ${classes.red}`}
-                  ></span>
-                  <p className={classes.p}>Midterm Exam</p>
-                </Card>
-              </Box>
-            ))}
-          </div>
-        ))}
-      </Container>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Container>
+          {calendar.map((week) =>
+            week.map((day) => <CalendarCell key={day.id} day={day} />)
+          )}
+        </Container>
+      </DragDropContext>
     </div>
   );
 }
