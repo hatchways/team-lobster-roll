@@ -43,6 +43,11 @@ BoardSchema.statics.deleteBoard = function (boardId) {
   this.deleteOne({ _id: mongoose.Types.ObjectId(boardId) }).exec();
 };
 
+// gets a Board by _id
+BoardSchema.statics.findBoard = function (boardId) {
+  return this.find({ _id: mongoose.Types.ObjectId(boardId) });
+};
+
 // adds a Column model into the Board's columns array
 BoardSchema.methods.addNewColumn = async function (columnName) {
   const newColumn = await Column.createNewColumn(columnName);

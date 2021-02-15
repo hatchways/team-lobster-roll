@@ -4,37 +4,25 @@ const Board = require("../models/Board");
 const Column = require("../models/Column");
 const Card = require("../models/Card");
 
+// GET
+router.get("/:id", async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const foundBoard = await Board.findBoard(id);
+    res.status(200).json({ data: foundBoard });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 // CREATE
-router.post("/board", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     if (req.body) {
-      const data = req.body.data;
-      const { type, title } = data;
-      /* data obj should look like:
-       {
-        type: enum COLUMN / TASK ,
-        title: str,
-        description?: str
-       } 
-      */
-      if (!type || !title) {
-        res.status(400).send("Missing parameters");
-      } else {
-        //TODO: create new Col or Task
-        if (type === "column") {
-          const newColumn = await Column.createNewColumn({
-            name: title,
-            cards: [],
-          });
-          res.status(200).json(newColumn);
-        } else {
-          const newCard = await Card.createNewCard({
-            name: title,
-            //   description: description
-          });
-          res.status(200).json(newCard);
-        }
-      }
+      const data = req.body;
+      const { title } = data;
+      const newBoard = await Board.createNewBoard(title);
+      res.status(201).json({ data: newBoard });
     }
   } catch (err) {
     console.error(err);
@@ -42,38 +30,34 @@ router.post("/board", async (req, res, next) => {
 });
 
 // EDIT
-router.patch("/board/:id", async (req, res, next) => {
+router.patch("/:id", async (req, res, next) => {
   try {
     if (req.body) {
-      const data = req.body.data;
-      const { type, title, description } = data;
+      const data = req.body;
+      const { title } = data;
+      const newData = {
+        name: title,
+      };
       const { id } = req.params;
-      /* data obj should look like:
-       {
-        type: enum COLUMN / TASK ,
-        title: str,
-        description?: str
-       } 
-      */
-      if (!type || !title) {
-        res.status(400).send("Missing parameters");
-      } else {
-        //TODO: edit select Col or Task
-        if (type === "column") {
-          const toUpdateColumn = await Column.findById(id);
-          if (toUpdateColumn) {
-            const updated = await toUpdateColumn.update({ title });
-          }
-        } else {
-          const toUpdateCard = await Card.findById(id);
-          const updated = await toUpdateCard.update({
-            title,
-            // description,
-          });
+      const updatedBoard = await Board.findByIdAndUpdate(
+        id,
+        newData,
+        (err, board) => {
+          res.send(board);
         }
-        res.status(200).send(`success: ${title} ${type} created!`);
-      }
+      );
     }
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+// DELETE
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deletedBoard = await Board.deleteBoard(id);
+    res.status(200).json({ msg: `Board ${id} deleted successfully` });
   } catch (err) {
     console.error(err);
   }

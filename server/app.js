@@ -6,13 +6,14 @@ const logger = require("morgan");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
+const boardRouter = require("./routes/board");
 
 const { json, urlencoded } = express;
 
 var app = express();
 
 // database setup
-require('./db')();
+require("./db")();
 
 app.use(logger("dev"));
 app.use(json());
@@ -22,14 +23,15 @@ app.use(express.static(join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
+app.use("/api/board", boardRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
