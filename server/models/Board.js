@@ -44,8 +44,34 @@ BoardSchema.statics.deleteBoard = function (boardId) {
 };
 
 // gets a Board by _id
-BoardSchema.statics.findBoard = function (boardId) {
-  return this.find({ _id: mongoose.Types.ObjectId(boardId) });
+BoardSchema.statics.findBoard = async function (boardId) {
+  const foundBoard = await this.findById(boardId);
+  const foundColumns = {};
+  const foundCards = {};
+  for (const columnId of foundBoard.columns) {
+    const column = await Column.findColumn(columnId);
+    foundColumns[columnId] = column;
+    foundCards[columnId] = [];
+  }
+  for (const columnId in foundColumns) {
+    const cards = foundColumns[columnId].cards;
+    for (const cardId of cards) {
+      const foundCard = await Card.findCard(cardId);
+      foundCards[columnId].push(foundCard);
+    }
+  }
+  for (const columnId in foundColumns) {
+    foundColumns[columnId].cards = foundCards[columnId];
+  }
+
+  const data = {
+    _v: foundBoard._v,
+    _id: foundBoard._id,
+    name: foundBoard.name,
+    columns: foundColumns,
+  };
+
+  return data;
 };
 
 // adds a Column model into the Board's columns array
@@ -63,7 +89,7 @@ BoardSchema.methods.removeColumn = async function (columnId) {
 
 // creates a new Card and adds it to specific Column by its _id
 BoardSchema.methods.addNewCardToColumn = async function (cardName, columnId) {
-  const newCard = await Card.createNewCard();
+  const newCard = await Card.createNewCard(cardName);
   const column = await Column.findOne({
     _id: mongoose.Types.ObjectId(columnId),
   });
