@@ -43,7 +43,7 @@ function Calendar() {
 
   const classes = useStyles();
 
-  const onDragEnd = result => {};
+  const onDragEnd = (result) => {};
 
   return (
     <div>

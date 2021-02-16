@@ -44,23 +44,23 @@ const useStyles = makeStyles({
   },
 });
 
-function CalendarCard({card, index}) {
+function CalendarCard({ card, index }) {
   const classes = useStyles();
   return (
-		<Draggable draggableId={card.id} index={index}>
-      {provided => (
-				<RootRef rootRef={provided.innerRef}>
-					<Card
-						className={classes.card} 
-						{...provided.draggableProps}
-						{...provided.dragHandleProps}
-					>
-						<span className={`${classes.cardStatus} ${classes.red}`}></span>
-						<p className={classes.p}>{card.title}</p>
-					</Card>
-				</RootRef>
-			)}
-		</Draggable>
+    <Draggable draggableId={card.id} index={index}>
+      {(provided) => (
+        <RootRef rootRef={provided.innerRef}>
+          <Card
+            className={classes.card}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <span className={`${classes.cardStatus} ${classes.red}`}></span>
+            <p className={classes.p}>{card.title}</p>
+          </Card>
+        </RootRef>
+      )}
+    </Draggable>
   );
 }
 
