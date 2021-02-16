@@ -1,27 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
 const User = require("../models/User");
 
-router.post("/:email/:password", (req, res, next) => {
-  const { email, password } = req.params;
+router.post("/", (req, res, next) => {
+  const { email, password } = req.body;
   let epCheck = false;
-  if (email.includes("@") && password.length > 6 && (epCheck = true)) {
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-      const addUser = async () => {
-        const user1 = new User({
-          email: email,
-          password: hash,
-        });
-        await user1
-          .save()
-          .then(() => res.status(200).send({ msg: "Account created!." }))
-          .catch((err) => {
-            res.status(401).send({ msg: err });
-          });
-      };
-      addUser();
+  if (email.includes("@") && password.length > 6) {
+    epCheck = true;
+    bcrypt.hash(password, 10, (err, hash) => {
+      const user = new User({
+        email: email,
+        password: hash,
+      });
+      user
+        .save()
+        .then(() => res.status(200).send({ msg: "Account created!." }))
+        .catch((err) => res.status(401).send("That email is not available."));
     });
   }
   !epCheck &&
