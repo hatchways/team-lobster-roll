@@ -1,6 +1,7 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import Card from "@material-ui/core/Card";
+import RootRef from "@material-ui/core/RootRef";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -17,12 +18,12 @@ const useStyles = makeStyles({
     alignItems: "flex-start",
     listStyle: "none",
     margin: "5px 0px 5px 0px",
-    padding: "2px 10px 0px 10px",
+    padding: "5px 10px 5px 10px",
     backgroundColor: "#FFFFFF",
     borderRadius: "8px",
     boxShadow: "0px 0px 10px 1px rgba(208,213,223,0.4)",
     width: "100%",
-    height: "40px",
+    minHeight: "40px",
     boxSizing: "border-box",
     "&:hover": {
       border: "2px solid #80A3FB",
@@ -43,16 +44,23 @@ const useStyles = makeStyles({
   },
 });
 
-// Calendar component
-function CalendarCard() {
+function CalendarCard({card, index}) {
   const classes = useStyles();
   return (
-    <React.Fragment>
-      <Card className={classes.card}>
-        <span className={`${classes.cardStatus} ${classes.red}`}></span>
-        <p className={classes.p}>Midterm Exam</p>
-      </Card>
-    </React.Fragment>
+		<Draggable draggableId={card.id} index={index}>
+      {provided => (
+				<RootRef rootRef={provided.innerRef}>
+					<Card
+						className={classes.card} 
+						{...provided.draggableProps}
+						{...provided.dragHandleProps}
+					>
+						<span className={`${classes.cardStatus} ${classes.red}`}></span>
+						<p className={classes.p}>{card.title}</p>
+					</Card>
+				</RootRef>
+			)}
+		</Draggable>
   );
 }
 

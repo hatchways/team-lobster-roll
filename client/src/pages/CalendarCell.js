@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import moment from 'moment';
 import { Droppable } from "react-beautiful-dnd";
 import Box from "@material-ui/core/Box";
 import RootRef from "@material-ui/core/RootRef";
@@ -36,13 +37,26 @@ const useStyles = makeStyles({
   },
 });
 
-// Calendar component
+// data from db and fetched from global state
+const cards = [
+	{ id: "task-1", title: "Math Exam", status: "red", deadline: "2021-02-22" },
+  { id: "task-2", title: "Comp Sci Project", status: "r", deadline: "2021-02-19" },
+  { id: "task-3", title: "Biology Exam", status: "red", deadline: "2021-02-28" },
+  { id: "task-4", title: "Chemisty Exam", status: "red", deadline: "2021-02-28" }
+];
+
 function CalendarCell({ day }) {
-  const classes = useStyles();
+ // const [filteredCards, setCards] = useState([]);
+	const classes = useStyles();	
+	
+	/* useEffect(() => {
+		setCards(cards.filter(card => day.isSame(card.deadline)))
+	}, []); */
+	
   return (
-    <React.Fragment>
+    
       <Droppable droppableId={day.id}>
-        {(provided) => (
+        {provided => (
           <RootRef rootRef={provided.innerRef}>
             <Box {...provided.droppableProps} className={classes.day}>
               <span>
@@ -51,13 +65,16 @@ function CalendarCell({ day }) {
                 </p>
                 <p className={`${classes.p} ${classes.cardCount}`}>1 Card</p>
               </span>
-              <CalendarCard />
+							{ cards
+								.filter(card => day.day.isSame(card.deadline))
+								.map((card, index) => <CalendarCard key={card.id} card={card} index={index} />)								
+							}
               {provided.placeholder}
             </Box>
           </RootRef>
         )}
       </Droppable>
-    </React.Fragment>
+
   );
 }
 

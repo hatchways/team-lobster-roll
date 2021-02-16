@@ -1,5 +1,3 @@
-import { v4 as uuid } from "uuid";
-
 export default function buildCalendar(value) {
   const startDay = value.clone().startOf("month").startOf("week");
   const endDay = value.clone().endOf("month").endOf("week");
@@ -11,9 +9,10 @@ export default function buildCalendar(value) {
       Array(7)
         .fill(0)
         .map(() => {
+					const tempDay = day.add(1, "day").clone();
           return {
-            id: uuid(),
-            day: day.add(1, "day").clone(),
+            id: tempDay.format(),
+            day: tempDay,
           };
         })
     );
