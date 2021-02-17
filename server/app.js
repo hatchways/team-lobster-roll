@@ -3,9 +3,15 @@ const express = require("express");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
+const User = require("./models/User");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
+const listRouter = require("./routes/list");
+const signupRouter = require("./routes/signup");
+const loginRouter = require("./routes/login");
+const userRouter = require("./routes/user");
 const uploadRouter = require("./routes/upload");
 const boardRouter = require("./routes/board");
 
@@ -16,6 +22,7 @@ var app = express();
 // database setup
 require("./db")();
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
@@ -26,6 +33,11 @@ app.use("/", indexRouter);
 app.use("/ping", pingRouter);
 app.use("/upload", uploadRouter);
 app.use("/api/board", boardRouter);
+app.use("/list", listRouter);
+app.use("/login", loginRouter);
+app.use("/signup", signupRouter);
+app.use("/user", userRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -42,5 +54,8 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({ error: err });
 });
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log("Server listening..."));
 
 module.exports = app;
