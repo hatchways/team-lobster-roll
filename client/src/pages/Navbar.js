@@ -1,13 +1,18 @@
 import React from "react";
-import { Toolbar, IconButton, Typography, Button } from "@material-ui/core";
+import { Toolbar, Typography, Button } from "@material-ui/core";
+import CalendarTodayIcon from "@material-ui/icons/CalendarTodayOutlined";
+import DashboardIcon from "@material-ui/icons/DashboardOutlined";
+import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 
 import logo from "../assets/logo.png";
-import calendar from "../assets/calendar.svg";
-import dashboard from "../assets/dashboard.svg";
-import plus from "../assets/plus.svg";
 
 const useStyles = makeStyles((theme) => ({
+  visualIcon: {
+    width: "25px",
+    height: "25px",
+    marginRight: "1rem",
+  },
   profileIcon: {
     width: "50px",
     height: "50px",
@@ -15,8 +20,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "2em",
   },
   createButton: {
-    paddingTop: "4px",
-    paddingBottom: "4px",
+    padding: "1rem 2rem",
     borderRadius: "8px",
     backgroundColor: "#759CFC",
     "&:hover": {
@@ -43,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#666",
     "&:hover": {
       color: "#759CFC",
+      cursor: "pointer",
     },
   },
 }));
@@ -56,15 +61,11 @@ function Navbar(props) {
         <img src={logo} />
         <div className={`${classes.flex} ${classes.third}`}>
           <div className={`${classes.flex} ${classes.click}`}>
-            <IconButton>
-              <img src={dashboard} width="30px" height="30px" />
-            </IconButton>
+            <DashboardIcon className={classes.visualIcon} />
             <Typography variant="h6">Dashboard</Typography>
           </div>
           <div className={`${classes.flex} ${classes.click}`}>
-            <IconButton>
-              <img src={calendar} width="25px" height="25px" />
-            </IconButton>
+            <CalendarTodayIcon className={classes.visualIcon} />
             <Typography variant="h6">Calendar</Typography>
           </div>
         </div>
@@ -74,14 +75,7 @@ function Navbar(props) {
             type="submit"
             variant="contained"
             color="secondary">
-            <IconButton>
-              <img
-                src={plus}
-                width="25px"
-                height="25px"
-                style={{ color: "#FFF" }}
-              />
-            </IconButton>
+            <AddIcon className={classes.fixRightMargin} />
             <Typography variant="body1" className={classes.fixRightMargin}>
               Create board
             </Typography>
