@@ -5,12 +5,12 @@ const UserSchema = new Schema(
   {
     firstName: {
       type: String,
-      required: true,
+      required: false,
       minlength: 2,
     },
     lastName: {
       type: String,
-      required: true,
+      required: false,
       minlength: 2,
     },
     email: {
@@ -21,7 +21,7 @@ const UserSchema = new Schema(
     },
     password: {
       type: String,
-      minlength: 7,
+      minlength: 6,
       required: true,
     },
     joinDate: {
@@ -33,14 +33,19 @@ const UserSchema = new Schema(
   { collection: "User" }
 );
 
-// Remove a user **
-UserSchema.statics.deleteUser = function (userEmail) {
-  return this.deleteOne({ email: userEmail });
+// Remove a user
+UserSchema.statics.deleteUser = function (id) {
+  return this.deleteOne({ _id: id });
 };
 
-// Find a user by email **
-UserSchema.statics.findByEmail = function (userEmail) {
-  return this.find({ email: userEmail });
+// Find a user by id
+UserSchema.statics.findUser = function (id) {
+  return this.find({ _id: id });
+};
+
+// Find a user by email
+UserSchema.statics.findByEmail = function (email) {
+  return this.find({ email: email });
 };
 
 const User = mongoose.model("User", UserSchema);

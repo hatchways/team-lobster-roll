@@ -11,7 +11,7 @@ const pingRouter = require("./routes/ping");
 const listRouter = require("./routes/list");
 const signupRouter = require("./routes/signup");
 const loginRouter = require("./routes/login");
-const findDeleteUserRouter = require("./routes/findDeleteUser");
+const userRouter = require("./routes/user");
 const uploadRouter = require("./routes/upload");
 
 const { json, urlencoded } = express;
@@ -21,8 +21,7 @@ var app = express();
 // database setup
 require("./db")();
 
-const corsOption = { origin: "http://localhost:3000", credentials: true };
-app.use(cors(corsOption));
+app.use(cors());
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
@@ -35,7 +34,7 @@ app.use("/upload", uploadRouter);
 app.use("/list", listRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
-app.use("/findDeleteUser", findDeleteUserRouter);
+app.use("/user", userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

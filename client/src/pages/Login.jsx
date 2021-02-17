@@ -23,12 +23,11 @@ function Login() {
     if (!emailError.length && !passwordError.length) {
       axios
         .post(
-          "http://localhost:3001/login/",
+          `${window.location.origin}/login/`,
           {
             email: email,
             password: password,
-          },
-          { withCredentials: true }
+          }
         )
         .then((data) => {
           console.log(data.data[0]);
