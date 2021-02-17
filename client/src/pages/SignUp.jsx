@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useStyles } from "../themes/loginSignup";
 import { Button, Typography, TextField } from "@material-ui/core";
 import { UserContext } from "../contexts/UserContext";
+import auth from "../auth/auth";
 
 function SignUp(props) {
   const classes = useStyles();
@@ -22,9 +23,12 @@ function SignUp(props) {
       email: email,
       id: "jd123",
     };
-    setUser(dummyData);
-    setLoggedIn(true);
-    props.history.push("/board");
+    function successfulLogin() {
+      setUser(dummyData);
+      setLoggedIn(true);
+      props.history.push("/board");
+    }
+    auth.login(successfulLogin);
   };
 
   return (
