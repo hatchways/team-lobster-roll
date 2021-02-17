@@ -32,18 +32,17 @@ export default function buildCalendar(value) {
       Array(7)
         .fill(0)
         .map(() => {
-					const dayClone = day.add(1, "day").clone();
-					let cards = [];
-					
-					cardsFromDb.forEach(card => {
-						if (dayClone.isSame(card.deadline)) cards.push(card);
-					});
-          
-					return {
-            id: dayClone.format('YYYY-MM-DD'),
-						number: dayClone.format('D'),
-            /* day: dayClone, */
-						cards
+          const dayClone = day.add(1, "day").clone();
+          let cards = [];
+
+          cardsFromDb.forEach((card) => {
+            if (dayClone.isSame(card.deadline)) cards.push(card);
+          });
+
+          return {
+            id: dayClone.format("YYYY-MM-DD"),
+            number: dayClone.format("D"),
+            cards,
           };
         })
     );

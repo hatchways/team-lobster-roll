@@ -46,17 +46,15 @@ const useStyles = makeStyles({
 function CalendarCell({ day }) {
   const [cards, setCards] = useState([]);
   const classes = useStyles();
-	
-	useEffect(() => {
-		setCards(day.cards);
-	}, [day]);
+
+  useEffect(() => {
+    setCards(day.cards);
+  }, [day]);
 
   return (
     <Grid item className={classes.day}>
       <span>
-        <p className={`${classes.p} ${classes.dayNumber}`}>
-          {day.number}
-        </p>
+        <p className={`${classes.p} ${classes.dayNumber}`}>{day.number}</p>
         {cards.length === 0 ? null : cards.length > 1 ? (
           <p className={`${classes.p} ${classes.cardCount}`}>
             {cards.length} Cards
