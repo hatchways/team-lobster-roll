@@ -6,12 +6,14 @@ import SignUp from "./pages/SignUp.jsx";
 import { theme } from "./themes/theme";
 import LandingPage from "./pages/Landing.jsx";
 import Board from "./pages/Board";
+import Navbar from "./pages/Navbar";
 
 import "./App.css";
 
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
+      <Navbar />
       <BrowserRouter>
         <Route path="/" exact component={LandingPage} />
         <Route path="/login" component={Login} />
