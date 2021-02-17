@@ -11,6 +11,7 @@ const pingRouter = require("./routes/ping");
 const signupRouter = require("./routes/signup");
 const loginRouter = require("./routes/login");
 const findDeleteUserRouter = require("./routes/findDeleteUser");
+const uploadRouter = require("./routes/upload");
 
 const { json, urlencoded } = express;
 
@@ -31,6 +32,7 @@ app.use("/ping", pingRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
 app.use("/findDeleteUser", findDeleteUserRouter);
+app.use("/upload", uploadRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
