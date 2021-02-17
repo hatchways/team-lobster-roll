@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import List from "./List";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
+import { UserContext } from "../contexts/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
 
 function Board() {
   const classes = useStyles();
+  const { user } = useContext(UserContext);
+  console.log("context", user);
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.blue}>
