@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 function Board() {
   const classes = useStyles();
   const { loggedIn, user } = useContext(UserContext);
-  console.log("context", loggedIn, user);
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.blue}>
