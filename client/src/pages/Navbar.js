@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "1rem 2rem",
     borderRadius: "8px",
     backgroundColor: "#759CFC",
+    textTransform: "capitalize",
     "&:hover": {
       backgroundColor: "#759CFC",
     },
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   bar: {
     margin: "1rem auto",
+    padding: "0 3rem",
   },
   fixRightMargin: {
     marginRight: "1rem",
@@ -54,6 +56,8 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar(props) {
   const classes = useStyles();
+  const defaultProfileImg =
+    "https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg";
 
   return (
     <>
@@ -81,8 +85,9 @@ function Navbar(props) {
             </Typography>
           </Button>
           <img
-            src="https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg"
+            src={defaultProfileImg}
             className={classes.profileIcon}
+            alt="profile-icon"
           />
         </div>
       </Toolbar>
