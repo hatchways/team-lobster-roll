@@ -11,19 +11,18 @@ import { UserContext } from "./contexts/UserContext";
 import "./App.css";
 
 function App() {
-  const [show, setShow] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState({});
-  const providerValue = useMemo(() => ({ user, setUser, setShow }), [
-    user,
-    setUser,
-    setShow,
-  ]);
+  const providerValue = useMemo(
+    () => ({ user, setUser, loggedIn, setLoggedIn }),
+    [user, setUser, loggedIn, setLoggedIn]
+  );
 
   return (
     <UserContext.Provider value={providerValue}>
       <MuiThemeProvider theme={theme}>
         <BrowserRouter>
-          {show ? (
+          {loggedIn ? (
             <Route path="/board" component={Board} />
           ) : (
             <>

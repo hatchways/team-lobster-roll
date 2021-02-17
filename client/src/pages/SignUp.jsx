@@ -9,7 +9,7 @@ function SignUp(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setUser, setShow } = useContext(UserContext);
+  const { setUser, setLoggedIn } = useContext(UserContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ function SignUp(props) {
       id: "jd123",
     };
     setUser(dummyData);
-    setShow(true);
+    setLoggedIn(true);
     props.history.push("/board");
   };
 
