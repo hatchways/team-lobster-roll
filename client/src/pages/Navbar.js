@@ -37,6 +37,13 @@ const useStyles = makeStyles((theme) => ({
   },
   third: {
     width: "30%",
+    maxWidth: "350px",
+  },
+  click: {
+    color: "#666",
+    "&:hover": {
+      color: "#759CFC",
+    },
   },
 }));
 
@@ -45,16 +52,16 @@ function Navbar(props) {
 
   return (
     <>
-      <Toolbar className={classes.flex + " " + classes.bar}>
+      <Toolbar className={`${classes.flex} ${classes.bar}`}>
         <img src={logo} />
-        <div className={classes.flex + " " + classes.third}>
-          <div className={classes.flex}>
+        <div className={`${classes.flex} ${classes.third}`}>
+          <div className={`${classes.flex} ${classes.click}`}>
             <IconButton>
               <img src={dashboard} width="30px" height="30px" />
             </IconButton>
             <Typography variant="h6">Dashboard</Typography>
           </div>
-          <div className={classes.flex}>
+          <div className={`${classes.flex} ${classes.click}`}>
             <IconButton>
               <img src={calendar} width="25px" height="25px" />
             </IconButton>
