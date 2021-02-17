@@ -32,53 +32,13 @@ const useStyles = makeStyles({
   },
 });
 
-// data from db that was fetched from global state
-const cardsFromDb = [
-  { id: "card-1", title: "Math Exam", status: "red", deadline: "2021-02-19" },
-  {
-    id: "card-2",
-    title: "Comp Sci Project",
-    status: "red",
-    deadline: "2021-02-19",
-  },
-  {
-    id: "card-3",
-    title: "Biology Exam",
-    status: "red",
-    deadline: "2021-02-22",
-  },
-  {
-    id: "card-4",
-    title: "Chemisty Exam",
-    status: "red",
-    deadline: "2021-02-18",
-  },
-];
-
-// test result obj
-const result = {
-	draggableId: 'task-4',
-	type: 'TYPE',
-	reason: 'DROP',
-	source: {
-		droppableId: '2021-02-19',
-		index: 1
-	},
-	destination: {
-		droppableId: '2021-02-19',
-		index: 0
-	}
-};
-
 function Calendar() {
   const [calendar, setCalendar] = useState([]);
   const [value, setValue] = useState(moment());
-	//const [cardsData, setCards] = useState(cardsFromDb);
 	const classes = useStyles();
 
   useEffect(() => {
     setCalendar(buildCalendar(value));
-		console.log(buildCalendar(value))
   }, [value]);
 	
   const onDragEnd = (result) => {
@@ -87,9 +47,8 @@ function Calendar() {
 		if (
 			destination.droppableId === source.droppableId &&
 			destination.index === source.index
-		);
+		) return;
 		
-		let cell = {};
 		let newCards = [];
 		let weekIndex = 0;
 		let dayIndex = 0;
@@ -97,24 +56,20 @@ function Calendar() {
 		for (let i=0; i<calendar.length; i++) {
 			for (let j=0; j<calendar[i].length; j++) {
 				if (calendar[i][j].id === source.droppableId) {
-					cell = calendar[i][j];
-					newCards = Array.from(calendar[i][j].cards);
+					newCards = JSON.parse(JSON.stringify(calendar[i][j].cards));
 					weekIndex = i;
 					dayIndex = j;
 					break;
 				}
 			}
 		};
-		
-		console.log(calendar[weekIndex][dayIndex]);
-		
+	
+		const newPosition = newCards.filter(card => card.id === draggableId)[0];
 		newCards.splice(source.index, 1);
-		newCards.splice(destination.index, 0, cell);
-		const newCalendar = calendar;
+		newCards.splice(destination.index, 0, newPosition);		
+		
+		const newCalendar = JSON.parse(JSON.stringify(calendar));
 		newCalendar[weekIndex][dayIndex].cards = newCards;
-		
-		console.log(newCalendar[weekIndex][dayIndex]);
-		
 		setCalendar(newCalendar);
 	};
 

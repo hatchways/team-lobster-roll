@@ -49,14 +49,13 @@ function CalendarCell({ day }) {
 	
 	useEffect(() => {
 		setCards(day.cards);
-		console.log('called');
 	}, [day]);
 
   return (
     <Grid item className={classes.day}>
       <span>
         <p className={`${classes.p} ${classes.dayNumber}`}>
-          {day.day.format("D")}
+          {day.number}
         </p>
         {cards.length === 0 ? null : cards.length > 1 ? (
           <p className={`${classes.p} ${classes.cardCount}`}>

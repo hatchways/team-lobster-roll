@@ -11,7 +11,7 @@ const cardsFromDb = [
     id: "card-3",
     title: "Biology Exam",
     status: "red",
-    deadline: "2021-02-22",
+    deadline: "2021-02-19",
   },
   {
     id: "card-4",
@@ -41,7 +41,8 @@ export default function buildCalendar(value) {
           
 					return {
             id: dayClone.format('YYYY-MM-DD'),
-            day: dayClone,
+						number: dayClone.format('D'),
+            /* day: dayClone, */
 						cards
           };
         })
