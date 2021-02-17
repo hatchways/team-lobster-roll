@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useStyles } from "../themes/loginSignup";
 import { Button, Typography, TextField } from "@material-ui/core";
 import axios from "axios";
