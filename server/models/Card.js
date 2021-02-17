@@ -10,22 +10,26 @@ const CardSchema = new Schema(
     description: {
       type: String,
     },
-		color: {
-			type: String
-		},
-		deadline: {
-			type: String
-		},
-		tags: [{
-			name: {
-				type: String
-			}
-		}],
-		attachments: [{
-			imgSrc: {
-				type: String
-			}
-		}]
+    color: {
+      type: String,
+    },
+    deadline: {
+      type: String,
+    },
+    tags: [
+      {
+        name: {
+          type: String,
+        },
+      },
+    ],
+    attachments: [
+      {
+        imgSrc: {
+          type: String,
+        },
+      },
+    ],
   },
   { collection: "Card" }
 );
