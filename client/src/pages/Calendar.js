@@ -43,6 +43,7 @@ function Calendar() {
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
+
     if (!destination) return;
     if (
       destination.droppableId === source.droppableId &&
@@ -50,27 +51,47 @@ function Calendar() {
     )
       return;
 
-    let newCards = [];
-    let weekIndex = 0;
-    let dayIndex = 0;
+    const newCalendar = JSON.parse(JSON.stringify(calendar));
+    let sourceCards = [];
+    let destinationCards = [];
+    let sourceWeek = 0;
+    let sourceDay = 0;
+    let destinationWeek = 0;
+    let destinationDay = 0;
 
+    // finds the indices of the source calendar cell and the destination cell
     for (let i = 0; i < calendar.length; i++) {
       for (let j = 0; j < calendar[i].length; j++) {
         if (calendar[i][j].id === source.droppableId) {
-          newCards = JSON.parse(JSON.stringify(calendar[i][j].cards));
-          weekIndex = i;
-          dayIndex = j;
-          break;
+          sourceCards = JSON.parse(JSON.stringify(calendar[i][j].cards));
+          sourceWeek = i;
+          sourceDay = j;
+        }
+        if (calendar[i][j].id === destination.droppableId) {
+          destinationCards = JSON.parse(JSON.stringify(calendar[i][j].cards));
+          destinationWeek = i;
+          destinationDay = j;
         }
       }
     }
 
-    const newPosition = newCards.filter((card) => card.id === draggableId)[0];
-    newCards.splice(source.index, 1);
-    newCards.splice(destination.index, 0, newPosition);
+    const draggedCard = sourceCards.filter(
+      (card) => card.id === draggableId
+    )[0];
 
-    const newCalendar = JSON.parse(JSON.stringify(calendar));
-    newCalendar[weekIndex][dayIndex].cards = newCards;
+    // case for if card was dropped in the same column from where it originally was
+    if (sourceWeek === destinationWeek && sourceDay === destinationDay) {
+      sourceCards.splice(source.index, 1);
+      sourceCards.splice(destination.index, 0, draggedCard);
+      newCalendar[sourceWeek][sourceDay].cards = sourceCards;
+      setCalendar(newCalendar);
+      return;
+    }
+
+    sourceCards.splice(source.index, 1);
+    newCalendar[sourceWeek][sourceDay].cards = sourceCards;
+    destinationCards.splice(destination.index, 0, draggedCard);
+    newCalendar[destinationWeek][destinationDay].cards = destinationCards;
     setCalendar(newCalendar);
   };
 

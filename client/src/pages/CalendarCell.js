@@ -21,7 +21,8 @@ const useStyles = makeStyles({
     fontSize: "16px",
   },
   day: {
-    display: "inline-block",
+    display: "flex",
+    flexDirection: "column",
     position: "relative",
     boxSizing: "border-box",
     width: "calc(100% / 7)",
@@ -34,10 +35,10 @@ const useStyles = makeStyles({
     color: "gray",
   },
   cardContainer: {
+    flexGrow: "1",
     position: "relative",
-    minHeight: "60px",
-    maxHeight: "85%",
     width: "100%",
+    minHeight: "60px",
     overflowY: "auto",
     overflowX: "hidden",
   },
