@@ -22,13 +22,17 @@ function SignUp() {
       : setPasswordError("Password must be > 6 characters.");
     if (!emailError.length && !passwordError.length) {
       axios
-        .post("http://localhost:3001/signup/", {
-          email: email,
-          password: password,
-        })
+        .post(
+          "http://localhost:3001/signup/",
+          {
+            email: email,
+            password: password,
+          },
+          { withCredentials: true }
+        )
         .then((data) => {
           console.log(data);
-          history.push("/login");
+          history.push("/list");
         })
         .catch((err) => console.log(err));
     }

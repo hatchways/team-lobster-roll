@@ -22,10 +22,14 @@ function Login() {
       : setPasswordError("Password must be > 6 characters.");
     if (!emailError.length && !passwordError.length) {
       axios
-        .post("http://localhost:3001/login/", {
-          email: email,
-          password: password,
-        })
+        .post(
+          "http://localhost:3001/login/",
+          {
+            email: email,
+            password: password,
+          },
+          { withCredentials: true }
+        )
         .then((data) => {
           console.log(data.data[0]);
           // Add data to context push to the list page for population

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 router.post("/", (req, res, next) => {
@@ -13,9 +14,19 @@ router.post("/", (req, res, next) => {
         email: email,
         password: hash,
       });
+      const token = jwt.sign(
+        { userId: user._id },
+        process.env.SECRET_KEY || "ShH_SeCrEt_StUfF",
+        { expiresIn: "24h" }
+      );
       user
         .save()
-        .then(() => res.status(200).send({ msg: "Account created!." }))
+        .then(() =>
+          res
+            .status(200)
+            .cookie("user", { token: token }, { httpOnly: true })
+            .send(user)
+        )
         .catch((err) => res.status(401).send("That email is not available."));
     });
   }

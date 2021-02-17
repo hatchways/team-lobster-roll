@@ -8,6 +8,7 @@ const User = require('./models/User');
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
+const listRouter = require("./routes/list");
 const signupRouter = require("./routes/signup");
 const loginRouter = require("./routes/login");
 const findDeleteUserRouter = require("./routes/findDeleteUser");
@@ -19,7 +20,8 @@ var app = express();
 // database setup
 require('./db')();
 
-app.use(cors());
+const corsOption = {origin: "http://localhost:3000", credentials: true}
+app.use(cors(corsOption));
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
@@ -28,6 +30,7 @@ app.use(express.static(join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
+app.use("/list", listRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
 app.use("/findDeleteUser", findDeleteUserRouter);
