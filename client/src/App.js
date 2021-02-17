@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { MuiThemeProvider } from "@material-ui/core";
 import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./pages/Login.jsx";
@@ -13,9 +13,14 @@ import "./App.css";
 function App() {
   const [show, setShow] = useState(false);
   const [user, setUser] = useState({});
+  const providerValue = useMemo(() => ({ user, setUser, setShow }), [
+    user,
+    setUser,
+    setShow,
+  ]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, setShow }}>
+    <UserContext.Provider value={providerValue}>
       <MuiThemeProvider theme={theme}>
         <BrowserRouter>
           {show ? (
