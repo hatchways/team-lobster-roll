@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useStyles } from "../themes/loginSignup";
 import { Button, Typography, TextField } from "@material-ui/core";
@@ -6,6 +7,7 @@ import axios from "axios";
 
 function SignUp() {
   const classes = useStyles();
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
@@ -21,8 +23,14 @@ function SignUp() {
       : setPasswordError("Password must be > 6 characters.");
     if (!emailError.length && !passwordError.length) {
       axios
-        .post(`http://localhost:3001/signup/${email}/${password}`)
-        .then((data) => console.log(data))
+        .post(`${window.location.origin}/signup/`, {
+          email: email,
+          password: password,
+        })
+        .then((data) => {
+          console.log(data);
+          history.push("/list");
+        })
         .catch((err) => console.log(err));
     }
   };
