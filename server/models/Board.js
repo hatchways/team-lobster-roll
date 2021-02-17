@@ -45,33 +45,15 @@ BoardSchema.statics.deleteBoard = function (boardId) {
 
 // gets a Board by _id
 BoardSchema.statics.findBoard = async function (boardId) {
-  const foundBoard = await this.findById(boardId);
-  const foundColumns = {};
-  const foundCards = {};
-  for (const columnId of foundBoard.columns) {
-    const column = await Column.findColumn(columnId);
-    foundColumns[columnId] = column;
-    foundCards[columnId] = [];
-  }
-  for (const columnId in foundColumns) {
-    const cards = foundColumns[columnId].cards;
-    for (const cardId of cards) {
-      const foundCard = await Card.findCard(cardId);
-      foundCards[columnId].push(foundCard);
-    }
-  }
-  for (const columnId in foundColumns) {
-    foundColumns[columnId].cards = foundCards[columnId];
-  }
+  const foundBoard = await this.findById(boardId).populate({
+    path: "columns",
+    populate: {
+      path: "cards",
+      model: "Card",
+    },
+  });
 
-  const data = {
-    _v: foundBoard._v,
-    _id: foundBoard._id,
-    name: foundBoard.name,
-    columns: foundColumns,
-  };
-
-  return data;
+  return foundBoard;
 };
 
 // adds a Column model into the Board's columns array
