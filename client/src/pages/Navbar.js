@@ -1,5 +1,5 @@
 import React from "react";
-import { Toolbar, Typography, Button } from "@material-ui/core";
+import { Toolbar, Typography, Button, Grid } from "@material-ui/core";
 import CalendarTodayIcon from "@material-ui/icons/CalendarTodayOutlined";
 import DashboardIcon from "@material-ui/icons/DashboardOutlined";
 import AddIcon from "@material-ui/icons/Add";
@@ -60,38 +60,63 @@ function Navbar(props) {
     "https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg";
 
   return (
-    <>
-      <Toolbar className={`${classes.flex} ${classes.bar}`}>
-        <img src={logo} />
-        <div className={`${classes.flex} ${classes.third}`}>
-          <div className={`${classes.flex} ${classes.click}`}>
-            <DashboardIcon className={classes.visualIcon} />
-            <Typography variant="h6">Dashboard</Typography>
-          </div>
-          <div className={`${classes.flex} ${classes.click}`}>
-            <CalendarTodayIcon className={classes.visualIcon} />
-            <Typography variant="h6">Calendar</Typography>
-          </div>
-        </div>
-        <div className={classes.flex}>
-          <Button
-            className={classes.createButton}
-            type="submit"
-            variant="contained"
-            color="secondary">
-            <AddIcon className={classes.fixRightMargin} />
-            <Typography variant="body1" className={classes.fixRightMargin}>
-              Create board
-            </Typography>
-          </Button>
-          <img
-            src={defaultProfileImg}
-            className={classes.profileIcon}
-            alt="profile-icon"
-          />
-        </div>
-      </Toolbar>
-    </>
+    <Toolbar className={`${classes.flex} ${classes.bar}`}>
+      <img src={logo} />
+      <Grid
+        className={`${classes.third}`}
+        container
+        direction="row"
+        alignItems="center"
+        justify="space-between">
+        <Grid item>
+          <Grid
+            className={`${classes.click}`}
+            container
+            direction="row"
+            alignItems="center"
+            justify="space-between">
+            <Grid item>
+              <DashboardIcon className={classes.visualIcon} />
+            </Grid>
+            <Grid item>
+              <Typography variant="h6">Dashboard</Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid
+            className={`${classes.click}`}
+            container
+            direction="row"
+            alignItems="center"
+            justify="space-between">
+            <Grid item>
+              <CalendarTodayIcon className={classes.visualIcon} />
+            </Grid>
+            <Grid item>
+              <Typography variant="h6">Calendar</Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid className={classes.flex}>
+        <Button
+          className={classes.createButton}
+          type="submit"
+          variant="contained"
+          color="secondary">
+          <AddIcon className={classes.fixRightMargin} />
+          <Typography variant="body1" className={classes.fixRightMargin}>
+            Create board
+          </Typography>
+        </Button>
+        <img
+          src={defaultProfileImg}
+          className={classes.profileIcon}
+          alt="profile-icon"
+        />
+      </Grid>
+    </Toolbar>
   );
 }
 
