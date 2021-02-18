@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import axios from "axios";
 import {
   TextField,
   Typography,
@@ -9,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
+import { createColumn } from "../API/board";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -61,6 +63,7 @@ function CreateModal(props) {
   const { setShowModal } = props;
 
   const handleCreate = () => {
+    createColumn();
     setShowModal(false);
   };
 
