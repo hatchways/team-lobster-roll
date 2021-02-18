@@ -25,7 +25,7 @@ const CardSchema = new Schema(
     ],
     attachments: [
       {
-        imgSrc: {
+        src: {
           type: String,
         },
       },
