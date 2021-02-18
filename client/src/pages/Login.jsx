@@ -1,34 +1,55 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import { useStyles } from "../themes/loginSignup";
+import { Link, useHistory } from "react-router-dom";
+import axios from "axios";
 import { Button, Typography, TextField } from "@material-ui/core";
+import { useStyles } from "../themes/loginSignup";
 import { UserContext } from "../contexts/UserContext";
 import auth from "../auth/auth";
 
 function Login(props) {
   const classes = useStyles();
+  const history = useHistory();
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
 
   const { setUser, setLoggedIn } = useContext(UserContext);
 
+  const [passwordError, setPasswordError] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
-    // API verification steps ...
-    //if successful, update UserContext & redirect
-    const dummyData = {
-      firstName: "John",
-      lastName: "Doe",
-      email: email,
-      id: "jd123",
-    };
-    function successfulLogin() {
-      setUser(dummyData);
-      setLoggedIn(true);
-      props.history.push("/board");
+    email.includes("@")
+      ? setEmailError("")
+      : setEmailError("Email must contain an '@'.");
+    password.length > 6
+      ? setPasswordError("")
+      : setPasswordError("Password must be > 6 characters.");
+    if (!emailError.length && !passwordError.length) {
+      axios
+        .post(`${window.location.origin}/login/`, {
+          email: email,
+          password: password,
+        })
+        .then((data) => {
+          console.log(data.data[0]);
+          // Add data to context push to the list page for population
+          //if successful, update UserContext & redirect
+          const dummyData = {
+            firstName: "John",
+            lastName: "Doe",
+            email: email,
+            id: "jd123",
+          };
+          function successfulLogin() {
+            setUser(dummyData);
+            setLoggedIn(true);
+            history.push("/board");
+          }
+          auth.login(successfulLogin);
+        })
+        .catch((err) => console.log(err));
     }
-    auth.login(successfulLogin);
   };
 
   return (
@@ -52,6 +73,8 @@ function Login(props) {
               label="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              helperText={emailError}
+              FormHelperTextProps={{ className: classes.helperText }}
             />
             <TextField
               className={classes.textField}
@@ -60,6 +83,8 @@ function Login(props) {
               label="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              helperText={passwordError}
+              FormHelperTextProps={{ className: classes.helperText }}
             />
             <Button
               className={classes.button}
