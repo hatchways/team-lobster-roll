@@ -4,7 +4,6 @@ import axios from "axios";
 import { Button, Typography, TextField } from "@material-ui/core";
 import { useStyles } from "../themes/loginSignup";
 import { UserContext } from "../contexts/UserContext";
-import auth from "../auth/auth";
 
 function Login(props) {
   const classes = useStyles();
@@ -33,12 +32,9 @@ function Login(props) {
         })
         .then((data) => {
           const userData = data.data[0];
-          function successfulLogin() {
-            setUser(userData);
-            setLoggedIn(true);
-            history.push("/board");
-          }
-          auth.login(successfulLogin);
+          setUser(userData);
+          setLoggedIn(true);
+          history.push("/board");
         })
         .catch((err) => console.log(err));
     }
