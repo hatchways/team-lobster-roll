@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { useStyles } from "../themes/loginSignup";
-import { Button, Typography, TextField } from "@material-ui/core";
 import axios from "axios";
+import { Button, Typography, TextField } from "@material-ui/core";
+import { useStyles } from "../themes/loginSignup";
+import { UserContext } from "../contexts/UserContext";
 
-function SignUp() {
+function SignUp(props) {
   const classes = useStyles();
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  const { setUser, setLoggedIn } = useContext(UserContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,8 +30,10 @@ function SignUp() {
           password: password,
         })
         .then((data) => {
-          console.log(data);
-          history.push("/list");
+          const userData = data.data;
+          setUser(userData);
+          setLoggedIn(true);
+          history.push("/board");
         })
         .catch((err) => console.log(err));
     }
@@ -74,8 +78,7 @@ function SignUp() {
               type="submit"
               variant="contained"
               color="secondary"
-              onClick={handleSubmit}
-            >
+              onClick={handleSubmit}>
               Sign Up
             </Button>
           </form>
