@@ -98,7 +98,7 @@ function Navbar(props) {
     loggedIn && (
       <>
         <Toolbar className={`${classes.flex} ${classes.bar}`}>
-          <img src={logo} />
+          <img src={logo} alt="kanban logo" />
           <Grid
             className={`${classes.third}`}
             container
