@@ -38,7 +38,6 @@ app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
 app.use("/user", userRouter);
 
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -54,8 +53,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({ error: err });
 });
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log("Server listening..."));
 
 module.exports = app;
