@@ -85,14 +85,12 @@ function Navbar(props) {
 
   const UserCard = () => {
     return (
-      showUserCard && (
-        <Grid item>
-          <Paper className={classes.userCard}>
-            <Typography variant="body1">{email}</Typography>
-            <Typography variant="body1">Joined: {joinDate}</Typography>
-          </Paper>
-        </Grid>
-      )
+      <Grid item>
+        <Paper className={classes.userCard}>
+          <Typography variant="body1">{email}</Typography>
+          <Typography variant="body1">Joined: {joinDate}</Typography>
+        </Paper>
+      </Grid>
     );
   };
 
@@ -143,7 +141,8 @@ function Navbar(props) {
               className={classes.createButton}
               type="submit"
               variant="contained"
-              color="secondary">
+              color="primary"
+              onClick={() => setShowModal(true)}>
               <AddIcon className={classes.fixRightMargin} />
               <Typography variant="body1" className={classes.fixRightMargin}>
                 Create board
@@ -157,8 +156,8 @@ function Navbar(props) {
             />
           </Grid>
         </Toolbar>
-        <UserCard />
-        <CreateModal />
+        {showUserCard && <UserCard />}
+        {showModal && <CreateModal setShowModal={setShowModal} />}
       </>
     )
   );

@@ -1,5 +1,12 @@
 import React, { useContext, useState } from "react";
-import { TextField, Typography, Button, Grid, Paper } from "@material-ui/core";
+import {
+  TextField,
+  Typography,
+  Button,
+  Grid,
+  Paper,
+  IconButton,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -16,18 +23,18 @@ const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
     background: "#ffffff",
-    padding: "2rem",
+    padding: "1rem",
     width: "400px",
     height: "320px",
     borderRadius: "8px",
     boxShadow: "0px 0px 10px 5px rgba(0,0,0,0.1)",
   },
-  height: {
-    height: "90%",
+  modalMain: {
+    height: "80%",
   },
   title: {
     fontWeight: "800",
-    marginTop: "1rem",
+    marginTop: "0.5rem",
   },
   createButton: {
     padding: "1rem 3rem",
@@ -51,6 +58,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 function CreateModal(props) {
   const classes = useStyles();
+  const { setShowModal } = props;
+
+  const handleCreate = () => {
+    setShowModal(false);
+  };
 
   return (
     <Grid
@@ -66,14 +78,16 @@ function CreateModal(props) {
           justify="flex-start"
           alignItems="center">
           <Grid item className={classes.close}>
-            <CloseIcon />
+            <IconButton>
+              <CloseIcon onClick={() => setShowModal(false)} />
+            </IconButton>
           </Grid>
           <Grid
             container
             direction="column"
             justify="space-between"
             alignItems="center"
-            className={classes.height}>
+            className={classes.modalMain}>
             <Grid item>
               <Typography variant="h4" className={classes.title}>
                 Create a new column
@@ -90,7 +104,8 @@ function CreateModal(props) {
                 type="submit"
                 variant="contained"
                 color="primary"
-                className={classes.createButton}>
+                className={classes.createButton}
+                onClick={handleCreate}>
                 <Typography variant="body1">Create</Typography>
               </Button>
             </Grid>
