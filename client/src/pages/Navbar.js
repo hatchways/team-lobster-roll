@@ -5,6 +5,7 @@ import DashboardIcon from "@material-ui/icons/DashboardOutlined";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../contexts/UserContext";
+import CreateModal from "./CreateModal";
 
 import logo from "../assets/logo.png";
 
@@ -80,6 +81,7 @@ function Navbar(props) {
   const joinDate = user?.joinDate?.slice(0, 10);
 
   const [showUserCard, setShowUserCard] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const UserCard = () => {
     return (
@@ -156,6 +158,7 @@ function Navbar(props) {
           </Grid>
         </Toolbar>
         <UserCard />
+        <CreateModal />
       </>
     )
   );
