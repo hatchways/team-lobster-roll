@@ -43,6 +43,19 @@ BoardSchema.statics.deleteBoard = function (boardId) {
   this.deleteOne({ _id: mongoose.Types.ObjectId(boardId) }).exec();
 };
 
+// gets a Board by _id
+BoardSchema.statics.findBoard = async function (boardId) {
+  const foundBoard = await this.findById(boardId).populate({
+    path: "columns",
+    populate: {
+      path: "cards",
+      model: "Card",
+    },
+  });
+
+  return foundBoard;
+};
+
 // adds a Column model into the Board's columns array
 BoardSchema.methods.addNewColumn = async function (columnName) {
   const newColumn = await Column.createNewColumn(columnName);
@@ -58,7 +71,7 @@ BoardSchema.methods.removeColumn = async function (columnId) {
 
 // creates a new Card and adds it to specific Column by its _id
 BoardSchema.methods.addNewCardToColumn = async function (cardName, columnId) {
-  const newCard = await Card.createNewCard();
+  const newCard = await Card.createNewCard(cardName);
   const column = await Column.findOne({
     _id: mongoose.Types.ObjectId(columnId),
   });

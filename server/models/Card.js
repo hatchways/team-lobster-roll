@@ -14,6 +14,12 @@ const CardSchema = new Schema(
   { collection: "Card" }
 );
 
+// gets card by _id
+CardSchema.statics.findCard = async function (cardId) {
+  const foundCard = await Card.findById(cardId);
+  return foundCard;
+};
+
 // creates a new instance of the Card model and returns the saved instance
 CardSchema.statics.createNewCard = async function (name) {
   const card = new this({ name });
