@@ -31,16 +31,9 @@ function SignUp(props) {
           password: password,
         })
         .then((data) => {
-          console.log(data);
-          //if successful, update UserContext & redirect
-          const dummyData = {
-            firstName: "Jane",
-            lastName: "Doe",
-            email: email,
-            id: "jd123",
-          };
+          const userData = data.data;
           function successfulLogin() {
-            setUser(dummyData);
+            setUser(userData);
             setLoggedIn(true);
             history.push("/board");
           }

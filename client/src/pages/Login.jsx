@@ -32,17 +32,9 @@ function Login(props) {
           password: password,
         })
         .then((data) => {
-          console.log(data.data[0]);
-          // Add data to context push to the list page for population
-          //if successful, update UserContext & redirect
-          const dummyData = {
-            firstName: "John",
-            lastName: "Doe",
-            email: email,
-            id: "jd123",
-          };
+          const userData = data.data[0];
           function successfulLogin() {
-            setUser(dummyData);
+            setUser(userData);
             setLoggedIn(true);
             history.push("/board");
           }
