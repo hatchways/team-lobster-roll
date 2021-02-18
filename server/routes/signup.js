@@ -9,11 +9,8 @@ router.post("/", (req, res, next) => {
   let epCheck = false;
   if (email.includes("@") && password.length > 6) {
     epCheck = true;
-    bcrypt.hash(password, 10, (err, hash) => {
-      const user = new User({
-        email: email,
-        password: hash,
-      });
+    bcrypt.hash(password, 10, async (err, hash) => {
+      const user = await User.createUser(email, hash);
       const token = jwt.sign(
         { userId: user._id },
         process.env.SECRET_KEY || "ShH_SeCrEt_StUfF",
