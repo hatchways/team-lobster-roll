@@ -18,6 +18,12 @@ const ColumnSchema = new Schema(
   { collection: "Column" }
 );
 
+// gets a Column by _id
+ColumnSchema.statics.findColumn = async function (columnId) {
+  const foundColumn = await Column.findById(columnId);
+  return foundColumn;
+};
+
 // creates a new instance of the Column model and returns the saved instance
 ColumnSchema.statics.createNewColumn = async function (name) {
   const column = new this({ name });

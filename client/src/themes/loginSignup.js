@@ -24,6 +24,9 @@ export const useStyles = makeStyles({
         boxShadow: "rgb(184, 213, 241) 2px 2px 5px",
         marginBottom: 8
       },
+      helperText: {
+        color: "red",
+      },
       button:{
         marginTop: 25,
         background: "rgb(41, 140, 238)"
