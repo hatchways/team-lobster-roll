@@ -6,6 +6,7 @@ import SignUp from "./pages/SignUp.jsx";
 import { theme } from "./themes/theme";
 import LandingPage from "./pages/Landing.jsx";
 import Board from "./pages/Board";
+import Navbar from "./pages/Navbar";
 import { UserContextProvider } from "./contexts/UserContext";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 
@@ -15,6 +16,7 @@ function App() {
   return (
     <UserContextProvider>
       <MuiThemeProvider theme={theme}>
+        <Navbar />
         <BrowserRouter>
           <Switch>
             <ProtectedRoute exact path="/board" component={Board} />
