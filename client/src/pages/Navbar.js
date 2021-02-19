@@ -5,6 +5,7 @@ import DashboardIcon from "@material-ui/icons/DashboardOutlined";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../contexts/UserContext";
+import CreateModal from "./CreateModal";
 
 import logo from "../assets/logo.png";
 
@@ -80,17 +81,16 @@ function Navbar(props) {
   const joinDate = user?.joinDate?.slice(0, 10);
 
   const [showUserCard, setShowUserCard] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const UserCard = () => {
     return (
-      showUserCard && (
-        <Grid item>
-          <Paper className={classes.userCard}>
-            <Typography variant="body1">{email}</Typography>
-            <Typography variant="body1">Joined: {joinDate}</Typography>
-          </Paper>
-        </Grid>
-      )
+      <Grid item>
+        <Paper className={classes.userCard}>
+          <Typography variant="body1">{email}</Typography>
+          <Typography variant="body1">Joined: {joinDate}</Typography>
+        </Paper>
+      </Grid>
     );
   };
 
@@ -141,7 +141,8 @@ function Navbar(props) {
               className={classes.createButton}
               type="submit"
               variant="contained"
-              color="secondary">
+              color="primary"
+              onClick={() => setShowModal(true)}>
               <AddIcon className={classes.fixRightMargin} />
               <Typography variant="body1" className={classes.fixRightMargin}>
                 Create board
@@ -155,7 +156,8 @@ function Navbar(props) {
             />
           </Grid>
         </Toolbar>
-        <UserCard />
+        {showUserCard && <UserCard />}
+        {showModal && <CreateModal setShowModal={setShowModal} type="board" />}
       </>
     )
   );

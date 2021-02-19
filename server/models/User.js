@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Board = require("./Board");
 
 const UserSchema = new Schema(
   {
@@ -29,6 +30,12 @@ const UserSchema = new Schema(
       default: Date.now,
       required: true,
     },
+    boards: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Board",
+      },
+    ],
   },
   { collection: "User" }
 );
@@ -40,12 +47,26 @@ UserSchema.statics.deleteUser = function (id) {
 
 // Find a user by id
 UserSchema.statics.findUser = function (id) {
-  return this.find({ _id: id });
+  return this.findById(id);
 };
 
 // Find a user by email
 UserSchema.statics.findByEmail = function (email) {
   return this.find({ email: email });
+};
+
+// Creates a user
+UserSchema.statics.createUser = async function (email, hash) {
+  const newUser = new User({
+    email: email,
+    password: hash,
+  });
+
+  const newBoard = await Board.createNewBoard("untitled");
+  newBoard.save();
+  newUser.boards = [newBoard._id];
+
+  return newUser;
 };
 
 const User = mongoose.model("User", UserSchema);
