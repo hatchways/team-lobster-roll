@@ -1,9 +1,10 @@
-import React from "react";
-import { Toolbar, Typography, Button, Grid } from "@material-ui/core";
+import React, { useContext, useState } from "react";
+import { Toolbar, Typography, Button, Grid, Paper } from "@material-ui/core";
 import CalendarTodayIcon from "@material-ui/icons/CalendarTodayOutlined";
 import DashboardIcon from "@material-ui/icons/DashboardOutlined";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
+import { UserContext } from "../contexts/UserContext";
 
 import logo from "../assets/logo.png";
 
@@ -18,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
     height: "50px",
     borderRadius: "50%",
     marginLeft: "2em",
+    "&:hover": {
+      cursor: "pointer",
+      boxShadow: "0px 0px 10px 1px rgba(128,163,251,0.1)",
+    },
   },
   createButton: {
     padding: "1rem 2rem",
@@ -44,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
   third: {
     width: "30%",
     maxWidth: "350px",
+    minWidth: "250px",
   },
   click: {
     color: "#666",
@@ -52,71 +58,106 @@ const useStyles = makeStyles((theme) => ({
       cursor: "pointer",
     },
   },
+  userCard: {
+    minWidth: "100px",
+    padding: "1rem",
+    background: "#ffffff",
+    zIndex: "1",
+    position: "absolute",
+    top: "95px",
+    right: "1rem",
+    boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.15)",
+    textAlign: "right",
+  },
 }));
 
 function Navbar(props) {
   const classes = useStyles();
   const defaultProfileImg =
     "https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg";
+  const { loggedIn, user } = useContext(UserContext);
+  const { email } = user;
+  const joinDate = user?.joinDate?.slice(0, 10);
+
+  const [showUserCard, setShowUserCard] = useState(false);
+
+  const UserCard = () => {
+    return (
+      showUserCard && (
+        <Grid item>
+          <Paper className={classes.userCard}>
+            <Typography variant="body1">{email}</Typography>
+            <Typography variant="body1">Joined: {joinDate}</Typography>
+          </Paper>
+        </Grid>
+      )
+    );
+  };
 
   return (
-    <Toolbar className={`${classes.flex} ${classes.bar}`}>
-      <img src={logo} />
-      <Grid
-        className={`${classes.third}`}
-        container
-        direction="row"
-        alignItems="center"
-        justify="space-between">
-        <Grid item>
+    loggedIn && (
+      <>
+        <Toolbar className={`${classes.flex} ${classes.bar}`}>
+          <img src={logo} alt="kanban logo" />
           <Grid
-            className={`${classes.click}`}
+            className={`${classes.third}`}
             container
             direction="row"
             alignItems="center"
             justify="space-between">
             <Grid item>
-              <DashboardIcon className={classes.visualIcon} />
+              <Grid
+                className={`${classes.click}`}
+                container
+                direction="row"
+                alignItems="center"
+                justify="space-between">
+                <Grid item>
+                  <DashboardIcon className={classes.visualIcon} />
+                </Grid>
+                <Grid item>
+                  <Typography variant="h6">Dashboard</Typography>
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item>
-              <Typography variant="h6">Dashboard</Typography>
+              <Grid
+                className={`${classes.click}`}
+                container
+                direction="row"
+                alignItems="center"
+                justify="space-between">
+                <Grid item>
+                  <CalendarTodayIcon className={classes.visualIcon} />
+                </Grid>
+                <Grid item>
+                  <Typography variant="h6">Calendar</Typography>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item>
-          <Grid
-            className={`${classes.click}`}
-            container
-            direction="row"
-            alignItems="center"
-            justify="space-between">
-            <Grid item>
-              <CalendarTodayIcon className={classes.visualIcon} />
-            </Grid>
-            <Grid item>
-              <Typography variant="h6">Calendar</Typography>
-            </Grid>
+          <Grid className={classes.flex}>
+            <Button
+              className={classes.createButton}
+              type="submit"
+              variant="contained"
+              color="secondary">
+              <AddIcon className={classes.fixRightMargin} />
+              <Typography variant="body1" className={classes.fixRightMargin}>
+                Create board
+              </Typography>
+            </Button>
+            <img
+              src={defaultProfileImg}
+              className={classes.profileIcon}
+              alt="profile-icon"
+              onClick={() => setShowUserCard(!showUserCard)}
+            />
           </Grid>
-        </Grid>
-      </Grid>
-      <Grid className={classes.flex}>
-        <Button
-          className={classes.createButton}
-          type="submit"
-          variant="contained"
-          color="secondary">
-          <AddIcon className={classes.fixRightMargin} />
-          <Typography variant="body1" className={classes.fixRightMargin}>
-            Create board
-          </Typography>
-        </Button>
-        <img
-          src={defaultProfileImg}
-          className={classes.profileIcon}
-          alt="profile-icon"
-        />
-      </Grid>
-    </Toolbar>
+        </Toolbar>
+        <UserCard />
+      </>
+    )
   );
 }
 
