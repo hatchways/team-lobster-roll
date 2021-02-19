@@ -16,7 +16,7 @@ router.post("/", (req, res, next) => {
       });
       const token = jwt.sign(
         { userId: user._id },
-        process.env.SECRET_KEY || "ShH_SeCrEt_StUfF",
+        process.env.COOKIE_SECRET_KEY || "ShH_SeCrEt_StUfF",
         { expiresIn: "24h" }
       );
       user
