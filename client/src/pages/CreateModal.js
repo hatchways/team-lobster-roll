@@ -133,7 +133,7 @@ function CreateModal(props) {
             </Grid>
             <Grid item>
               <TextField
-                defaultValue="Add Title"
+                placeholder="Add Title"
                 variant="outlined"
                 className={classes.input}
                 onChange={(e) => setTitle(e.target.value)}></TextField>
