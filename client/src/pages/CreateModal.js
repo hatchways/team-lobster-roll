@@ -1,5 +1,4 @@
-import React, { useContext, useState } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
 import {
   TextField,
   Typography,
@@ -10,7 +9,10 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
-import { createColumn } from "../API/board";
+import { createBoard } from "../API/board";
+import { createColumn } from "../API/column";
+import { createCard } from "../API/card";
+import { UserContext } from "../contexts/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -60,10 +62,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 function CreateModal(props) {
   const classes = useStyles();
-  const { setShowModal } = props;
+  const { setShowModal, type } = props;
+  const { user } = useContext(UserContext);
 
-  const handleCreate = () => {
-    createColumn();
+  const [title, setTitle] = useState("");
+
+  const handleCreate = (data, type) => {
+    switch (type) {
+      case "board": {
+        const cleanedData = {
+          userId: data._id,
+          title: title,
+        };
+        createBoard(cleanedData);
+        break;
+      }
+      case "column": {
+        const cleanedData = {
+          boardId: data.boards[0], //TODO: make dynamic
+          title: title,
+        };
+        createColumn(cleanedData);
+        break;
+      }
+      case "card": {
+        const cleanedData = {
+          columnId: "602f2b85e297d244f8f90d1c" || props.columnId, //PENDING: switch dummyData to DB
+          title: title,
+        };
+        createCard(cleanedData);
+        break;
+      }
+      default:
+        return;
+    }
+  };
+  const handleClick = () => {
+    handleCreate(user, type);
     setShowModal(false);
   };
 
@@ -81,8 +116,8 @@ function CreateModal(props) {
           justify="flex-start"
           alignItems="center">
           <Grid item className={classes.close}>
-            <IconButton>
-              <CloseIcon onClick={() => setShowModal(false)} />
+            <IconButton onClick={() => setShowModal(false)}>
+              <CloseIcon />
             </IconButton>
           </Grid>
           <Grid
@@ -93,14 +128,15 @@ function CreateModal(props) {
             className={classes.modalMain}>
             <Grid item>
               <Typography variant="h4" className={classes.title}>
-                Create a new column
+                Create a new {type}
               </Typography>
             </Grid>
             <Grid item>
               <TextField
                 defaultValue="Add Title"
                 variant="outlined"
-                className={classes.input}></TextField>
+                className={classes.input}
+                onChange={(e) => setTitle(e.target.value)}></TextField>
             </Grid>
             <Grid item>
               <Button
@@ -108,7 +144,7 @@ function CreateModal(props) {
                 variant="contained"
                 color="primary"
                 className={classes.createButton}
-                onClick={handleCreate}>
+                onClick={handleClick}>
                 <Typography variant="body1">Create</Typography>
               </Button>
             </Grid>
