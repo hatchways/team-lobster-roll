@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import { Typography } from "@material-ui/core";
+import CardInfo from "./CardInfo-components/CardInfo";
 
 import { Draggable } from "react-beautiful-dnd";
 
@@ -59,31 +60,51 @@ const useStyles = makeStyles({
 });
 
 function Task(props) {
+  const [showCardInfo, setShowCardInfo] = useState(false);
   const classes = useStyles(props);
   const { task, idx } = props;
+
+  const handleShowCardInfo = () => {
+    setShowCardInfo(true);
+  };
+
+  const handleCloseCardInfo = () => {
+    setShowCardInfo(false);
+  };
+
   return (
-    <Draggable draggableId={task.id} index={idx}>
-      {(provided) => (
-        <Card
-          className={classes.card}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          ref={provided.innerRef}>
-          <span
-            className={`${classes.cardStatus} ${
-              task.status ? classes[task.status] : classes.noColor
-            }`}></span>
-          <Typography variant="h6">{task.title}</Typography>
-          {task.note ? (
-            <Typography variant="body1" className={classes.note}>
-              {task.note}
-            </Typography>
-          ) : (
-            ""
-          )}
-        </Card>
-      )}
-    </Draggable>
+    <React.Fragment>
+      <Draggable draggableId={task.id} index={idx}>
+        {(provided) => (
+          <Card
+            onClick={handleShowCardInfo}
+            className={classes.card}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+          >
+            <span
+              className={`${classes.cardStatus} ${
+                task.status ? classes[task.status] : classes.noColor
+              }`}
+            ></span>
+            <Typography variant="h6">{task.title}</Typography>
+            {task.note ? (
+              <Typography variant="body1" className={classes.note}>
+                {task.note}
+              </Typography>
+            ) : (
+              ""
+            )}
+          </Card>
+        )}
+      </Draggable>
+      <CardInfo
+        task={task}
+        showCardInfo={showCardInfo}
+        closeCardInfo={handleCloseCardInfo}
+      />
+    </React.Fragment>
   );
 }
 
