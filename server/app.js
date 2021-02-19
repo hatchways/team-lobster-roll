@@ -14,6 +14,8 @@ const loginRouter = require("./routes/login");
 const userRouter = require("./routes/user");
 const uploadRouter = require("./routes/upload");
 const boardRouter = require("./routes/board");
+const columnRouter = require("./routes/column");
+const cardRouter = require("./routes/card");
 
 const { json, urlencoded } = express;
 
@@ -33,6 +35,8 @@ app.use("/", indexRouter);
 app.use("/ping", pingRouter);
 app.use("/upload", uploadRouter);
 app.use("/api/board", boardRouter);
+app.use("/api/column", columnRouter);
+app.use("/api/card", cardRouter);
 app.use("/list", listRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);

@@ -3,6 +3,7 @@ const router = express.Router();
 const Board = require("../models/Board");
 const Column = require("../models/Column");
 const Card = require("../models/Card");
+const User = require("../models/User");
 
 // GET
 router.get("/:id", async (req, res, next) => {
@@ -20,8 +21,12 @@ router.post("/", async (req, res, next) => {
   try {
     if (req.body) {
       const data = req.body;
-      const { title } = data;
+      const { title, userId } = data;
       const newBoard = await Board.createNewBoard(title);
+      const foundUser = await Board.findUser(userId);
+
+      foundUser.boards = [...foundUser.boards, newBoard._id];
+      foundUser.save();
       res.status(201).json({ data: newBoard });
     }
   } catch (err) {
