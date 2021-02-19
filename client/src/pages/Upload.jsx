@@ -29,12 +29,15 @@ function Upload() {
   const [loading, setLoading] = useState(false);
 
   const uploadImage = () => {
+    console.log(pictures)
     setLoading(true);
     let uploadPromises = pictures.map((picture) => {
       let data = new FormData();
       data.append("image", picture, picture.name);
-      return axios.post(`${window.location.origin}/upload/`, data);
+      setPictures([]);
+      //return axios.post(`${window.location.origin}/upload/`, data);
     });
+    /*
     axios
       .all(uploadPromises)
       .then((data) => {
@@ -43,7 +46,7 @@ function Upload() {
         console.log(data[0].data);
       })
       .catch((err) => console.log(err));
-    setPictures([]);
+    setPictures([]);*/
   };
 
   const onDrop = (picture) => {
@@ -67,7 +70,7 @@ function Upload() {
           onChange={onDrop}
           imgExtension={[".jpg", ".gif", ".png"]}
           maxFileSize={5242880}
-          singleImage={true}
+          singleImage={false}
         />
       )}
       {loading && <HashLoader color={"#759CFC"} />}
