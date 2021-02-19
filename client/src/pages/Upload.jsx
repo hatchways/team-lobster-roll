@@ -55,9 +55,9 @@ function Upload() {
     setImageName(e.target.files[0].name);
     setPictures(pictures.concat(e.target.files[0]));
   };
-  const chooseFile = e =>{
+  const chooseFile = (e) => {
     hiddenFileInput.current.click();
-  }
+  };
 
   return (
     <div className={classes.main}>
@@ -68,7 +68,7 @@ function Upload() {
             className={classes.button}
             variant="contained"
             color="primary"
-            onClick={(e)=> chooseFile(e)}
+            onClick={(e) => chooseFile(e)}
           >
             Choose a file
           </Button>
