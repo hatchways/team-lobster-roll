@@ -16,7 +16,6 @@ import "./App.css";
 
 function App() {
   return (
-<<<<<<< HEAD
     <UserContextProvider>
       <MuiThemeProvider theme={theme}>
         <Navbar />
