@@ -13,7 +13,7 @@ router.post("/", async (req, res, next) => {
       const newCard = await Card.createNewCard(title);
       const foundColumn = await Column.findColumn(columnId);
 
-      foundColumn.columns = [...foundColumn.cards, newCard._id];
+      foundColumn.cards = [...foundColumn.cards, newCard._id];
       foundColumn.save();
       res.status(201).json({ data: newCard });
     }

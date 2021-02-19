@@ -47,7 +47,7 @@ UserSchema.statics.deleteUser = function (id) {
 
 // Find a user by id
 UserSchema.statics.findUser = function (id) {
-  return this.find({ _id: id });
+  return this.findById(id);
 };
 
 // Find a user by email

@@ -23,7 +23,7 @@ router.post("/", async (req, res, next) => {
       const data = req.body;
       const { title, userId } = data;
       const newBoard = await Board.createNewBoard(title);
-      const foundUser = await Board.findUser(userId);
+      const foundUser = await User.findUser(userId);
 
       foundUser.boards = [...foundUser.boards, newBoard._id];
       foundUser.save();
