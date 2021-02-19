@@ -7,14 +7,14 @@ export const theme = createMuiTheme({
     h1: {
       fontSize: 18,
       fontWeight: 600,
-      marginBottom: 25
+      marginBottom: 25,
     },
-    h5:{
-      fontSize:12,
-      fontWeight: 600
-    }
+    h5: {
+      fontSize: 12,
+      fontWeight: 600,
+    },
   },
   palette: {
-    primary: { main: "#DF1B1B" }
-  }
+    primary: { main: "#759CFC" },
+  },
 });

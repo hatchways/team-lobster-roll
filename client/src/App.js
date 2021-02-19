@@ -7,6 +7,7 @@ import { theme } from "./themes/theme";
 import LandingPage from "./pages/Landing.jsx";
 import Board from "./pages/Board";
 import Navbar from "./pages/Navbar";
+import Upload from "./pages/Upload";
 import { UserContextProvider } from "./contexts/UserContext";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" exact component={LandingPage} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={SignUp} />
+            <Route path="/upload" component={Upload} />
             <Route path="*" component={() => "404 Not Found"} />
           </Switch>
         </BrowserRouter>
