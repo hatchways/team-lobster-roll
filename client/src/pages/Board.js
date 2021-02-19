@@ -71,9 +71,7 @@ function Board() {
         </Toolbar>
       </AppBar>
       <List />
-      {showModal && (
-        <CreateModal setShowModal={setShowModal} user={user} type="column" />
-      )}
+      {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
     </div>
   );
 }

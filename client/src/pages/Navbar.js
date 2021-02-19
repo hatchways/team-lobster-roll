@@ -157,9 +157,7 @@ function Navbar(props) {
           </Grid>
         </Toolbar>
         {showUserCard && <UserCard />}
-        {showModal && (
-          <CreateModal setShowModal={setShowModal} user={user} type="board" />
-        )}
+        {showModal && <CreateModal setShowModal={setShowModal} type="board" />}
       </>
     )
   );
