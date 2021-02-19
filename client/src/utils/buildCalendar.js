@@ -1,3 +1,26 @@
+// data from db that was fetched from global state
+const cardsFromDb = [
+  { id: "card-1", title: "Math Exam", status: "red", deadline: "2021-02-19" },
+  {
+    id: "card-2",
+    title: "Comp Sci Project",
+    status: "red",
+    deadline: "2021-02-19",
+  },
+  {
+    id: "card-3",
+    title: "Biology Exam",
+    status: "red",
+    deadline: "2021-02-22",
+  },
+  {
+    id: "card-4",
+    title: "Chemisty Exam",
+    status: "red",
+    deadline: "2021-02-28",
+  },
+];
+
 export default function buildCalendar(value) {
   const startDay = value.clone().startOf("month").startOf("week");
   const endDay = value.clone().endOf("month").endOf("week");
@@ -9,10 +32,17 @@ export default function buildCalendar(value) {
       Array(7)
         .fill(0)
         .map(() => {
-					const tempDay = day.add(1, "day").clone();
-          return {
-            id: tempDay.format(),
-            day: tempDay,
+					const dayClone = day.add(1, "day").clone();
+					let cards = [];
+					
+					cardsFromDb.forEach(card => {
+						if (dayClone.isSame(card.deadline)) cards.push(card);
+					});
+          
+					return {
+            id: dayClone.format('YYYY-MM-DD'),
+            day: dayClone,
+						cards
           };
         })
     );

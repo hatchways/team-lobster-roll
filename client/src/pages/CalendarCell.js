@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import { Droppable } from "react-beautiful-dnd";
-import Box from "@material-ui/core/Box";
-import RootRef from "@material-ui/core/RootRef";
+import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import CalendarCard from "./CalendarCard";
 
@@ -35,54 +33,57 @@ const useStyles = makeStyles({
     fontWeight: "bold",
     color: "gray",
   },
+  cardContainer: {
+    position: "relative",
+    minHeight: "60px",
+    maxHeight: "85%",
+    width: "100%",
+    overflowY: "auto",
+    overflowX: "hidden",
+  },
 });
 
-// data from db and fetched from global state
-const cards = [
-  { id: "task-1", title: "Math Exam", status: "red", deadline: "2021-02-22" },
-  {
-    id: "task-2",
-    title: "Comp Sci Project",
-    status: "red",
-    deadline: "2021-02-19",
-  },
-  {
-    id: "task-3",
-    title: "Biology Exam",
-    status: "red",
-    deadline: "2021-02-28",
-  },
-  {
-    id: "task-4",
-    title: "Chemisty Exam",
-    status: "red",
-    deadline: "2021-02-28",
-  },
-];
-
 function CalendarCell({ day }) {
+  const [cards, setCards] = useState([]);
   const classes = useStyles();
+	
+	useEffect(() => {
+		setCards(day.cards);
+		console.log('called');
+	}, [day]);
+
   return (
-    <Droppable droppableId={day.id}>
-      {(provided) => (
-        <RootRef rootRef={provided.innerRef}>
-          <Box {...provided.droppableProps} className={classes.day}>
-            <span>
-              <p className={`${classes.p} ${classes.dayNumber}`}>
-                {day.day.format("D")}
-              </p>
-              <p className={`${classes.p} ${classes.cardCount}`}>1 Card</p>
-            </span>
-            {cards
-              .filter((card) => day.day.isSame(card.deadline))
-              .map((card, index) => (
-                <CalendarCard key={card.id} card={card} index={index} />
-              ))}
+    <Grid item className={classes.day}>
+      <span>
+        <p className={`${classes.p} ${classes.dayNumber}`}>
+          {day.day.format("D")}
+        </p>
+        {cards.length === 0 ? null : cards.length > 1 ? (
+          <p className={`${classes.p} ${classes.cardCount}`}>
+            {cards.length} Cards
+          </p>
+        ) : (
+          <p className={`${classes.p} ${classes.cardCount}`}>
+            {cards.length} Card
+          </p>
+        )}
+      </span>
+
+      <Droppable droppableId={day.id}>
+        {(provided) => (
+          <div
+            className={classes.cardContainer}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {cards.map((card, index) => (
+              <CalendarCard key={card.id} card={card} index={index} />
+            ))}
             {provided.placeholder}
-          </Box>
-        </RootRef>
-      )}
-    </Droppable>
+          </div>
+        )}
+      </Droppable>
+    </Grid>
   );
 }
 
