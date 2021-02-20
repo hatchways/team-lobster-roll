@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 import axios from "axios";
 import { makeStyles, Button } from "@material-ui/core";
 import HashLoader from "react-spinners/HashLoader";
@@ -13,7 +14,17 @@ const useStyles = makeStyles({
   },
   title: {
     fontSize: "36px",
-    color: "#759CFC",
+    color: "#000",
+  },
+  imageBox: {
+    width: 80,
+    height: 80,
+    margin: 20,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    borderRadius: "50%",
   },
   input: {
     display: "none",
@@ -22,11 +33,17 @@ const useStyles = makeStyles({
     color: "white",
     marginTop: 30,
   },
+  uploadBtn: {
+    color: "white",
+  },
 });
 
 function Upload() {
   const hiddenFileInput = useRef(null);
+  const { user, setUser } = useContext(UserContext);
   const classes = useStyles();
+  const imageLink = "/images/default-profile.jpg";
+  const [image, setImage] = useState(imageLink);
   const [pictures, setPictures] = useState([]);
   const [imageName, setImageName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,15 +61,20 @@ function Upload() {
       .all(uploadPromises)
       .then((data) => {
         setLoading(false);
-        setImageName("Uploaded completed.");
-        console.log(data[0].data);
+        setImageName("Profile updated.");
+        setUser({ ...user, image: data[0].data.imgSrc });
       })
       .catch((err) => console.log(err));
-    setPictures([]);
+    setTimeout(() => {
+      setImageName("");
+      setImage(imageLink);
+      setPictures([]);
+    }, 3000);
   };
 
   const onDrop = (e) => {
-    setImageName(e.target.files[0].name);
+    let file = URL.createObjectURL(e.target.files[0]);
+    setImage(file);
     setPictures(pictures.concat(e.target.files[0]));
   };
   const chooseFile = (e) => {
@@ -61,7 +83,9 @@ function Upload() {
 
   return (
     <div className={classes.main}>
-      <h1 className={classes.title}>Image Uploader</h1>
+      <div className={classes.imageBox}>
+        <img className={classes.image} src={image} alt="profile" />
+      </div>
       {!loading && (
         <div>
           <Button
@@ -76,21 +100,21 @@ function Upload() {
             ref={hiddenFileInput}
             type="file"
             className={classes.input}
-            multiple={true}
-            accept=".json,.csv,.txt,.png,.text,application/json,text/csv,text/plain"
+            multiple={false}
+            accept=".jpg, .jpeg, .png, .svg"
             onChange={(e) => onDrop(e)}
           />
         </div>
       )}
-      {loading && <HashLoader color={"#759CFC"} />}
+      <HashLoader loading={loading} color={"#759CFC"} />
       <p>{imageName}</p>
       <Button
-        className={classes.button}
+        className={classes.uploadBtn}
         onClick={uploadImage}
         variant="contained"
         color="primary"
       >
-        Upload
+        Set
       </Button>
     </div>
   );
