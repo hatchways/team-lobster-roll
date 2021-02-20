@@ -13,6 +13,7 @@ import { UserContext } from "../contexts/UserContext";
 import { Grid } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
+import UploadImage from "./UploadImage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +40,7 @@ function Board() {
   const classes = useStyles();
   const { user } = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
 
   return (
     <div className={classes.root}>
@@ -48,7 +50,8 @@ function Board() {
             container
             direction="row"
             alignItems="center"
-            justify="space-between">
+            justify="space-between"
+          >
             <Grid item>
               <Typography variant="h6" className={classes.title}>
                 My School Board
@@ -59,9 +62,18 @@ function Board() {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowModal(true)}>
+                onClick={() => setShowModal(true)}
+              >
                 <AddIcon />
                 Create column
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.buttonCreate}
+                onClick={() => setShowUpload(true)}
+              >
+                Choose Profile Image
               </Button>
               <IconButton color="inherit">
                 <MenuIcon />
@@ -72,6 +84,7 @@ function Board() {
       </AppBar>
       <List />
       {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
+      {showUpload && <UploadImage setShowUpload={setShowUpload} />}
     </div>
   );
 }

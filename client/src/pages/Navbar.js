@@ -74,12 +74,9 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar(props) {
   const classes = useStyles();
-  const defaultProfileImg =
-    "https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg";
   const { loggedIn, user } = useContext(UserContext);
   const { email } = user;
   const joinDate = user?.joinDate?.slice(0, 10);
-
   const [showUserCard, setShowUserCard] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -104,14 +101,16 @@ function Navbar(props) {
             container
             direction="row"
             alignItems="center"
-            justify="space-between">
+            justify="space-between"
+          >
             <Grid item>
               <Grid
                 className={`${classes.click}`}
                 container
                 direction="row"
                 alignItems="center"
-                justify="space-between">
+                justify="space-between"
+              >
                 <Grid item>
                   <DashboardIcon className={classes.visualIcon} />
                 </Grid>
@@ -126,7 +125,8 @@ function Navbar(props) {
                 container
                 direction="row"
                 alignItems="center"
-                justify="space-between">
+                justify="space-between"
+              >
                 <Grid item>
                   <CalendarTodayIcon className={classes.visualIcon} />
                 </Grid>
@@ -142,14 +142,15 @@ function Navbar(props) {
               type="submit"
               variant="contained"
               color="primary"
-              onClick={() => setShowModal(true)}>
+              onClick={() => setShowModal(true)}
+            >
               <AddIcon className={classes.fixRightMargin} />
               <Typography variant="body1" className={classes.fixRightMargin}>
                 Create board
               </Typography>
             </Button>
             <img
-              src={defaultProfileImg}
+              src={user.image}
               className={classes.profileIcon}
               alt="profile-icon"
               onClick={() => setShowUserCard(!showUserCard)}
