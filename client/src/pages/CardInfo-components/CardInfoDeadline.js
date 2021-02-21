@@ -6,8 +6,6 @@ import { useStyles } from "../../themes/cardInfoStyles";
 function CardInfoDeadline({ saveDeadline, showDeadline, deleteDeadline }) {
   const [disabled, setDisabled] = useState(true);
   const [deadline, setDeadline] = useState("");
-  const [showInput, setShowInput] = useState("");
-  const [showDate, setShowDate] = useState("");
   const classes = useStyles();
 
   const handleChange = (e) => {
@@ -45,9 +43,7 @@ function CardInfoDeadline({ saveDeadline, showDeadline, deleteDeadline }) {
       <Box className={classes.field}>
         <Button
           disabled={disabled}
-          style={{ color: "white" }}
-          variant="contained"
-          size="medium"
+          size="large"
           color="primary"
           onClick={confirmSave}
         >
