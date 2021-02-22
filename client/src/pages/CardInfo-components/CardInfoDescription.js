@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Typography, Box, TextField, Button } from "@material-ui/core";
 import { ImportContactsTwoTone } from "@material-ui/icons";
 import { useStyles } from "../../themes/cardInfoStyles";
+import {updateCard} from '../../API/card';
 
 function CardInfoDescription({
   saveDescription,
@@ -17,9 +18,13 @@ function CardInfoDescription({
     setDisabled(false);
   };
 
-  const confirmSave = () => {
-    saveDescription(description);
-    setDisabled(true);
+  const confirmSave = async () => {
+		const res = await updateCard('description', description);
+    if (res.status===200) {
+			saveDescription(description);
+			setDisabled(true);
+			// todo: update card in board context with res.data
+		}
   };
 
   const handleDeleteSection = () => {
