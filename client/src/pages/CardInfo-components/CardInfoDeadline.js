@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Typography, Box, TextField, Button } from "@material-ui/core";
 import { AccessTime } from "@material-ui/icons";
 import { useStyles } from "../../themes/cardInfoStyles";
-import {updateCard} from '../../API/card';
+import { updateCard } from "../../API/card";
 
 function CardInfoDeadline({ saveDeadline, showDeadline, deleteDeadline }) {
   const [disabled, setDisabled] = useState(true);
@@ -15,12 +15,12 @@ function CardInfoDeadline({ saveDeadline, showDeadline, deleteDeadline }) {
   };
 
   const confirmSave = async () => {
-		const res = await updateCard('deadline', deadline);
-    if (res.status===200) {
-			saveDeadline(deadline);
-			setDisabled(true);
-			// todo: update card in board context with res.data
-		}
+    const res = await updateCard("deadline", deadline);
+    if (res.status === 200) {
+      saveDeadline(deadline);
+      setDisabled(true);
+      // todo: update card in board context with res.data
+    }
   };
 
   const handleDeleteSection = () => {

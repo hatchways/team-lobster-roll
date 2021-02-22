@@ -63,9 +63,9 @@ CardSchema.statics.updateCard = async function (cardId, property, newData) {
   const updatedCard = await this.findOneAndUpdate(
     { _id: mongoose.Types.ObjectId(cardId) },
     { [property]: newData },
-		{new: true}
+    { new: true }
   );
-	return updatedCard;
+  return updatedCard;
 };
 
 const Card = mongoose.model("Card", CardSchema);
