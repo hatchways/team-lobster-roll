@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import axios from "axios";
-import { makeStyles, Button } from "@material-ui/core";
+import { makeStyles, Button, Avatar } from "@material-ui/core";
 import HashLoader from "react-spinners/HashLoader";
 
 const useStyles = makeStyles({
@@ -16,15 +16,10 @@ const useStyles = makeStyles({
     fontSize: "36px",
     color: "#000",
   },
-  imageBox: {
+  avatar:{
     width: 80,
     height: 80,
-    margin: 20,
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    borderRadius: "50%",
+    marginBottom: 20,
   },
   input: {
     display: "none",
@@ -38,7 +33,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Upload() {
+function Upload({setShowUpload}) {
   const hiddenFileInput = useRef(null);
   const { user, setUser } = useContext(UserContext);
   const classes = useStyles();
@@ -66,9 +61,8 @@ function Upload() {
       })
       .catch((err) => console.log(err));
     setTimeout(() => {
-      setImageName("");
-      setImage(imageLink);
       setPictures([]);
+      setShowUpload(false);
     }, 3000);
   };
 
@@ -83,9 +77,7 @@ function Upload() {
 
   return (
     <div className={classes.main}>
-      <div className={classes.imageBox}>
-        <img className={classes.image} src={image} alt="profile" />
-      </div>
+      <Avatar className={classes.avatar} alt={user.email} src={image} />
       {!loading && (
         <div>
           <Button
@@ -114,7 +106,7 @@ function Upload() {
         variant="contained"
         color="primary"
       >
-        Set
+        Upload
       </Button>
     </div>
   );

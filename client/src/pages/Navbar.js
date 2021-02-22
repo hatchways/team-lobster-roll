@@ -1,9 +1,8 @@
 import React, { useContext, useState } from "react";
-import { Toolbar, Typography, Button, Grid, Paper } from "@material-ui/core";
+import { Toolbar, Typography, Button, Grid, Paper, Avatar, makeStyles } from "@material-ui/core";
 import CalendarTodayIcon from "@material-ui/icons/CalendarTodayOutlined";
 import DashboardIcon from "@material-ui/icons/DashboardOutlined";
 import AddIcon from "@material-ui/icons/Add";
-import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../contexts/UserContext";
 import CreateModal from "./CreateModal";
 
@@ -149,7 +148,7 @@ function Navbar(props) {
                 Create board
               </Typography>
             </Button>
-            <img
+            <Avatar
               src={user.image}
               className={classes.profileIcon}
               alt="profile-icon"

@@ -86,7 +86,7 @@ function UploadImage({ setShowUpload }) {
               </Typography>
             </Grid>
             <Grid item>
-              <Upload />
+              <Upload setShowUpload={setShowUpload} />
             </Grid>
           </Grid>
         </Grid>
