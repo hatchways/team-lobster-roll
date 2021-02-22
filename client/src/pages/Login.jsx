@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
-import axios from "axios";
-import { Button, Typography, TextField } from "@material-ui/core";
 import { useStyles } from "../themes/loginSignup";
+import { Button, Typography, TextField } from "@material-ui/core";
+import axios from "axios";
 import { UserContext } from "../contexts/UserContext";
 
 function Login(props) {
