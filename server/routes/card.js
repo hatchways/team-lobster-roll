@@ -27,7 +27,7 @@ router.put('/update/:id', async (req, res) => {
 	try {
 		if (req.body) {
 			await Card.updateCard(req.params.id, req.body.property, req.body.newData);
-			res.end();
+			res.status(200).end();
 		}
 	} catch (err) {
 		console.error(err);
