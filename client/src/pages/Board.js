@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import List from "./List";
 import {
   AppBar,
@@ -6,6 +6,7 @@ import {
   Typography,
   IconButton,
   Button,
+  Paper,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
@@ -33,12 +34,45 @@ const useStyles = makeStyles((theme) => ({
       borderColor: "#ffffff",
     },
   },
+  dropdown: {
+    minWidth: "100px",
+    padding: "1rem",
+    background: "#ffffff",
+    zIndex: "1",
+    position: "absolute",
+    top: "160px",
+    right: "1rem",
+    boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.15)",
+    textAlign: "right",
+  },
 }));
 
 function Board() {
   const classes = useStyles();
-  const { user } = useContext(UserContext);
+  const { user, getAllBoards } = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [boards, setBoards] = useState([]);
+
+  useEffect(async () => {
+    const boardList = await getAllBoards();
+    setBoards(boardList);
+  }, []);
+
+  const Dropdown = () => {
+    const allBoards = boards.map((board) => (
+      <Typography key={board._id}>{board.name}</Typography>
+    ));
+
+    return (
+      <Grid item>
+        <Paper className={classes.dropdown}>
+          <Typography variant="body1">Select board</Typography>
+          {allBoards}
+        </Paper>
+      </Grid>
+    );
+  };
 
   return (
     <div className={classes.root}>
@@ -63,7 +97,9 @@ function Board() {
                 <AddIcon />
                 Create column
               </Button>
-              <IconButton color="inherit">
+              <IconButton
+                color="inherit"
+                onClick={() => setShowDropdown(!showDropdown)}>
                 <MenuIcon />
               </IconButton>
             </Grid>
@@ -72,6 +108,7 @@ function Board() {
       </AppBar>
       <List />
       {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
+      {showDropdown && <Dropdown />}
     </div>
   );
 }
