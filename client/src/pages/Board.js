@@ -54,10 +54,13 @@ function Board() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [boards, setBoards] = useState([]);
 
-  useEffect(async () => {
-    const boardList = await getAllBoards();
-    setBoards(boardList);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      const boardList = await getAllBoards();
+      setBoards(boardList);
+    }
+    fetchData();
+  }, [getAllBoards]);
 
   const Dropdown = () => {
     const allBoards = boards.map((board) => (
