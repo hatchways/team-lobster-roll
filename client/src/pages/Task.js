@@ -71,24 +71,21 @@ function Task(props) {
   const handleCloseCardInfo = () => {
     setShowCardInfo(false);
   };
-
   return (
     <React.Fragment>
-      <Draggable draggableId={task.id} index={idx}>
+      <Draggable draggableId={task._id} index={idx}>
         {(provided) => (
           <Card
             onClick={handleShowCardInfo}
             className={classes.card}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            ref={provided.innerRef}
-          >
+            ref={provided.innerRef}>
             <span
               className={`${classes.cardStatus} ${
                 task.status ? classes[task.status] : classes.noColor
-              }`}
-            ></span>
-            <Typography variant="h6">{task.title}</Typography>
+              }`}></span>
+            <Typography variant="h6">{task.title || task.name}</Typography>
             {task.note ? (
               <Typography variant="body1" className={classes.note}>
                 {task.note}

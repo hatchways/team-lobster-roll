@@ -57,14 +57,17 @@ const columnTypes = {
 
 const initialData = {
   columns: columnTypes,
-  tasks: taskTypes,
+  // tasks: taskTypes,
   columnOrder: [...Object.keys(columnTypes)],
 };
 
-function List() {
+function List(props) {
   const classes = useStyles();
-  const [data, setData] = useState(initialData);
+  const { loadedData } = props;
 
+  const [data, setData] = useState(loadedData); //title -> name ; status -> color ; note -> description
+
+  console.log("in list:", loadedData);
   function handleOnDragEnd(result) {
     const { source, destination, draggableId, type } = result;
     if (!destination) {
@@ -142,7 +145,8 @@ function List() {
             ref={provided.innerRef}>
             {data.columnOrder.map((columnId, idx) => {
               const column = data.columns[columnId];
-              const tasks = column.taskIds.map((taskId) => data.tasks[taskId]);
+              // const tasks = column.taskIds.map((taskId) => data.tasks[taskId]); //[]task {}
+              const tasks = column.cards;
               return (
                 <Column
                   key={column.id}

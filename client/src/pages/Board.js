@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import List from "./List";
 import {
   AppBar,
@@ -53,7 +53,13 @@ function Board() {
   const [showModal, setShowModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [boards, setBoards] = useState([]);
+  const [selectBoard, setSelectBoard] = useState(0);
+  const [board, setBoard] = useState({});
 
+  const loadedData = useMemo(() => {
+    const preloaded = { columns: {}, columnOrder: [] };
+    return preloaded;
+  }, []);
   useEffect(() => {
     async function fetchData() {
       const boardList = await getAllBoards();
@@ -61,6 +67,21 @@ function Board() {
     }
     fetchData();
   }, [getAllBoards]);
+  useEffect(() => {
+    setBoard(boards[selectBoard]);
+    if (board && board.columns) {
+      const loadedColumns = {};
+      const loadedOrder = [];
+      board.columns.forEach((col) => {
+        col.id = col._id;
+        col.taskIds = col.cards.map((card) => card._id);
+        loadedColumns[col._id] = col;
+        loadedOrder.push(col._id);
+      });
+      loadedData.columns = loadedColumns;
+      loadedData.columnOrder = loadedOrder;
+    }
+  }, [board, boards, loadedData, selectBoard]);
 
   const Dropdown = () => {
     const allBoards = boards.map((board) => (
@@ -109,7 +130,7 @@ function Board() {
           </Grid>
         </Toolbar>
       </AppBar>
-      <List />
+      <List loadedData={loadedData} />
       {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
       {showDropdown && <Dropdown />}
     </div>
