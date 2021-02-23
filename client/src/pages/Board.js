@@ -53,7 +53,7 @@ function Board() {
   const [showModal, setShowModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [boards, setBoards] = useState([]);
-  const [selectBoard, setSelectBoard] = useState(0);
+  const [selectBoard, setSelectBoard] = useState(1);
   const [board, setBoard] = useState({});
 
   const loadedData = useMemo(() => {
@@ -68,6 +68,7 @@ function Board() {
     fetchData();
   }, [getAllBoards]);
   useEffect(() => {
+    console.log("selected board", selectBoard);
     setBoard(boards[selectBoard]);
     if (board && board.columns) {
       const loadedColumns = {};
@@ -84,8 +85,13 @@ function Board() {
   }, [board, boards, loadedData, selectBoard]);
 
   const Dropdown = () => {
-    const allBoards = boards.map((board) => (
-      <Typography key={board._id}>{board.name}</Typography>
+    const allBoards = boards.map((board, idx) => (
+      <Typography
+        variant="subtitle1"
+        key={board._id}
+        onClick={() => setSelectBoard(idx)}>
+        {board.name}
+      </Typography>
     ));
 
     return (
