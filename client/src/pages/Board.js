@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import List from "./List";
 import {
   AppBar,
@@ -10,6 +10,7 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../contexts/UserContext";
+import { SocketContext } from "../contexts/SocketContext";
 import { Grid } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
@@ -39,8 +40,28 @@ const useStyles = makeStyles((theme) => ({
 function Board() {
   const classes = useStyles();
   const { user } = useContext(UserContext);
+  const { socket } = useContext(SocketContext);
   const [showModal, setShowModal] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
+
+	// socket.io testing
+  useEffect(() => {
+    if (socket) {
+      socket.emit("testEmit", "testing emit");
+
+      socket.on("confirmEmit", (message) => {
+        console.log(message);
+      });
+    }
+  }, [socket]);
+
+  // componentWillUnmount
+  useEffect(() => {
+    return () => {
+      socket.removeAllListeners("confirmEmit");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={classes.root}>
