@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
 import List from "./List";
 import {
   AppBar,
@@ -94,12 +95,11 @@ function Board() {
 
   const Dropdown = () => {
     const allBoards = boards.map((board, idx) => (
-      <Typography
-        variant="subtitle1"
-        key={board._id}
-        onClick={() => setSelectBoard(idx)}>
-        {board.name}
-      </Typography>
+      <Link to={`/board/${board._id}`} key={board._id}>
+        <Typography variant="subtitle1" onClick={() => setSelectBoard(idx)}>
+          {board.name}
+        </Typography>
+      </Link>
     ));
 
     return (
