@@ -6,11 +6,22 @@ const Card = require("../models/Card");
 const User = require("../models/User");
 
 // GET
+router.get("/shallow/:id", async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const foundBoard = await Board.findById(id);
+    res.status(200).json(foundBoard);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+// GET
 router.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
     const foundBoard = await Board.findBoard(id);
-    res.status(200).json({ data: foundBoard });
+    res.status(200).json(foundBoard);
   } catch (err) {
     console.error(err);
   }
@@ -27,7 +38,7 @@ router.post("/", async (req, res, next) => {
 
       foundUser.boards = [...foundUser.boards, newBoard._id];
       foundUser.save();
-      res.status(201).json({ data: newBoard });
+      res.status(201).json(newBoard);
     }
   } catch (err) {
     console.error(err);
