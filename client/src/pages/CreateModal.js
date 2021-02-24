@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 function CreateModal(props) {
   const classes = useStyles();
-  const { setShowModal, type } = props;
+  const { setShowModal, type, selectBoard } = props;
   const { user } = useContext(UserContext);
 
   const [title, setTitle] = useState("");
@@ -79,7 +79,7 @@ function CreateModal(props) {
       }
       case "column": {
         const cleanedData = {
-          boardId: data.boards[0], //TODO: make dynamic
+          boardId: data.boards[selectBoard],
           title: title,
         };
         createColumn(cleanedData);
@@ -87,7 +87,7 @@ function CreateModal(props) {
       }
       case "card": {
         const cleanedData = {
-          columnId: "602f2b85e297d244f8f90d1c" || props.columnId, //PENDING: switch dummyData to DB
+          columnId: props.columnId,
           title: title,
         };
         createCard(cleanedData);

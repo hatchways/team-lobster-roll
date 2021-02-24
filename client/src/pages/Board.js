@@ -155,7 +155,13 @@ function Board() {
         </Toolbar>
       </AppBar>
       <List loadedData={loadedData} />
-      {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
+      {showModal && (
+        <CreateModal
+          setShowModal={setShowModal}
+          type="column"
+          selectBoard={selectBoard}
+        />
+      )}
       {showDropdown && <Dropdown />}
     </div>
   );
