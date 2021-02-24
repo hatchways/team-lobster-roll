@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { editBoard } from "../API/board";
 
 import Column from "./Column";
 
@@ -21,51 +22,20 @@ const useStyles = makeStyles({
   },
 });
 
-const taskTypes = {
-  "task-1": { id: "task-1", title: "art", status: "red", note: "March 14" },
-  "task-2": { id: "task-2", title: "philosophy", status: "red" },
-  "task-3": { id: "task-3", title: "cooking", status: "red" },
-  "task-4": { id: "task-4", title: "gym", status: "red" },
-  "task-5": { id: "task-5", title: "math", status: "green" },
-  "task-6": { id: "task-6", title: "english", status: "green" },
-  "task-7": { id: "task-7", title: "science", status: "green" },
-  "task-8": { id: "task-8", title: "history", status: "green" },
-};
-
-const columnTypes = {
-  "col-1": {
-    id: "col-1",
-    name: "To do",
-    taskIds: [...Object.keys(taskTypes)],
-  },
-  "col-2": {
-    id: "col-2",
-    name: "In progress",
-    taskIds: [],
-  },
-  "col-3": {
-    id: "col-3",
-    name: "Review",
-    taskIds: [],
-  },
-  "col-4": {
-    id: "col-4",
-    name: "Completed",
-    taskIds: [],
-  },
-};
-
-const initialData = {
-  columns: columnTypes,
-  // tasks: taskTypes,
-  columnOrder: [...Object.keys(columnTypes)],
-};
-
 function List(props) {
   const classes = useStyles();
   const { loadedData } = props;
 
-  const [data, setData] = useState(loadedData); //title -> name ; status -> color ; note -> description
+  const [data, setData] = useState(loadedData);
+
+  function handleCardMove() {
+    const dummyData = {
+      cardId: "602fe3a4dbe42c4aaca4b7b3",
+      fromColumnId: "602f2b85e297d244f8f90d1c",
+      toColumnId: "602ecdfb8c2c62480c93fe46",
+    };
+    editBoard("602ecdfb8c2c62480c93fe47", dummyData);
+  }
 
   function handleOnDragEnd(result) {
     const { source, destination, draggableId, type } = result;

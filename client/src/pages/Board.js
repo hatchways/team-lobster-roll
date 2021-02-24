@@ -104,17 +104,7 @@ function Board() {
     return (
       <Grid item>
         <Paper className={classes.dropdown}>
-          <Typography
-            variant="body1"
-            onClick={() =>
-              editBoard("602ecdfb8c2c62480c93fe47", {
-                cardId: "602fe3a4dbe42c4aaca4b7b3",
-                fromColumnId: "602f2b85e297d244f8f90d1c",
-                toColumnId: "602ecdfb8c2c62480c93fe46",
-              })
-            }>
-            Select board
-          </Typography>
+          <Typography variant="body1">Select board</Typography>
           {allBoards}
         </Paper>
       </Grid>
