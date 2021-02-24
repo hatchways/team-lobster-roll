@@ -67,7 +67,6 @@ function List(props) {
 
   const [data, setData] = useState(loadedData); //title -> name ; status -> color ; note -> description
 
-  console.log("in list:", loadedData);
   function handleOnDragEnd(result) {
     const { source, destination, draggableId, type } = result;
     if (!destination) {

@@ -57,6 +57,7 @@ function Board() {
   const [boards, setBoards] = useState([]);
   const [selectBoard, setSelectBoard] = useState(0);
   const [board, setBoard] = useState({});
+  const [currBoardId, setCurrBoardId] = useState("");
 
   const loadedData = useMemo(() => {
     const preloaded = { columns: {}, columnOrder: [] };
@@ -71,10 +72,9 @@ function Board() {
   }, [getAllBoards]);
   useEffect(() => {
     const boardId = boards[selectBoard] && boards[selectBoard]._id;
-    console.log("clicked new boardId", boardId);
+    setCurrBoardId(boardId);
     async function fetchData() {
       const res = await getBoard(boardId);
-      console.log("res", res);
       const loadedBoard = res.data;
       const loadedColumns = {};
       const loadedOrder = [];
@@ -88,7 +88,6 @@ function Board() {
       loadedData.columnOrder = loadedOrder;
 
       setBoard(loadedBoard);
-      console.log("new board", loadedBoard);
     }
     boardId && fetchData();
   }, [boards, loadedData, selectBoard]);
@@ -159,7 +158,7 @@ function Board() {
         <CreateModal
           setShowModal={setShowModal}
           type="column"
-          selectBoard={selectBoard}
+          currBoardId={currBoardId}
         />
       )}
       {showDropdown && <Dropdown />}

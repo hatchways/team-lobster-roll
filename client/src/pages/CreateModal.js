@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 function CreateModal(props) {
   const classes = useStyles();
-  const { setShowModal, type, selectBoard } = props;
+  const { setShowModal, type, currBoardId } = props;
   const { user } = useContext(UserContext);
 
   const [title, setTitle] = useState("");
@@ -79,7 +79,7 @@ function CreateModal(props) {
       }
       case "column": {
         const cleanedData = {
-          boardId: data.boards[selectBoard],
+          boardId: currBoardId,
           title: title,
         };
         createColumn(cleanedData);
