@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const CardSchema = new Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
     },
@@ -41,8 +41,8 @@ CardSchema.statics.findCard = async function (cardId) {
 };
 
 // creates a new instance of the Card model and returns the saved instance
-CardSchema.statics.createNewCard = async function (name) {
-  const card = new this({ name });
+CardSchema.statics.createNewCard = async function (title) {
+  const card = new this({ title });
   await card.save();
   return card;
 };

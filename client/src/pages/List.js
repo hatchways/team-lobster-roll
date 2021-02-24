@@ -22,14 +22,14 @@ const useStyles = makeStyles({
 });
 
 const taskTypes = {
-  "task-1": { id: "task-1", title: "art", status: "red", note: "March 14" },
-  "task-2": { id: "task-2", title: "philosophy", status: "red" },
-  "task-3": { id: "task-3", title: "cooking", status: "red" },
-  "task-4": { id: "task-4", title: "gym", status: "red" },
-  "task-5": { id: "task-5", title: "math", status: "green" },
-  "task-6": { id: "task-6", title: "english", status: "green" },
-  "task-7": { id: "task-7", title: "science", status: "green" },
-  "task-8": { id: "task-8", title: "history", status: "green" },
+  "task-1": { id: "task-1", title: "art", color: "red", description: "March 14" },
+  "task-2": { id: "task-2", title: "philosophy", color: "red" },
+  "task-3": { id: "task-3", title: "cooking", color: "red" },
+  "task-4": { id: "task-4", title: "gym", color: "red" },
+  "task-5": { id: "task-5", title: "math", color: "green" },
+  "task-6": { id: "task-6", title: "english", color: "green" },
+  "task-7": { id: "task-7", title: "science", color: "green" },
+  "task-8": { id: "task-8", title: "history", color: "green" },
 };
 
 const columnTypes = {
