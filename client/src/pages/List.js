@@ -142,6 +142,7 @@ function List(props) {
                 />
               );
             })}
+            <span>{provided.placeholder}</span>
           </div>
         )}
       </Droppable>
