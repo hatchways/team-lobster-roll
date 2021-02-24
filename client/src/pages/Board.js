@@ -14,6 +14,7 @@ import { UserContext } from "../contexts/UserContext";
 import { Grid } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
+import { getBoard } from "../API/board";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,7 +54,7 @@ function Board() {
   const [showModal, setShowModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [boards, setBoards] = useState([]);
-  const [selectBoard, setSelectBoard] = useState(1);
+  const [selectBoard, setSelectBoard] = useState(0);
   const [board, setBoard] = useState({});
 
   const loadedData = useMemo(() => {
@@ -63,17 +64,19 @@ function Board() {
   useEffect(() => {
     async function fetchData() {
       const boardList = await getAllBoards();
-      setBoards(boardList);
+      return setBoards(boardList);
     }
     fetchData();
   }, [getAllBoards]);
   useEffect(() => {
-    console.log("selected board", selectBoard);
-    setBoard(boards[selectBoard]);
-    if (board && board.columns) {
+    const boardId = boards[selectBoard] && boards[selectBoard]._id;
+    console.log("clicked new boardId", boardId);
+    async function fetchData() {
+      const res = await getBoard(boardId);
+      const loadedBoard = res.data;
       const loadedColumns = {};
       const loadedOrder = [];
-      board.columns.forEach((col) => {
+      loadedBoard.columns.forEach((col) => {
         col.id = col._id;
         col.taskIds = col.cards.map((card) => card._id);
         loadedColumns[col._id] = col;
@@ -81,8 +84,12 @@ function Board() {
       });
       loadedData.columns = loadedColumns;
       loadedData.columnOrder = loadedOrder;
+
+      setBoard(loadedBoard);
+      console.log("new board", loadedBoard);
     }
-  }, [board, boards, loadedData, selectBoard]);
+    boardId && fetchData();
+  }, [boards, loadedData, selectBoard]);
 
   const Dropdown = () => {
     const allBoards = boards.map((board, idx) => (
