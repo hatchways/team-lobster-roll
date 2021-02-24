@@ -1,22 +1,22 @@
 // data from db that was fetched from global state
 const cardsFromDb = [
-  { id: "card-1", title: "Math Exam", status: "red", deadline: "2021-02-19" },
+  { id: "card-1", title: "Math Exam", color: "red", deadline: "2021-02-19" },
   {
     id: "card-2",
     title: "Comp Sci Project",
-    status: "red",
+    color: "red",
     deadline: "2021-02-19",
   },
   {
     id: "card-3",
     title: "Biology Exam",
-    status: "red",
+    color: "red",
     deadline: "2021-02-19",
   },
   {
     id: "card-4",
     title: "Chemisty Exam",
-    status: "red",
+    color: "red",
     deadline: "2021-02-28",
   },
 ];

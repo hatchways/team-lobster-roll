@@ -28,7 +28,7 @@ export const useStyles = makeStyles({
       boxShadow: "0px 0px 10px 1px rgba(128,163,251,0.8)",
     },
   },
-  cardStatus: {
+  cardColor: {
     height: "0px",
     width: "30px",
     borderRadius: "8px",

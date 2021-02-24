@@ -85,13 +85,13 @@ function Task(props) {
           >
             <span
               className={`${classes.cardStatus} ${
-                task.status ? classes[task.status] : classes.noColor
+                task.color ? classes[task.color] : classes.noColor
               }`}
             ></span>
             <Typography variant="h6">{task.title}</Typography>
-            {task.note ? (
+            {task.description ? (
               <Typography variant="body1" className={classes.note}>
-                {task.note}
+                {task.description}
               </Typography>
             ) : (
               ""
