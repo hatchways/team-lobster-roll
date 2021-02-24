@@ -50,18 +50,11 @@ router.patch("/:id", async (req, res, next) => {
   try {
     if (req.body) {
       const data = req.body;
-      const { title } = data;
-      const newData = {
-        name: title,
-      };
-      const { id } = req.params;
-      const updatedBoard = await Board.findByIdAndUpdate(
-        id,
-        newData,
-        (err, board) => {
-          res.send(board);
-        }
-      );
+      const { cardId, fromColumnId, toColumnId } = data;
+      const boardId = req.params.id;
+      const foundBoard = await Board.findById(boardId);
+      foundBoard.moveCard(cardId, fromColumnId, toColumnId);
+      res.status(200).json(foundBoard);
     }
   } catch (err) {
     console.error(err);

@@ -26,3 +26,12 @@ export const getBoardShallow = async (boardId) => {
     console.error(err);
   }
 };
+
+export const editBoard = async (boardId, data) => {
+  try {
+    const URL = `${window.location.origin}/api/board/${boardId}`;
+    return await axios.patch(URL, data);
+  } catch (err) {
+    console.error(err);
+  }
+};
