@@ -17,3 +17,12 @@ export const getBoard = async (boardId) => {
     console.error(err);
   }
 };
+
+export const getBoardShallow = async (boardId) => {
+  try {
+    const URL = `${window.location.origin}/api/board/shallow/${boardId}`;
+    return await axios.get(URL);
+  } catch (err) {
+    console.error(err);
+  }
+};
