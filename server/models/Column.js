@@ -38,7 +38,7 @@ ColumnSchema.statics.deleteColumn = async function (columnId) {
 
 // adds a Card model into the Column's cards array
 ColumnSchema.methods.addCard = async function (cardId) {
-  this.cards.push(cardId);
+  this.cards.push(cardId); //splice
   await this.save();
 };
 

@@ -45,13 +45,28 @@ BoardSchema.statics.deleteBoard = function (boardId) {
 
 // gets a Board by _id
 BoardSchema.statics.findBoard = async function (boardId) {
-  const foundBoard = await this.findById(boardId).populate({
-    path: "columns",
-    populate: {
+  const foundBoard = await this.findById(boardId)
+    .populate({
+      path: "columns",
+      model: "Column",
+    })
+    .populate({
       path: "cards",
       model: "Card",
-    },
-  });
+    });
+  // .exec(function (err, data) {
+  //   if (err) {
+  //     console.log("error: ", err);
+  //   }
+  //   console.log("data: ", data);
+  // });
+  // const foundBoard = await this.findById(boardId).populate({
+  //   path: "columns",
+  //   populate: {
+  //     path: "cards",
+  //     model: "Card",
+  //   },
+  // });
 
   return foundBoard;
 };
@@ -84,11 +99,13 @@ BoardSchema.methods.moveCard = async function (
   fromColumnId,
   toColumnId
 ) {
-  const fromCol = Column.findOne({
+  const fromCol = await Column.findOne({
     _id: mongoose.Types.ObjectId(fromColumnId),
   });
-  const toCol = Column.findOne({ _id: mongoose.Types.ObjectId(toColumnId) });
-  await Promise.all([fromCol, toCol]);
+  const toCol = await Column.findOne({
+    _id: mongoose.Types.ObjectId(toColumnId),
+  });
+  // need toColumn idx to splice card into
   await Promise.all([fromCol.removeCard(cardId), toCol.addCard(cardId)]);
 };
 
