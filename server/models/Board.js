@@ -45,28 +45,14 @@ BoardSchema.statics.deleteBoard = function (boardId) {
 
 // gets a Board by _id
 BoardSchema.statics.findBoard = async function (boardId) {
-  const foundBoard = await this.findById(boardId)
-    .populate({
-      path: "columns",
-      model: "Column",
-    })
-    .populate({
+  const foundBoard = await this.findById(boardId).populate({
+    path: "columns",
+    model: "Column",
+    populate: {
       path: "cards",
       model: "Card",
-    });
-  // .exec(function (err, data) {
-  //   if (err) {
-  //     console.log("error: ", err);
-  //   }
-  //   console.log("data: ", data);
-  // });
-  // const foundBoard = await this.findById(boardId).populate({
-  //   path: "columns",
-  //   populate: {
-  //     path: "cards",
-  //     model: "Card",
-  //   },
-  // });
+    },
+  });
 
   return foundBoard;
 };
