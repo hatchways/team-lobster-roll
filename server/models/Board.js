@@ -80,19 +80,37 @@ BoardSchema.methods.addNewCardToColumn = async function (cardName, columnId) {
 };
 
 // moves specific card from an existing column to another existing column
-BoardSchema.methods.moveCard = async function (
-  cardId,
-  fromColumnId,
-  toColumnId
-) {
-  const fromCol = await Column.findOne({
-    _id: mongoose.Types.ObjectId(fromColumnId),
-  });
-  const toCol = await Column.findOne({
-    _id: mongoose.Types.ObjectId(toColumnId),
-  });
-  // need toColumn idx to splice card into
-  await Promise.all([fromCol.removeCard(cardId), toCol.addCard(cardId)]);
+BoardSchema.methods.moveCard = async function (data) {
+  const {
+    cardId,
+    fromColumnId,
+    toColumnId,
+    sourceIdx,
+    destinationIdx,
+    movement,
+  } = data;
+
+  const foundFromColumn = await Column.findById(fromColumnId);
+  const foundToColumn = await Column.findById(toColumnId);
+  if (movement === "same") {
+    foundFromColumn.moveCard(cardId, sourceIdx, destinationIdx);
+  } else {
+    foundFromColumn.moveCardOut(sourceIdx);
+    foundToColumn.moveCardIn(cardId, destinationIdx);
+  }
+};
+
+// moves column in same board
+BoardSchema.methods.moveColumn = async function (data) {
+  const {
+    cardId,
+    fromColumnId,
+    toColumnId,
+    sourceIdx,
+    destinationIdx,
+    movement,
+  } = data;
+  //TODO: columns
 };
 
 // removes specific card from existing column

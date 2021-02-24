@@ -50,10 +50,15 @@ router.patch("/:id", async (req, res, next) => {
   try {
     if (req.body) {
       const data = req.body;
-      const { cardId, fromColumnId, toColumnId } = data;
+      const { movement } = data;
       const boardId = req.params.id;
       const foundBoard = await Board.findById(boardId);
-      foundBoard.moveCard(cardId, fromColumnId, toColumnId);
+      if (movement === "same" || movement === "different") {
+        foundBoard.moveCard(data);
+      } else {
+        //TODO: columns
+        // console.log("data: ", data);
+      }
       res.status(200).json(foundBoard);
     }
   } catch (err) {

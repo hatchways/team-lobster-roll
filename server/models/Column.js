@@ -38,7 +38,7 @@ ColumnSchema.statics.deleteColumn = async function (columnId) {
 
 // adds a Card model into the Column's cards array
 ColumnSchema.methods.addCard = async function (cardId) {
-  this.cards.push(cardId); //splice
+  this.cards.push(cardId);
   await this.save();
 };
 
@@ -48,5 +48,27 @@ ColumnSchema.methods.removeCard = async function (cardId) {
   await Promise.all([this.save(), Card.deleteCard(cardId)]);
 };
 
+// moves card same column
+ColumnSchema.methods.moveCard = async function (
+  cardId,
+  sourceIdx,
+  destinationIdx
+) {
+  this.cards.splice(sourceIdx, 1);
+  this.cards.splice(destinationIdx, 0, cardId);
+  await this.save();
+};
+
+// moves card in
+ColumnSchema.methods.moveCardIn = async function (cardId, destinationIdx) {
+  this.cards.splice(destinationIdx, 0, cardId);
+  await this.save();
+};
+
+// moves card out
+ColumnSchema.methods.moveCardOut = async function (sourceIdx) {
+  this.cards.splice(sourceIdx, 1);
+  await this.save();
+};
 const Column = mongoose.model("Column", ColumnSchema);
 module.exports = Column;

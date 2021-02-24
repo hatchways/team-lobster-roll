@@ -24,17 +24,13 @@ const useStyles = makeStyles({
 
 function List(props) {
   const classes = useStyles();
-  const { loadedData } = props;
+  const { loadedData, currBoardId } = props;
 
   const [data, setData] = useState(loadedData);
 
-  function handleCardMove() {
-    const dummyData = {
-      cardId: "602fe3a4dbe42c4aaca4b7b3",
-      fromColumnId: "602f2b85e297d244f8f90d1c",
-      toColumnId: "602ecdfb8c2c62480c93fe46",
-    };
-    editBoard("602ecdfb8c2c62480c93fe47", dummyData);
+  function handleCardMove(data, movement) {
+    data.movement = movement;
+    editBoard(currBoardId, data);
   }
 
   function handleOnDragEnd(result) {
@@ -49,6 +45,7 @@ function List(props) {
       return;
     }
 
+    // DRAG COLUMN
     if (type === "column") {
       const newColumnOrder = [...data.columnOrder];
       newColumnOrder.splice(source.index, 1);
@@ -64,6 +61,7 @@ function List(props) {
     const start = data.columns[source.droppableId];
     const finish = data.columns[destination.droppableId];
 
+    // DRAG CARD SAME COLUMN
     if (start === finish) {
       const newTaskIds = [...start.taskIds];
       newTaskIds.splice(source.index, 1);
@@ -79,8 +77,19 @@ function List(props) {
       };
 
       setData(newState);
+      const moveData = {
+        cardId: draggableId,
+        fromColumnId: source.droppableId,
+        toColumnId: destination.droppableId,
+        destinationIdx: destination.index,
+        sourceIdx: source.index,
+      };
+      handleCardMove(moveData, "same");
+
       return;
     }
+
+    // DRAG CARD DIFFERENT COLUMN
     const startTaskIds = [...start.taskIds];
     startTaskIds.splice(source.index, 1);
     const newStart = {
@@ -102,6 +111,14 @@ function List(props) {
       },
     };
     setData(newState);
+    const moveData = {
+      cardId: draggableId,
+      fromColumnId: source.droppableId,
+      toColumnId: destination.droppableId,
+      destinationIdx: destination.index,
+      sourceIdx: source.index,
+    };
+    handleCardMove(moveData, "different");
   }
 
   return (

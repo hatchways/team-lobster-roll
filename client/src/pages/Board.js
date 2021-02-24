@@ -143,7 +143,7 @@ function Board() {
           </Grid>
         </Toolbar>
       </AppBar>
-      <List loadedData={loadedData} />
+      <List loadedData={loadedData} currBoardId={currBoardId} />
       {showModal && (
         <CreateModal
           setShowModal={setShowModal}
