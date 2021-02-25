@@ -15,6 +15,7 @@ export const useStyles = makeStyles({
     listStyle: "none",
   },
   columnHeader: {
+    position: "relative",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -42,35 +43,19 @@ export const useStyles = makeStyles({
       backgroundColor: "#759CFC",
     },
   },
-	
-	bg: {
-    position: "fixed",
+  optionsContainer: {
+    position: "absolute",
     top: "0",
     right: "0",
-    bottom: "0",
-    left: "0",
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    zIndex: "3",
+    width: "130px",
+    zIndex: "4",
+    borderRadius: "5px",
+    boxShadow: " 0 0 10px #ccc",
+    backgroundColor: "white",
   },
-	optionsContainer: {
-		position: 'fixed',
-		top: '0',
-		right: '0',
-		bottom: '0',
-		left: '0',
-		margin: 'auto',
-		width: '400px',
-		height: '200px',
-		zIndex: '4',
-		borderRadius: '10px',
-		backgroundColor: 'white',
-	},
-	closeButton: {
-		position: 'absolute',
-		top: '0',
-		right: '0'
-	}
-	
+  closeButton: {
+    position: "relative",
+    left: "80px",
+    width: "50px",
+  },
 });

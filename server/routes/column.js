@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Board = require("../models/Board");
 const Column = require("../models/Column");
 const Card = require("../models/Card");
@@ -24,15 +24,15 @@ router.post("/", async (req, res, next) => {
 });
 
 // DELETE COLUMN
-router.delete('/delete', async (req, res) => {
-	try {
-		const foundBoard = await Board.findBoard(req.body.boardId);
-		await foundBoard.removeColumn(req.body.columnId);
-		res.sendStatus(200);
-	} catch (err) {
-		res.status(400).send({msg: 'An error occured, could not delete column.'});
-		console.error(err);
-	}
+router.delete("/delete", async (req, res) => {
+  try {
+    const foundBoard = await Board.findBoard(req.body.boardId);
+    await foundBoard.removeColumn(req.body.columnId);
+    res.sendStatus(200);
+  } catch (err) {
+    res.status(400).send({ msg: "An error occured, could not delete column." });
+    console.error(err);
+  }
 });
 
 module.exports = router;

@@ -9,17 +9,19 @@ export const createColumn = (data) => {
   }
 };
 
-export const deleteColumn = (boardId, columnId) => {
-	try {
-		axios.delete(`${window.location.origin}/api/column/delete/`,
-			{
-				data: {
-					boardId,
-					columnId
-				}
-			}
-		);
-	} catch (err) {
-		console.error(err);
-	}
+export const deleteColumn = async (boardId, columnId) => {
+  try {
+    const res = await axios.delete(
+      `${window.location.origin}/api/column/delete/`,
+      {
+        data: {
+          boardId,
+          columnId,
+        },
+      }
+    );
+    return res.status;
+  } catch (err) {
+    console.error(err);
+  }
 };

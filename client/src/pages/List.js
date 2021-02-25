@@ -61,7 +61,7 @@ const initialData = {
   columnOrder: [...Object.keys(columnTypes)],
 };
 
-function List({handleSelectColumn, handleShowColumnOptions}) {
+function List() {
   const classes = useStyles();
   const [data, setData] = useState(initialData);
 
@@ -139,7 +139,8 @@ function List({handleSelectColumn, handleShowColumnOptions}) {
           <div
             className={classes.columnsContainer}
             {...provided.droppableProps}
-            ref={provided.innerRef}>
+            ref={provided.innerRef}
+          >
             {data.columnOrder.map((columnId, idx) => {
               const column = data.columns[columnId];
               const tasks = column.taskIds.map((taskId) => data.tasks[taskId]);
@@ -149,8 +150,6 @@ function List({handleSelectColumn, handleShowColumnOptions}) {
                   column={column}
                   tasks={tasks}
                   idx={idx}
-									selectColumn={handleSelectColumn}
-									showOptions={handleShowColumnOptions}
                 />
               );
             })}
