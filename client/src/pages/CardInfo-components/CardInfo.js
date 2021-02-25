@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import {
   Typography,
   Container,
   Box,
-  TextField,
   Button,
   CardContent,
   Card,
@@ -15,10 +14,6 @@ import CardInfoDeadline from "./CardInfoDeadline";
 import CardInfoComment from "./CardInfoComment";
 
 function CardInfo({ task, showCardInfo, closeCardInfo }) {
-  useEffect(() => {
-    console.log(showCardInfo);
-  }, [showCardInfo]);
-
   const classes = useStyles();
   const [info, setInfo] = useState({
     name: "",
