@@ -61,7 +61,7 @@ const initialData = {
   columnOrder: [...Object.keys(columnTypes)],
 };
 
-function List() {
+function List({handleSelectColumn, handleShowColumnOptions}) {
   const classes = useStyles();
   const [data, setData] = useState(initialData);
 
@@ -149,6 +149,8 @@ function List() {
                   column={column}
                   tasks={tasks}
                   idx={idx}
+									selectColumn={handleSelectColumn}
+									showOptions={handleShowColumnOptions}
                 />
               );
             })}
