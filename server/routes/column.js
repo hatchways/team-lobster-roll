@@ -23,12 +23,11 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-// DELETE
+// DELETE COLUMN
 router.delete('/delete', async (req, res) => {
 	try {
 		const foundBoard = await Board.findBoard(req.body.boardId);
-		console.log(foundBoard);
-		//await foundBoard.removeColumn(req.body.columnId);
+		await foundBoard.removeColumn(req.body.columnId);
 		res.sendStatus(200);
 	} catch (err) {
 		res.status(400).send({msg: 'An error occured, could not delete column.'});
