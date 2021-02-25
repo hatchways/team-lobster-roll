@@ -16,6 +16,7 @@ import { Grid } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
 import { getBoard, editBoard } from "../API/board";
+import UploadImage from "./UploadImage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,6 +53,8 @@ const useStyles = makeStyles((theme) => ({
 function Board() {
   const classes = useStyles();
   const { user, getAllBoards } = useContext(UserContext);
+  const [showUpload, setShowUpload] = useState(false);
+
   const [showModal, setShowModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [boards, setBoards] = useState([]);
@@ -136,6 +139,16 @@ function Board() {
               </Button>
               <IconButton
                 color="inherit"
+                onClick={() => setShowDropdown(!showDropdown)}></IconButton>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.buttonCreate}
+                onClick={() => setShowUpload(true)}>
+                Choose Profile Image
+              </Button>
+              <IconButton
+                color="inherit"
                 onClick={() => setShowDropdown(!showDropdown)}>
                 <MenuIcon />
               </IconButton>
@@ -157,6 +170,7 @@ function Board() {
         />
       )}
       {showDropdown && <Dropdown />}
+      {showUpload && <UploadImage setShowUpload={setShowUpload} />}
     </div>
   );
 }

@@ -25,6 +25,11 @@ const UserSchema = new Schema(
       minlength: 6,
       required: true,
     },
+    image: {
+      type: String,
+      required: true,
+      default: "/images/default-profile.jpg",
+    },
     joinDate: {
       type: Date,
       default: Date.now,
@@ -53,6 +58,16 @@ UserSchema.statics.findUser = function (id) {
 // Find a user by email
 UserSchema.statics.findByEmail = function (email) {
   return this.find({ email: email });
+};
+
+// Add a profile image
+UserSchema.statics.addImage = function (id, image) {
+  return this.updateOne(
+    { _id: id },
+    {
+      $set: { image: image },
+    }
+  );
 };
 
 // Creates a user
