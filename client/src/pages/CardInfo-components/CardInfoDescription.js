@@ -53,9 +53,7 @@ function CardInfoDescription({
       <Box className={classes.field}>
         <Button
           disabled={disabled}
-          style={{ color: "white" }}
-          variant="contained"
-          size="medium"
+          size="large"
           color="primary"
           onClick={confirmSave}
         >

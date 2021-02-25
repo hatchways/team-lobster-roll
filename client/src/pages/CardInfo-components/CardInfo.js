@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Container,
@@ -63,10 +63,9 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
   return (
     <Container
       maxWidth={false}
-      className={`${classes.bg} ${
-        showCardInfo ? classes.dBlock : classes.dNone
-      }`}
+      className={showCardInfo ? classes.dBlock : classes.dNone}
     >
+      <Box className={classes.bg} onClick={() => closeCardInfo()} />
       <Card className={classes.cardContainer}>
         <CardContent className={classes.header}>
           <Box className={classes.titleContainer}>
@@ -113,7 +112,6 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
                 ADD TO CARD:
               </Typography>
               <Button
-                variant="contained"
                 className={`${classes.add} ${
                   !showDescription ? classes.dBlock : classes.dNone
                 }`}
@@ -122,7 +120,6 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
                 Description
               </Button>
               <Button
-                variant="contained"
                 className={`${classes.add} ${
                   !showDeadline ? classes.dBlock : classes.dNone
                 }`}
@@ -131,7 +128,6 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
                 Deadline
               </Button>
               <Button
-                variant="contained"
                 className={`${classes.add} ${
                   !showComment ? classes.dBlock : classes.dNone
                 }`}
@@ -144,28 +140,16 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
               <Typography variant="subtitle2" align="center">
                 ACTIONS:
               </Typography>
-              <Button
-                variant="contained"
-                className={`${classes.add} ${classes.dBlock}`}
-              >
+              <Button className={`${classes.add} ${classes.dBlock}`}>
                 Move
               </Button>
-              <Button
-                variant="contained"
-                className={`${classes.add} ${classes.dBlock}`}
-              >
+              <Button className={`${classes.add} ${classes.dBlock}`}>
                 Copy
               </Button>
-              <Button
-                variant="contained"
-                className={`${classes.add} ${classes.dBlock}`}
-              >
+              <Button className={`${classes.add} ${classes.dBlock}`}>
                 Share
               </Button>
-              <Button
-                variant="contained"
-                className={`${classes.add} ${classes.dBlock}`}
-              >
+              <Button className={`${classes.add} ${classes.dBlock}`}>
                 Delete
               </Button>
             </Box>

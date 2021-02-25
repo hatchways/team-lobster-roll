@@ -3,7 +3,9 @@ import { Link, useHistory } from "react-router-dom";
 import { useStyles } from "../themes/loginSignup";
 import { Button, Typography, TextField } from "@material-ui/core";
 import axios from "axios";
+import io from "socket.io-client";
 import { UserContext } from "../contexts/UserContext";
+import { SocketContext } from "../contexts/SocketContext";
 
 function Login(props) {
   const classes = useStyles();
@@ -11,19 +13,13 @@ function Login(props) {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
-
-  const { setUser, setLoggedIn } = useContext(UserContext);
-
   const [passwordError, setPasswordError] = useState("");
+  const { setUser, setLoggedIn } = useContext(UserContext);
+  const { setSocket } = useContext(SocketContext);
+  const emailVerify = new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    email.includes("@")
-      ? setEmailError("")
-      : setEmailError("Email must contain an '@'.");
-    password.length > 6
-      ? setPasswordError("")
-      : setPasswordError("Password must be > 6 characters.");
     if (!emailError.length && !passwordError.length) {
       axios
         .post(`${window.location.origin}/login/`, {
@@ -34,9 +30,35 @@ function Login(props) {
           const userData = data.data[0];
           setUser(userData);
           setLoggedIn(true);
+
+          const newSocket = io(window.location.origin);
+          setSocket(newSocket);
+
           history.push("/board");
         })
         .catch((err) => console.log(err));
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case "email": {
+        if (!emailVerify.test(value)) {
+          setEmailError("Invalid email address.");
+        } else setEmailError("");
+        setEmail(value);
+        break;
+      }
+      case "password": {
+        if (value.length < 7) {
+          setPasswordError("Must be at least 7 characters.");
+        } else setPasswordError("");
+        setPassword(value);
+        break;
+      }
+      default:
+        break;
     }
   };
 
@@ -60,7 +82,8 @@ function Login(props) {
               variant="outlined"
               label="Enter email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              onChange={(e) => handleChange(e)}
               helperText={emailError}
               FormHelperTextProps={{ className: classes.helperText }}
             />
@@ -70,7 +93,8 @@ function Login(props) {
               type="password"
               label="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              onChange={(e) => handleChange(e)}
               helperText={passwordError}
               FormHelperTextProps={{ className: classes.helperText }}
             />
@@ -79,7 +103,8 @@ function Login(props) {
               type="submit"
               variant="contained"
               color="secondary"
-              onClick={handleSubmit}>
+              onClick={handleSubmit}
+            >
               Login
             </Button>
           </form>

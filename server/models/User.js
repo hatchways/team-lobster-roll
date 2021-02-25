@@ -25,6 +25,11 @@ const UserSchema = new Schema(
       minlength: 6,
       required: true,
     },
+    image: {
+      type: String,
+      required: true,
+      default: "/images/default-profile.jpg",
+    },
     joinDate: {
       type: Date,
       default: Date.now,
@@ -55,6 +60,26 @@ UserSchema.statics.findByEmail = function (email) {
   return this.find({ email: email });
 };
 
+// Add a profile image
+UserSchema.statics.addImage = function (id, image) {
+  return this.updateOne(
+    { _id: id },
+    {
+      $set: { image: image },
+    }
+  );
+};
+
+// Delete a created board
+UserSchema.statics.deleteBoard = function (userId, boardId) {
+  this.updateOne(
+    { _id: userId },
+    {
+      $pull: { boards: boardId },
+    }
+  ).exec();
+};
+
 // Creates a user
 UserSchema.statics.createUser = async function (email, hash) {
   const newUser = new User({
@@ -62,7 +87,7 @@ UserSchema.statics.createUser = async function (email, hash) {
     password: hash,
   });
 
-  const newBoard = await Board.createNewBoard("untitled");
+  const newBoard = await Board.createNewBoard("untitled", newUser._id);
   newBoard.save();
   newUser.boards = [newBoard._id];
 
