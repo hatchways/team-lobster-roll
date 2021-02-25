@@ -70,6 +70,16 @@ UserSchema.statics.addImage = function (id, image) {
   );
 };
 
+// Delete a created board
+UserSchema.statics.deleteBoard = function (userId, boardId) {
+  this.updateOne(
+    { _id: userId },
+    {
+      $pull: { boards: boardId },
+    }
+  ).exec();
+};
+
 // Creates a user
 UserSchema.statics.createUser = async function (email, hash) {
   const newUser = new User({
@@ -77,7 +87,7 @@ UserSchema.statics.createUser = async function (email, hash) {
     password: hash,
   });
 
-  const newBoard = await Board.createNewBoard("untitled");
+  const newBoard = await Board.createNewBoard("untitled", newUser._id);
   newBoard.save();
   newUser.boards = [newBoard._id];
 
