@@ -102,15 +102,10 @@ BoardSchema.methods.moveCard = async function (data) {
 
 // moves column in same board
 BoardSchema.methods.moveColumn = async function (data) {
-  const {
-    cardId,
-    fromColumnId,
-    toColumnId,
-    sourceIdx,
-    destinationIdx,
-    movement,
-  } = data;
-  //TODO: columns
+  const { columnId, sourceIdx, destinationIdx } = data;
+  this.columns.splice(sourceIdx, 1);
+  this.columns.splice(destinationIdx, 0, columnId);
+  await this.save();
 };
 
 // removes specific card from existing column

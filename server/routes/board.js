@@ -53,11 +53,10 @@ router.patch("/:id", async (req, res, next) => {
       const { movement } = data;
       const boardId = req.params.id;
       const foundBoard = await Board.findById(boardId);
-      if (movement === "same" || movement === "different") {
-        foundBoard.moveCard(data);
+      if (movement === "column") {
+        foundBoard.moveColumn(data);
       } else {
-        //TODO: columns
-        // console.log("data: ", data);
+        foundBoard.moveCard(data);
       }
       res.status(200).json(foundBoard);
     }

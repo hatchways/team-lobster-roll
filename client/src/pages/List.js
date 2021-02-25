@@ -55,6 +55,12 @@ function List(props) {
         columnOrder: newColumnOrder,
       };
       setData(newState);
+      const moveData = {
+        columnId: draggableId,
+        destinationIdx: destination.index,
+        sourceIdx: source.index,
+      };
+      handleCardMove(moveData, "column");
       return;
     }
 
@@ -131,7 +137,6 @@ function List(props) {
             ref={provided.innerRef}>
             {data.columnOrder.map((columnId, idx) => {
               const column = data.columns[columnId];
-              // const tasks = column.taskIds.map((taskId) => data.tasks[taskId]); //[]task {}
               const tasks = column.cards;
               return (
                 <Column
