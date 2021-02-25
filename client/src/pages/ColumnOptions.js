@@ -1,11 +1,8 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
-import EditIcon from "@material-ui/icons/Edit";
 import { deleteColumn } from "../API/column";
 import { useStyles } from "../themes/columnStyles";
 
@@ -18,7 +15,6 @@ function ColumnOptions({ closeOptions }) {
       "6036d5190e37bad4baa5d691",
       "6036d61d0e37bad4baa5d692"
     );
-    await console.log(responseStatus);
     if (responseStatus === 200) {
       // update board context
     }
