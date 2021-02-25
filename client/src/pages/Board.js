@@ -14,6 +14,7 @@ import { Grid } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
 import UploadImage from "./UploadImage";
+import Members from "./Members";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +42,7 @@ function Board() {
   const { user } = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
+  const [showMembers, setShowMembers] = useState(false);
 
   return (
     <div className={classes.root}>
@@ -75,6 +77,14 @@ function Board() {
               >
                 Choose Profile Image
               </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.buttonCreate}
+                onClick={() => setShowMembers(true)}
+              >
+                Members
+              </Button>
               <IconButton color="inherit">
                 <MenuIcon />
               </IconButton>
@@ -85,6 +95,7 @@ function Board() {
       <List />
       {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
       {showUpload && <UploadImage setShowUpload={setShowUpload} />}
+      {showMembers && <Members setShowMembers={setShowMembers} />}
     </div>
   );
 }
