@@ -21,6 +21,7 @@ function App() {
         <Navbar />
         <BrowserRouter>
           <Switch>
+            <ProtectedRoute path="/board/:id" component={Board} />
             <ProtectedRoute path="/board" component={Board} />
             <Route path="/" exact component={LandingPage} />
             <Route path="/login" component={Login} />

@@ -91,7 +91,7 @@ function List(props) {
             className={classes.columnsContainer}
             {...provided.droppableProps}
             ref={provided.innerRef}>
-            {loadedData.columnOrder.map((columnId, idx) => {
+            {loadedData?.columnOrder.map((columnId, idx) => {
               const column = loadedData.columns[columnId];
               const tasks = column.cards;
               return (

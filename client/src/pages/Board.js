@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import List from "./List";
 import {
   AppBar,
@@ -15,7 +15,6 @@ import { UserContext } from "../contexts/UserContext";
 import { Grid } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
-import { getBoard, editBoard } from "../API/board";
 import UploadImage from "./UploadImage";
 
 const useStyles = makeStyles((theme) => ({
@@ -52,55 +51,23 @@ const useStyles = makeStyles((theme) => ({
 
 function Board() {
   const classes = useStyles();
-  const { user, getAllBoards } = useContext(UserContext);
+  const { boardList, currBoardId, setCurrBoardId, currBoard } = useContext(
+    UserContext
+  );
   const [showUpload, setShowUpload] = useState(false);
-
   const [showModal, setShowModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [boards, setBoards] = useState([]);
-  const [selectBoard, setSelectBoard] = useState(0);
-  const [columns, setColumns] = useState(null);
-  const [currBoardId, setCurrBoardId] = useState("");
   const [moves, setMoves] = useState(0);
+  const { id } = useParams();
 
-  const loadedData = useMemo(() => {
-    const preloaded = { columns: {}, columnOrder: [] };
-    return preloaded;
-  }, []);
   useEffect(() => {
-    async function fetchData() {
-      const boardList = await getAllBoards();
-      return setBoards(boardList);
-    }
-    fetchData();
-  }, [getAllBoards]);
-  useEffect(() => {
-    const boardId = boards[selectBoard] && boards[selectBoard]._id;
-    setCurrBoardId(boardId);
-    async function fetchData() {
-      const res = await getBoard(boardId);
-      const loadedBoard = res.data;
-      const loadedColumns = {};
-      const loadedOrder = [];
-      loadedBoard.columns.forEach((col) => {
-        col.id = col._id;
-        col.taskIds = col.cards.map((card) => card._id);
-        loadedColumns[col._id] = col;
-        loadedOrder.push(col._id);
-      });
-      loadedData.columns = loadedColumns;
-      loadedData.columnOrder = loadedOrder;
-      setColumns(loadedColumns);
-    }
-    boardId && fetchData();
-  }, [boards, loadedData, selectBoard, moves]);
+    setCurrBoardId(id);
+  }, [id, setCurrBoardId]);
 
   const Dropdown = () => {
-    const allBoards = boards.map((board, idx) => (
+    const allBoards = boardList.map((board, idx) => (
       <Link to={`/board/${board._id}`} key={board._id}>
-        <Typography variant="subtitle1" onClick={() => setSelectBoard(idx)}>
-          {board.name}
-        </Typography>
+        <Typography variant="subtitle1">{board.name}</Typography>
       </Link>
     ));
 
@@ -157,7 +124,7 @@ function Board() {
         </Toolbar>
       </AppBar>
       <List
-        loadedData={loadedData}
+        loadedData={currBoard}
         currBoardId={currBoardId}
         moves={moves}
         setMoves={setMoves}
