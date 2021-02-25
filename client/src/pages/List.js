@@ -24,13 +24,12 @@ const useStyles = makeStyles({
 
 function List(props) {
   const classes = useStyles();
-  const { loadedData, currBoardId } = props;
-
-  const [data, setData] = useState(loadedData);
+  const { loadedData, currBoardId, moves, setMoves } = props;
 
   function handleCardMove(data, movement) {
     data.movement = movement;
     editBoard(currBoardId, data);
+    setMoves(moves + 1);
   }
 
   function handleOnDragEnd(result) {
@@ -47,14 +46,6 @@ function List(props) {
 
     // DRAG COLUMN
     if (type === "column") {
-      const newColumnOrder = [...data.columnOrder];
-      newColumnOrder.splice(source.index, 1);
-      newColumnOrder.splice(destination.index, 0, draggableId);
-      const newState = {
-        ...data,
-        columnOrder: newColumnOrder,
-      };
-      setData(newState);
       const moveData = {
         columnId: draggableId,
         destinationIdx: destination.index,
@@ -64,25 +55,11 @@ function List(props) {
       return;
     }
 
-    const start = data.columns[source.droppableId];
-    const finish = data.columns[destination.droppableId];
+    const start = loadedData.columns[source.droppableId];
+    const finish = loadedData.columns[destination.droppableId];
 
     // DRAG CARD SAME COLUMN
     if (start === finish) {
-      const newTaskIds = [...start.taskIds];
-      newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, draggableId);
-
-      const newColumn = { ...start, taskIds: newTaskIds };
-      const newState = {
-        ...data,
-        columns: {
-          ...data.columns,
-          [newColumn.id]: newColumn,
-        },
-      };
-
-      setData(newState);
       const moveData = {
         cardId: draggableId,
         fromColumnId: source.droppableId,
@@ -96,27 +73,6 @@ function List(props) {
     }
 
     // DRAG CARD DIFFERENT COLUMN
-    const startTaskIds = [...start.taskIds];
-    startTaskIds.splice(source.index, 1);
-    const newStart = {
-      ...start,
-      taskIds: startTaskIds,
-    };
-    const finishTaskIds = [...finish.taskIds];
-    finishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinish = {
-      ...finish,
-      taskIds: finishTaskIds,
-    };
-    const newState = {
-      ...data,
-      columns: {
-        ...data.columns,
-        [newStart.id]: newStart,
-        [newFinish.id]: newFinish,
-      },
-    };
-    setData(newState);
     const moveData = {
       cardId: draggableId,
       fromColumnId: source.droppableId,
@@ -135,8 +91,8 @@ function List(props) {
             className={classes.columnsContainer}
             {...provided.droppableProps}
             ref={provided.innerRef}>
-            {data.columnOrder.map((columnId, idx) => {
-              const column = data.columns[columnId];
+            {loadedData.columnOrder.map((columnId, idx) => {
+              const column = loadedData.columns[columnId];
               const tasks = column.cards;
               return (
                 <Column
@@ -144,6 +100,7 @@ function List(props) {
                   column={column}
                   tasks={tasks}
                   idx={idx}
+                  moves={moves}
                 />
               );
             })}

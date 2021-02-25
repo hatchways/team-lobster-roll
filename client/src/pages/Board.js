@@ -56,8 +56,9 @@ function Board() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [boards, setBoards] = useState([]);
   const [selectBoard, setSelectBoard] = useState(0);
-  const [board, setBoard] = useState({});
+  const [columns, setColumns] = useState(null);
   const [currBoardId, setCurrBoardId] = useState("");
+  const [moves, setMoves] = useState(0);
 
   const loadedData = useMemo(() => {
     const preloaded = { columns: {}, columnOrder: [] };
@@ -86,11 +87,10 @@ function Board() {
       });
       loadedData.columns = loadedColumns;
       loadedData.columnOrder = loadedOrder;
-
-      setBoard(loadedBoard);
+      setColumns(loadedColumns);
     }
     boardId && fetchData();
-  }, [boards, loadedData, selectBoard]);
+  }, [boards, loadedData, selectBoard, moves]);
 
   const Dropdown = () => {
     const allBoards = boards.map((board, idx) => (
@@ -143,7 +143,12 @@ function Board() {
           </Grid>
         </Toolbar>
       </AppBar>
-      <List loadedData={loadedData} currBoardId={currBoardId} />
+      <List
+        loadedData={loadedData}
+        currBoardId={currBoardId}
+        moves={moves}
+        setMoves={setMoves}
+      />
       {showModal && (
         <CreateModal
           setShowModal={setShowModal}
