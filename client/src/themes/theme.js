@@ -13,6 +13,10 @@ export const theme = createMuiTheme({
       fontSize: 12,
       fontWeight: 600,
     },
+    h3: {
+      fontSize: 18,
+      fontWeight: 600,
+    },
   },
   palette: {
     primary: { main: "#759CFC" },
