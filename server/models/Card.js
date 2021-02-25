@@ -52,5 +52,21 @@ CardSchema.statics.deleteCard = async function (cardId) {
   await this.deleteOne({ _id: mongoose.Types.ObjectId(cardId) });
 };
 
+// updates a specific card by its _id
+CardSchema.statics.updateCard = async function (cardId, property, newData) {
+  /*
+	- the "property" param is the schema's property that is to be updated
+	- the "newData" param is the updated data for a specific schema property
+	- if the property does not exist, a new one will be created with "newData" as its data
+	- note: "newData" must match the data structure of the schema property
+  */
+  const updatedCard = await this.findOneAndUpdate(
+    { _id: mongoose.Types.ObjectId(cardId) },
+    { [property]: newData },
+    { new: true }
+  );
+  return updatedCard;
+};
+
 const Card = mongoose.model("Card", CardSchema);
 module.exports = Card;
