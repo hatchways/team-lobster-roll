@@ -100,25 +100,6 @@ function Board() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // socket.io testing
-  useEffect(() => {
-    if (socket) {
-      socket.emit("testEmit", "testing emit");
-
-      socket.on("confirmEmit", (message) => {
-        console.log(message);
-      });
-    }
-  }, [socket]);
-
-  // componentWillUnmount
-  useEffect(() => {
-    return () => {
-      socket.removeAllListeners("confirmEmit");
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.blue}>
