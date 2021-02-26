@@ -12,6 +12,7 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../contexts/UserContext";
+import { SocketContext } from "../contexts/SocketContext";
 import { Grid } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
@@ -54,8 +55,9 @@ function Board() {
   const { boardList, currBoardId, setCurrBoardId, currBoard } = useContext(
     UserContext
   );
-  const [showUpload, setShowUpload] = useState(false);
+  const { socket } = useContext(SocketContext);
   const [showModal, setShowModal] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const { id } = useParams();
 
@@ -78,6 +80,25 @@ function Board() {
       </Grid>
     );
   };
+
+  // socket.io testing
+  useEffect(() => {
+    if (socket) {
+      socket.emit("testEmit", "testing emit");
+
+      socket.on("confirmEmit", (message) => {
+        console.log(message);
+      });
+    }
+  }, [socket]);
+
+  // componentWillUnmount
+  useEffect(() => {
+    return () => {
+      socket.removeAllListeners("confirmEmit");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={classes.root}>

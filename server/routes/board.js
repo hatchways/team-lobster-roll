@@ -33,7 +33,7 @@ router.post("/", async (req, res, next) => {
     if (req.body) {
       const data = req.body;
       const { title, userId } = data;
-      const newBoard = await Board.createNewBoard(title);
+      const newBoard = await Board.createNewBoard(title, userId);
       const foundUser = await User.findUser(userId);
 
       foundUser.boards = [...foundUser.boards, newBoard._id];
@@ -66,11 +66,12 @@ router.patch("/:id", async (req, res, next) => {
 });
 
 // DELETE
-router.delete("/:id", async (req, res, next) => {
+router.delete("/", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const deletedBoard = await Board.deleteBoard(id);
-    res.status(200).json({ msg: `Board ${id} deleted successfully` });
+    const { userId, boardId } = req.body;
+    const deletedBoard = await Board.deleteBoard(boardId);
+    const updateUser = await User.deleteBoard(userId, boardId);
+    res.status(200).json({ msg: `Board ${boardId} deleted successfully` });
   } catch (err) {
     console.error(err);
   }

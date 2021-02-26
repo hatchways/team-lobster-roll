@@ -10,6 +10,7 @@ import Navbar from "./pages/Navbar";
 import Upload from "./pages/Upload";
 import Calendar from "./pages/Calendar";
 import { UserContextProvider } from "./contexts/UserContext";
+import { SocketContextProvider } from "./contexts/SocketContext";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 
 import "./App.css";
@@ -17,21 +18,22 @@ import "./App.css";
 function App() {
   return (
     <UserContextProvider>
-      <MuiThemeProvider theme={theme}>
-        <Navbar />
-        <BrowserRouter>
-          <Switch>
-            <ProtectedRoute path="/board/:id" component={Board} />
-            <ProtectedRoute path="/board" component={Board} />
-            <Route path="/" exact component={LandingPage} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={SignUp} />
-            <Route path="/upload" component={Upload} />
-            <Route path="/calendar" component={Calendar} />
-            <Route path="*" component={() => "404 Not Found"} />
-          </Switch>
-        </BrowserRouter>
-      </MuiThemeProvider>
+      <SocketContextProvider>
+        <MuiThemeProvider theme={theme}>
+          <Navbar />
+          <BrowserRouter>
+            <Switch>
+              <ProtectedRoute path="/board/:id" component={Board} />
+              <ProtectedRoute exact path="/board" component={Board} />
+              <Route path="/" exact component={LandingPage} />
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={SignUp} />
+              <Route path="/calendar" component={Calendar} />
+              <Route path="*" component={() => "404 Not Found"} />
+            </Switch>
+          </BrowserRouter>
+        </MuiThemeProvider>
+      </SocketContextProvider>
     </UserContextProvider>
   );
 }

@@ -15,12 +15,17 @@ const BoardSchema = new Schema(
         ref: "Column",
       },
     ],
+    creator: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+    members: [],
   },
   { collection: "Board" }
 );
 
 // creates a new instance of the Board model and returns the saved instance
-BoardSchema.statics.createNewBoard = async function (name) {
+BoardSchema.statics.createNewBoard = async function (name, userId) {
   const inProgressCol = new Column({
     name: "In Progress",
   });
@@ -32,6 +37,7 @@ BoardSchema.statics.createNewBoard = async function (name) {
   const board = new this({
     name,
     columns: [inProgressCol._id, completedCol._id],
+    creator: userId,
   });
 
   await Promise.all([inProgressCol.save(), completedCol.save(), board.save()]);

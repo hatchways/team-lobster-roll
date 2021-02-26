@@ -3,7 +3,9 @@ import { Link, useHistory } from "react-router-dom";
 import { useStyles } from "../themes/loginSignup";
 import { Button, Typography, TextField } from "@material-ui/core";
 import axios from "axios";
+import io from "socket.io-client";
 import { UserContext } from "../contexts/UserContext";
+import { SocketContext } from "../contexts/SocketContext";
 
 function Login(props) {
   const classes = useStyles();
@@ -13,6 +15,7 @@ function Login(props) {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const { setUser, setLoggedIn } = useContext(UserContext);
+  const { setSocket } = useContext(SocketContext);
   const emailVerify = new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g);
 
   const handleSubmit = (e) => {
@@ -27,6 +30,10 @@ function Login(props) {
           const userData = data.data[0];
           setUser(userData);
           setLoggedIn(true);
+
+          const newSocket = io(window.location.origin);
+          setSocket(newSocket);
+
           history.push("/board");
         })
         .catch((err) => console.log(err));
