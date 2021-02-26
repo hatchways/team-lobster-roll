@@ -100,7 +100,7 @@ function Board() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-	// socket.io testing
+  // socket.io testing
   useEffect(() => {
     if (socket) {
       socket.emit("testEmit", "testing emit");

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { editBoard } from "../API/board";
 
 import Column from "./Column";
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 
 function List(props) {
   const classes = useStyles();
-  const { loadedData, currBoardId, moves } = props;
+  const { loadedData, currBoardId } = props;
   const [boardData, setBoardData] = useState(loadedData);
   useEffect(() => {
     setBoardData(loadedData);
@@ -157,7 +157,6 @@ function List(props) {
                   column={column}
                   tasks={tasks}
                   idx={idx}
-                  moves={moves}
                 />
               );
             })}

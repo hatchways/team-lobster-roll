@@ -1,5 +1,4 @@
 import React, { createContext, useState, useMemo, useEffect } from "react";
-
 import { getBoardShallow, getBoard } from "../API/board";
 import { getUser } from "../API/user";
 
@@ -17,7 +16,7 @@ export const UserContextProvider = (props) => {
   useEffect(() => {
     if (userId && createCount > 0) {
       async function getData() {
-        const res = await getUser(user._id);
+        const res = await getUser(userId);
         const updatedUser = res.data;
         setUser(updatedUser);
       }
@@ -54,7 +53,7 @@ export const UserContextProvider = (props) => {
         setCurrBoardId(currBoardId);
 
         const loadedData = { columns: {}, columnOrder: [] };
-        const res = await getBoard(currBoardId || boardList[0]._id);
+        const res = await getBoard(currBoardId);
         const loadedBoard = res.data;
         const loadedColumns = {};
         const loadedOrder = [];
@@ -70,7 +69,7 @@ export const UserContextProvider = (props) => {
       }
     };
     getCurrBoard();
-  }, [currBoardId, boardList, createCount]);
+  }, [currBoardId, createCount]);
 
   const providerValue = useMemo(
     () => ({
