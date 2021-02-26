@@ -62,9 +62,8 @@ function Board() {
   useEffect(() => {
     setCurrBoardId(id);
   }, [id, setCurrBoardId]);
-
   const Dropdown = () => {
-    const allBoards = boardList.map((board, idx) => (
+    const allBoards = boardList.map((board) => (
       <Link to={`/board/${board._id}`} key={board._id}>
         <Typography variant="subtitle1">{board.name}</Typography>
       </Link>

@@ -3,14 +3,13 @@ const router = express.Router();
 const User = require("../models/User");
 
 // Find user
-router.get("/", async (req, res, next) => {
-  console.log(req.body)
-  const { id } = req.body;
+router.get("/:id", async (req, res, next) => {
+  const { id } = req.params;
+  console.log("id", id);
   try {
     const user = await User.findUser(id);
-    res.status(201).json({ msg: user });
-    }
-  catch (err) {
+    res.status(201).json(user);
+  } catch (err) {
     res.status(404).send({ msg: err });
   }
 });

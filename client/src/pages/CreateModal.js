@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 function CreateModal(props) {
   const classes = useStyles();
   const { setShowModal, type, currBoardId } = props;
-  const { user } = useContext(UserContext);
+  const { user, createCount, setCreateCount } = useContext(UserContext);
 
   const [title, setTitle] = useState("");
 
@@ -75,6 +75,7 @@ function CreateModal(props) {
           title: title,
         };
         createBoard(cleanedData);
+        setCreateCount(createCount + 1);
         break;
       }
       case "column": {
@@ -83,6 +84,7 @@ function CreateModal(props) {
           title: title,
         };
         createColumn(cleanedData);
+        setCreateCount(createCount + 1);
         break;
       }
       case "card": {
@@ -91,6 +93,7 @@ function CreateModal(props) {
           title: title,
         };
         createCard(cleanedData);
+        setCreateCount(createCount + 1);
         break;
       }
       default:

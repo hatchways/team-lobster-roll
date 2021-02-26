@@ -1,20 +1,35 @@
 import React, { createContext, useState, useMemo, useEffect } from "react";
 
 import { getBoardShallow, getBoard } from "../API/board";
+import { getUser } from "../API/user";
 
 export const UserContext = createContext({});
 
 export const UserContextProvider = (props) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState({});
+  const [userId, setUserId] = useState("");
   const [boardList, setBoardList] = useState([]);
   const [currBoardId, setCurrBoardId] = useState("");
   const [currBoard, setCurrBoard] = useState(null);
+  const [createCount, setCreateCount] = useState(0);
+
+  useEffect(() => {
+    if (userId && createCount > 0) {
+      async function getData() {
+        const res = await getUser(user._id);
+        const updatedUser = res.data;
+        setUser(updatedUser);
+      }
+      getData();
+    }
+  }, [userId, createCount]);
 
   useEffect(() => {
     const getAllBoards = async () => {
       const allBoards = {};
       if (user && user.boards) {
+        setUserId(user._id);
         const pending = user.boards.map(async (boardId) => {
           return await getBoardShallow(boardId);
         });
@@ -55,7 +70,7 @@ export const UserContextProvider = (props) => {
       }
     };
     getCurrBoard();
-  }, [currBoardId, boardList]);
+  }, [currBoardId, boardList, createCount]);
 
   const providerValue = useMemo(
     () => ({
@@ -68,6 +83,8 @@ export const UserContextProvider = (props) => {
       setCurrBoardId,
       currBoard,
       setCurrBoard,
+      createCount,
+      setCreateCount,
     }),
     [
       user,
@@ -79,6 +96,8 @@ export const UserContextProvider = (props) => {
       setCurrBoardId,
       currBoard,
       setCurrBoard,
+      createCount,
+      setCreateCount,
     ]
   );
 

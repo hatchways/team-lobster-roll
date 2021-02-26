@@ -1,9 +1,9 @@
 import axios from "axios";
 
-export const createBoard = (data) => {
+export const createBoard = async (data) => {
   try {
     const URL = `${window.location.origin}/api/board/`;
-    axios.post(URL, data);
+    return await axios.post(URL, data);
   } catch (err) {
     console.error(err);
   }
