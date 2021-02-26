@@ -57,7 +57,6 @@ function Board() {
   const [showUpload, setShowUpload] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [moves, setMoves] = useState(0);
   const { id } = useParams();
 
   useEffect(() => {
@@ -123,12 +122,7 @@ function Board() {
           </Grid>
         </Toolbar>
       </AppBar>
-      <List
-        loadedData={currBoard}
-        currBoardId={currBoardId}
-        moves={moves}
-        setMoves={setMoves}
-      />
+      <List loadedData={currBoard} currBoardId={currBoardId} />
       {showModal && (
         <CreateModal
           setShowModal={setShowModal}
