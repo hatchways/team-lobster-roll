@@ -62,6 +62,7 @@ function Board() {
   const { id } = useParams();
 
   useEffect(() => {
+    console.log("board set id");
     setCurrBoardId(id);
   }, [id, setCurrBoardId]);
   const Dropdown = () => {
