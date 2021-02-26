@@ -62,8 +62,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 function CreateModal(props) {
   const classes = useStyles();
-  const { setShowModal, type, currBoardId } = props;
-  const { user, createCount, setCreateCount } = useContext(UserContext);
+  const { setShowModal, type } = props;
+  const {
+    user,
+    createCount,
+    setCreateCount,
+    currBoardId,
+    setCurrBoardId,
+  } = useContext(UserContext);
 
   const [title, setTitle] = useState("");
 
@@ -74,8 +80,13 @@ function CreateModal(props) {
           userId: data._id,
           title: title,
         };
-        createBoard(cleanedData);
-        setCreateCount(createCount + 1);
+        async function getData() {
+          const res = await createBoard(cleanedData);
+          const boardId = res.data._id;
+          boardId && setCurrBoardId(boardId);
+          setCreateCount(createCount + 1);
+        }
+        getData();
         break;
       }
       case "column": {

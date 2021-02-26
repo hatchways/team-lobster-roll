@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Board() {
+function Board(props) {
   const classes = useStyles();
   const { boardList, currBoardId, setCurrBoardId, currBoard } = useContext(
     UserContext
@@ -62,9 +62,13 @@ function Board() {
   const { id } = useParams();
 
   useEffect(() => {
-    console.log("board set id");
     setCurrBoardId(id);
   }, [id, setCurrBoardId]);
+  useEffect(() => {
+    if (currBoardId) {
+      props.history.push(`/board/${currBoardId}`);
+    }
+  }, [currBoardId]);
   const Dropdown = () => {
     const allBoards = boardList.map((board) => (
       <Link to={`/board/${board._id}`} key={board._id}>
@@ -86,7 +90,6 @@ function Board() {
   useEffect(() => {
     if (socket) {
       socket.emit("testEmit", "testing emit");
-
       socket.on("confirmEmit", (message) => {
         console.log(message);
       });
@@ -143,14 +146,8 @@ function Board() {
           </Grid>
         </Toolbar>
       </AppBar>
-      <List loadedData={currBoard} currBoardId={currBoardId} />
-      {showModal && (
-        <CreateModal
-          setShowModal={setShowModal}
-          type="column"
-          currBoardId={currBoardId}
-        />
-      )}
+      <List loadedData={currBoard} />
+      {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
       {showDropdown && <Dropdown />}
       {showUpload && <UploadImage setShowUpload={setShowUpload} />}
     </div>
