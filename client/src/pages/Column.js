@@ -41,7 +41,7 @@ function Column(props) {
                 <MoreHoriz />
               </IconButton>
               {showColOptions && (
-                <ColumnOptions closeOptions={() => setShowOptions(false)} />
+                <ColumnOptions closeOptions={() => setShowOptions(false)} columnName={column.name} />
               )}
             </div>
             <Droppable droppableId={column.id} type="task">

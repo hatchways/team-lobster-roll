@@ -35,4 +35,16 @@ router.delete("/delete", async (req, res) => {
   }
 });
 
+// UPDATE COLUMN NAME
+router.put("/update-name", async (req, res) => {
+  try {
+    await Column.updateName(req.body.columnId, req.body.columnName);
+    res.sendStatus(200);
+  } catch (err) {
+    res
+      .status(400)
+      .send({ msg: "An error occured, could not update the column name" });
+  }
+});
+
 module.exports = router;

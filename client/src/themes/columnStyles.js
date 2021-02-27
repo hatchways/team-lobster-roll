@@ -58,4 +58,10 @@ export const useStyles = makeStyles({
     left: "80px",
     width: "50px",
   },
+	deleteColumnMessage: {
+		marginBottom: '10px'
+	},
+	editNameInput: {
+		margin: '0 5px 5px 5px'
+	}
 });
