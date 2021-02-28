@@ -146,7 +146,7 @@ function Board(props) {
           </Grid>
         </Toolbar>
       </AppBar>
-      <List loadedData={currBoard} />
+      <List loadedData={currBoard} currBoardId={currBoardId} />
       {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
       {showDropdown && <Dropdown />}
       {showUpload && <UploadImage setShowUpload={setShowUpload} />}
