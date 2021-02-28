@@ -9,6 +9,7 @@ import Board from "./pages/Board";
 import Navbar from "./pages/Navbar";
 import Upload from "./pages/Upload";
 import Calendar from "./pages/Calendar";
+import Stripe from "./pages/Stripe";
 import { UserContextProvider } from "./contexts/UserContext";
 import { SocketContextProvider } from "./contexts/SocketContext";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
@@ -23,6 +24,7 @@ function App() {
           <Navbar />
           <BrowserRouter>
             <Switch>
+              <Route path="/stripe/payment" exact component={Stripe} />
               <ProtectedRoute path="/board/:id" component={Board} />
               <Route path="/" exact component={LandingPage} />
               <Route path="/login" component={Login} />
