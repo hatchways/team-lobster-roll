@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useStyles } from "../themes/calendarStyles";
@@ -6,8 +6,10 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import buildCalendar from "../utils/buildCalendar";
 import CalendarCell from "./CalendarCell";
+import { UserContext } from "../contexts/UserContext";
 
 function Calendar() {
+	const { currBoardId, currBoard } = useContext(UserContext);
   const [calendar, setCalendar] = useState([]);
   const [value, setValue] = useState(moment());
   const classes = useStyles();
@@ -15,6 +17,10 @@ function Calendar() {
   useEffect(() => {
     setCalendar(buildCalendar(value));
   }, [value]);
+	
+	useEffect(() => {
+		console.log(currBoard);
+	}, [currBoard]);
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;

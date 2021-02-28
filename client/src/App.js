@@ -20,8 +20,9 @@ function App() {
     <UserContextProvider>
       <SocketContextProvider>
         <MuiThemeProvider theme={theme}>
-          <Navbar />
+          
           <BrowserRouter>
+					<Navbar />
             <Switch>
               <ProtectedRoute path="/board/:id" component={Board} />
               <Route path="/" exact component={LandingPage} />

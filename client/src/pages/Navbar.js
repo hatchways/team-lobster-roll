@@ -5,7 +5,7 @@ import DashboardIcon from "@material-ui/icons/DashboardOutlined";
 import AddIcon from "@material-ui/icons/Add";
 import { UserContext } from "../contexts/UserContext";
 import CreateModal from "./CreateModal";
-
+import { useHistory } from "react-router-dom";
 import logo from "../assets/logo.png";
 
 const useStyles = makeStyles((theme) => ({
@@ -78,6 +78,7 @@ function Navbar(props) {
   const joinDate = user?.joinDate?.slice(0, 10);
   const [showUserCard, setShowUserCard] = useState(false);
   const [showModal, setShowModal] = useState(false);
+	const history = useHistory();
 
   const UserCard = () => {
     return (
@@ -109,6 +110,7 @@ function Navbar(props) {
                 direction="row"
                 alignItems="center"
                 justify="space-between"
+								onClick={() => history.goBack()}
               >
                 <Grid item>
                   <DashboardIcon className={classes.visualIcon} />
@@ -125,9 +127,10 @@ function Navbar(props) {
                 direction="row"
                 alignItems="center"
                 justify="space-between"
+								onClick={() => history.push('/calendar')}
               >
                 <Grid item>
-                  <CalendarTodayIcon className={classes.visualIcon} />
+										<CalendarTodayIcon className={classes.visualIcon} />
                 </Grid>
                 <Grid item>
                   <Typography variant="h6">Calendar</Typography>
