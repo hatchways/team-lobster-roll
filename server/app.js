@@ -16,7 +16,8 @@ const uploadRouter = require("./routes/upload");
 const boardRouter = require("./routes/board");
 const columnRouter = require("./routes/column");
 const cardRouter = require("./routes/card");
-const shareRouter = require("./routes/share");
+const shareRouter = require("./routes/stripe");
+const stripeRouter = require("./routes/stripe");
 
 const { json, urlencoded } = express;
 
@@ -43,6 +44,7 @@ app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
 app.use("/user", userRouter);
 app.use("/api/share", shareRouter);
+app.use("/api/stripe", stripeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
