@@ -1,7 +1,7 @@
 import React from "react";
-import { createPayment } from "../API/stripe";
+import { createPayment } from "../../API/stripe";
 
-function Stripe(props) {
+function Checkout(props) {
   async function handleClick() {
     const dummyData = {
       amount: 1000,
@@ -11,13 +11,12 @@ function Stripe(props) {
     };
     const res = await createPayment(dummyData);
   }
-
   return (
     <>
-      <h1>Stripe!</h1>
-      <br />
+      <h1>Checkout page</h1>
       <button onClick={handleClick}>Stripe Test</button>
     </>
   );
 }
-export default Stripe;
+
+export default Checkout;

@@ -9,7 +9,8 @@ import Board from "./pages/Board";
 import Navbar from "./pages/Navbar";
 import Upload from "./pages/Upload";
 import Calendar from "./pages/Calendar";
-import Stripe from "./pages/Stripe";
+import StripeMain from "./pages/Stripe/StripeMain";
+import Success from "./pages/Stripe/Success";
 import { UserContextProvider } from "./contexts/UserContext";
 import { SocketContextProvider } from "./contexts/SocketContext";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
@@ -24,12 +25,13 @@ function App() {
           <Navbar />
           <BrowserRouter>
             <Switch>
-              <Route path="/stripe/payment" exact component={Stripe} />
-              <ProtectedRoute path="/board/:id" component={Board} />
               <Route path="/" exact component={LandingPage} />
               <Route path="/login" component={Login} />
               <Route path="/signup" component={SignUp} />
               <Route path="/calendar" component={Calendar} />
+              <Route path="/stripe/" exact component={StripeMain} />
+              <Route path="/stripe/success" exact component={Success} />
+              <ProtectedRoute path="/board/:id" component={Board} />
               <Route path="*" component={() => "404 Not Found"} />
             </Switch>
           </BrowserRouter>
