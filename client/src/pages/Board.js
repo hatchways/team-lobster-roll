@@ -71,14 +71,13 @@ function Board(props) {
     if (currBoardId) {
       history.push(`/board/${currBoardId}`);
     }
-  }, [currBoardId]);
+  }, [currBoardId, history]);
   const Dropdown = () => {
     const allBoards = boardList.map((board) => (
       <Link to={`/board/${board._id}`} key={board._id}>
         <Typography variant="subtitle1">{board.name}</Typography>
       </Link>
     ));
-
 
     return (
       <Grid item>
@@ -142,8 +141,7 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowMembers(true)}
-              >
+                onClick={() => setShowMembers(true)}>
                 Members
               </Button>
               <IconButton
