@@ -6,22 +6,17 @@ const Card = require("../models/Card");
 const User = require("../models/User");
 
 // GET
-router.get("/shallow/:id", async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    const foundBoard = await Board.findById(id);
-    res.status(200).json(foundBoard);
-  } catch (err) {
-    console.error(err);
-  }
-});
-
-// GET
 router.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
-    const foundBoard = await Board.findBoard(id);
-    res.status(200).json(foundBoard);
+    const { shallow } = req.query;
+    if (shallow) {
+      const foundBoard = await Board.findById(id);
+      res.status(200).json(foundBoard);
+    } else {
+      const foundBoard = await Board.findBoard(id);
+      res.status(200).json(foundBoard);
+    }
   } catch (err) {
     console.error(err);
   }

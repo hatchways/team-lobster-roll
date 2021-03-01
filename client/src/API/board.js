@@ -20,7 +20,7 @@ export const getBoard = async (boardId) => {
 
 export const getBoardShallow = async (boardId) => {
   try {
-    const URL = `${window.location.origin}/api/board/shallow/${boardId}`;
+    const URL = `${window.location.origin}/api/board/${boardId}?shallow=true`;
     return await axios.get(URL);
   } catch (err) {
     console.error(err);
