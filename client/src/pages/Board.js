@@ -17,6 +17,7 @@ import { Grid } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
 import UploadImage from "./UploadImage";
+import Members from "./Members";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,6 +61,7 @@ function Board(props) {
   const [showModal, setShowModal] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showMembers, setShowMembers] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -76,6 +78,7 @@ function Board(props) {
         <Typography variant="subtitle1">{board.name}</Typography>
       </Link>
     ));
+
 
     return (
       <Grid item>
@@ -128,15 +131,20 @@ function Board(props) {
                 <AddIcon />
                 Create column
               </Button>
-              <IconButton
-                color="inherit"
-                onClick={() => setShowDropdown(!showDropdown)}></IconButton>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
                 onClick={() => setShowUpload(true)}>
                 Choose Profile Image
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.buttonCreate}
+                onClick={() => setShowMembers(true)}
+              >
+                Members
               </Button>
               <IconButton
                 color="inherit"
@@ -151,6 +159,7 @@ function Board(props) {
       {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
       {showDropdown && <Dropdown />}
       {showUpload && <UploadImage setShowUpload={setShowUpload} />}
+      {showMembers && <Members setShowMembers={setShowMembers} />}
     </div>
   );
 }
