@@ -54,6 +54,7 @@ BoardSchema.statics.deleteBoard = function (boardId) {
 BoardSchema.statics.findBoard = async function (boardId) {
   const foundBoard = await this.findById(boardId).populate({
     path: "columns",
+    model: "Column",
     populate: {
       path: "cards",
       model: "Card",
@@ -86,17 +87,32 @@ BoardSchema.methods.addNewCardToColumn = async function (cardName, columnId) {
 };
 
 // moves specific card from an existing column to another existing column
-BoardSchema.methods.moveCard = async function (
-  cardId,
-  fromColumnId,
-  toColumnId
-) {
-  const fromCol = Column.findOne({
-    _id: mongoose.Types.ObjectId(fromColumnId),
-  });
-  const toCol = Column.findOne({ _id: mongoose.Types.ObjectId(toColumnId) });
-  await Promise.all([fromCol, toCol]);
-  await Promise.all([fromCol.removeCard(cardId), toCol.addCard(cardId)]);
+BoardSchema.methods.moveCard = async function (data) {
+  const {
+    cardId,
+    fromColumnId,
+    toColumnId,
+    sourceIdx,
+    destinationIdx,
+    movement,
+  } = data;
+
+  const foundFromColumn = await Column.findById(fromColumnId);
+  const foundToColumn = await Column.findById(toColumnId);
+  if (movement === "same") {
+    foundFromColumn.moveCard(cardId, sourceIdx, destinationIdx);
+  } else {
+    foundFromColumn.moveCardOut(sourceIdx);
+    foundToColumn.moveCardIn(cardId, destinationIdx);
+  }
+};
+
+// moves column in same board
+BoardSchema.methods.moveColumn = async function (data) {
+  const { columnId, sourceIdx, destinationIdx } = data;
+  this.columns.splice(sourceIdx, 1);
+  this.columns.splice(destinationIdx, 0, columnId);
+  await this.save();
 };
 
 // removes specific card from existing column

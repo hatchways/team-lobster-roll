@@ -83,7 +83,7 @@ function Column(props) {
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {tasks.map((task, idx) => (
-                    <Task key={task.id} task={task} idx={idx} />
+                    <Task key={task._id} task={task} idx={idx} />
                   ))}
                   <span className={classes.placeholder}>
                     {provided.placeholder}
