@@ -25,7 +25,7 @@ const BoardSchema = new Schema(
 );
 
 // creates a new instance of the Board model and returns the saved instance
-BoardSchema.statics.createNewBoard = async function (name, userId, email) {
+BoardSchema.statics.createNewBoard = async function (name, userId) {
   const inProgressCol = new Column({
     name: "In Progress",
   });
@@ -38,7 +38,7 @@ BoardSchema.statics.createNewBoard = async function (name, userId, email) {
     name,
     columns: [inProgressCol._id, completedCol._id],
     creator: userId,
-    members: [email],
+    members: [userId],
   });
 
   await Promise.all([inProgressCol.save(), completedCol.save(), board.save()]);

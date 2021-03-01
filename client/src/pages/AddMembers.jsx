@@ -1,31 +1,28 @@
-import React, { useState, useContext } from "react";
-import { UserContext } from "../contexts/UserContext";
+import React, { useState } from "react";
 import { useStyles } from "../themes/membersTheme";
 import { TextField, Container, Avatar, Button } from "@material-ui/core";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { debounce } from "lodash";
 import axios from "axios";
 
 function AddMembers({ boardId }) {
   const classes = useStyles();
   const [members, setMembers] = useState([]);
-  const { user } = useContext(UserContext);
 
   const handleFilter = debounce((e) => {
-    const filter = e.target.value;
-    filter === "" && setMembers([]);
+    const email = e.target.value;
+    email === "" && setMembers([]);
     axios
-      .post(`${window.location.origin}/user/filter/`, {
-        emailFilter: filter,
-      })
+      .get(`${window.location.origin}/user/filter-by-email?email=${email}`)
       .then((data) => setMembers(data.data))
       .catch((err) => console.log(err));
   }, 750);
 
-  const handleMemberButton = (e, email) => {
+  const handleMemberButton = (e, id) => {
     let item = e.target;
     let data = {
       boardId: boardId,
-      email: email,
+      id: id,
     };
     axios
       .post(`${window.location.origin}/api/board/share/`, data)
@@ -66,10 +63,11 @@ function AddMembers({ boardId }) {
               variant="contained"
               size="small"
               display=""
-              onClick={(e) => handleMemberButton(e, member.email)}
+              onClick={(e) => handleMemberButton(e, member._id)}
             >
               <Avatar src={member.image} alt="member" />
               <p>{member.email}</p>
+              <AddCircleOutlineIcon />
             </Button>
           ))}
       </Container>

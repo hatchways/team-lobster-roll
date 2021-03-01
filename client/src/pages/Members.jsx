@@ -21,15 +21,15 @@ function Members({ setShowMembers }) {
   const [showSearch, setShowSearch] = useState(false);
   const [members, setMembers] = useState([]);
   // Static boardId for testing purposes
-  const boardId = "603526f9f0595138a0f791db";
+  const boardId = "6038ecca4d73560f74a88ea3";
 
   useEffect(() => {
     axios
       .get(`${window.location.origin}/api/board/${boardId}`)
       .then((data) => {
-        const emails = data.data.data.members;
+        const ids = data.data.data.members;
         axios
-          .post(`${window.location.origin}/user/members`, { emails: emails })
+          .get(`${window.location.origin}/user/board-members/${ids}`)
           .then((data) => setMembers(data.data))
           .catch((err) => console.log(err));
       })

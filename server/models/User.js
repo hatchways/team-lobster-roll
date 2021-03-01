@@ -52,7 +52,7 @@ UserSchema.statics.deleteUser = function (id) {
 
 // Find a user by id
 UserSchema.statics.findUser = function (id) {
-  return this.findById(id);
+  return this.find({ _id: id });
 };
 
 // Find a user by email
@@ -61,16 +61,14 @@ UserSchema.statics.findByEmail = function (email) {
 };
 
 // Find users using an array
-UserSchema.statics.findByEmailArray = function (emails) {
-  return this.find({ email: { $in: emails } }, { email: 1, image: 1 });
+UserSchema.statics.findByIdArray = function (ids) {
+  return this.find({ _id: { $in: ids } }, { email: 1, image: 1 });
 };
 
 // Find users with partial email
 UserSchema.statics.filterByEmail = function (email) {
-  console.log("In filterByEmail", email);
   return this.find({ email: { $regex: `${email}` } }, { email: 1, image: 1 });
 };
-
 
 // Add a profile image
 UserSchema.statics.addImage = function (id, image) {

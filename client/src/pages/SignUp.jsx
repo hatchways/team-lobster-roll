@@ -57,13 +57,7 @@ function SignUp(props) {
 
   return (
     <div className={classes.main}>
-      <div className={classes.contentBox}>
-        <img
-          className={classes.img}
-          src="/images/sign-up.png"
-          alt="women-computing"
-        />
-      </div>
+      <div className={`${classes.contentBox} ${classes.leftContent}`}></div>
       <div className={classes.contentBox}>
         <div className={classes.upperDetails}>
           <form className={classes.form}>

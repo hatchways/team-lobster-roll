@@ -77,8 +77,7 @@ function CreateModal(props) {
     switch (type) {
       case "board": {
         const cleanedData = {
-          email: user.email,
-          userId: data._id,
+          id: data._id,
           title: title,
         };
         async function getData() {

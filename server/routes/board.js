@@ -27,9 +27,9 @@ router.post("/", async (req, res, next) => {
   try {
     if (req.body) {
       const data = req.body;
-      const { title, userId, email } = data;
-      const newBoard = await Board.createNewBoard(title, userId, email);
-      const foundUser = await User.findUser(userId);
+      const { title, id } = data;
+      const newBoard = await Board.createNewBoard(title, id);
+      const foundUser = await User.findUser(id);
       foundUser.boards = [...foundUser.boards, newBoard._id];
       foundUser.save();
       res.status(201).json(newBoard);
@@ -76,9 +76,9 @@ router.post("/share", async (req, res, next) => {
   try {
     if (req.body) {
       const data = req.body;
-      const { boardId, email } = data;
+      const { boardId, id } = data;
       const board = await Board.findBoard(boardId);
-      const rawShares = [...board.members, email];
+      const rawShares = [...board.members, id];
       board.members = [...new Set(rawShares)];
       board.save();
       res.status(201).json({ msg: `Shares added to ${board.name}.` });

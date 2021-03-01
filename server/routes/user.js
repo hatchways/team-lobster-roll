@@ -5,18 +5,17 @@ const User = require("../models/User");
 // Find user
 router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
-  console.log("id", id);
   try {
     const user = await User.findUser(id);
-    res.status(201).json(user);
+    res.status(201).send(user);
   } catch (err) {
     res.status(404).send({ msg: err });
   }
 });
 
 // Find user by email
-router.post("/", async (req, res, next) => {
-  const { email } = req.body;
+router.get("/email/:email", async (req, res, next) => {
+  const { email } = req.params;
   try {
     const user = await User.findByEmail(email);
     res.status(201).send(user);
@@ -26,12 +25,12 @@ router.post("/", async (req, res, next) => {
 });
 
 // Filter users to share with
-router.post("/filter", async (req, res, next) => {
+router.get("/filter-by-email", async (req, res, next) => {
   try {
-    if (req.body) {
-      const { emailFilter } = req.body;
-      if (emailFilter !== "") {
-        const users = await User.filterByEmail(emailFilter);
+    if (req.query) {
+      const { email } = req.query;
+      if (email !== "") {
+        const users = await User.filterByEmail(email);
         res.status(201).send(users);
       }
     }
@@ -40,12 +39,14 @@ router.post("/filter", async (req, res, next) => {
   }
 });
 
-// Find users utilizing an email array
-router.post("/members", async (req, res, next) => {
+// Find users utilizing an id array
+router.get("/board-members/:ids", async (req, res, next) => {
   try {
-    if (req.body) {
-      const { emails } = req.body;
-      const members = await User.findByEmailArray(emails);
+    if (req.params) {
+      const { ids } = req.params;
+      // "ids" appears as one long comma separated string
+      const moddedIds = ids.split(",");
+      const members = await User.findByIdArray(moddedIds);
       res.status(201).send(members);
     }
   } catch (err) {
