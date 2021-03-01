@@ -1,5 +1,13 @@
-import React, { useContext, useState } from "react";
-import { Toolbar, Typography, Button, Grid, Paper, Avatar, makeStyles } from "@material-ui/core";
+import React, { useContext, useState, useEffect } from "react";
+import {
+  Toolbar,
+  Typography,
+  Button,
+  Grid,
+  Paper,
+  Avatar,
+  makeStyles,
+} from "@material-ui/core";
 import CalendarTodayIcon from "@material-ui/icons/CalendarTodayOutlined";
 import DashboardIcon from "@material-ui/icons/DashboardOutlined";
 import AddIcon from "@material-ui/icons/Add";
@@ -73,12 +81,12 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar(props) {
   const classes = useStyles();
-  const { loggedIn, user } = useContext(UserContext);
+  const { loggedIn, user, currBoardId } = useContext(UserContext);
   const { email } = user;
   const joinDate = user?.joinDate?.slice(0, 10);
   const [showUserCard, setShowUserCard] = useState(false);
   const [showModal, setShowModal] = useState(false);
-	const history = useHistory();
+  const history = useHistory();
 
   const UserCard = () => {
     return (
@@ -110,7 +118,7 @@ function Navbar(props) {
                 direction="row"
                 alignItems="center"
                 justify="space-between"
-								onClick={() => history.goBack()}
+                onClick={() => history.push(`/board/${currBoardId}`)}
               >
                 <Grid item>
                   <DashboardIcon className={classes.visualIcon} />
@@ -127,10 +135,10 @@ function Navbar(props) {
                 direction="row"
                 alignItems="center"
                 justify="space-between"
-								onClick={() => history.push('/calendar')}
+                onClick={() => history.push("/calendar")}
               >
                 <Grid item>
-										<CalendarTodayIcon className={classes.visualIcon} />
+                  <CalendarTodayIcon className={classes.visualIcon} />
                 </Grid>
                 <Grid item>
                   <Typography variant="h6">Calendar</Typography>

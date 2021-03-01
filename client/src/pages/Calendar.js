@@ -9,23 +9,23 @@ import CalendarCell from "./CalendarCell";
 import { UserContext } from "../contexts/UserContext";
 
 function Calendar() {
-	const { currBoardId, currBoard } = useContext(UserContext);
+  const { currBoard } = useContext(UserContext);
   const [calendar, setCalendar] = useState([]);
   const [currentDate, setCurrentDate] = useState(moment());
   const classes = useStyles();
-	
+
   useEffect(() => {
-		const {columns} = currBoard;
-		let cards = [];
-		// makes an array of Card objects
-		for (let key in columns) {
-			if (columns[key].cards) cards = [...cards, ...columns[key].cards];
-		}
-		
+    const { columns } = currBoard;
+    let cards = [];
+    // makes an array of all the Card objects in the current board
+    for (let key in columns) {
+      if (columns[key].cards) cards = [...cards, ...columns[key].cards];
+    }
+
     setCalendar(buildCalendar(currentDate, cards));
   }, [currentDate, currBoard]);
 
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
 
     if (!destination) return;
@@ -60,7 +60,7 @@ function Calendar() {
     }
 
     const draggedCard = sourceCards.filter(
-      (card) => card.id === draggableId
+      (card) => card._id === draggableId
     )[0];
 
     // case for if card was dropped in the same column from where it originally was
@@ -80,12 +80,12 @@ function Calendar() {
   };
 
   return (
-    <div>
+    <>
       <h1 className={classes.h1}>
         {currentDate.format("MMMM") + " " + currentDate.format("YYYY")}
       </h1>
 
-      <Container>
+      <Container style={{ marginBottom: "50px" }}>
         <Grid container>
           <Grid item className={`${classes.day} ${classes.names}`}>
             Sun
@@ -118,7 +118,7 @@ function Calendar() {
           </Grid>
         </DragDropContext>
       </Container>
-    </div>
+    </>
   );
 }
 
