@@ -11,16 +11,19 @@ import { UserContext } from "../contexts/UserContext";
 function Calendar() {
 	const { currBoardId, currBoard } = useContext(UserContext);
   const [calendar, setCalendar] = useState([]);
-  const [value, setValue] = useState(moment());
+  const [currentDate, setCurrentDate] = useState(moment());
   const classes = useStyles();
-
-  useEffect(() => {
-    setCalendar(buildCalendar(value));
-  }, [value]);
 	
-	useEffect(() => {
-		console.log(currBoard);
-	}, [currBoard]);
+  useEffect(() => {
+		const {columns} = currBoard;
+		let cards = [];
+		// makes an array of Card objects
+		for (let key in columns) {
+			if (columns[key].cards) cards = [...cards, ...columns[key].cards];
+		}
+		
+    setCalendar(buildCalendar(currentDate, cards));
+  }, [currentDate, currBoard]);
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -79,7 +82,7 @@ function Calendar() {
   return (
     <div>
       <h1 className={classes.h1}>
-        {value.format("MMMM") + " " + value.format("YYYY")}
+        {currentDate.format("MMMM") + " " + currentDate.format("YYYY")}
       </h1>
 
       <Container>
