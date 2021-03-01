@@ -15,7 +15,8 @@ const useStyles = makeStyles({
     padding: 0,
     backgroundColor: "#F4F6FF",
     borderRadius: "8px",
-    width: "320px",
+    width: 320,
+    minWidth: 320,
     "&:hover": {
       boxShadow: "0px 0px 10px 1px rgba(208,213,223,0.8)",
     },
@@ -68,7 +69,8 @@ function Column(props) {
             direction="column"
             justify="flex-start"
             {...provided.draggableProps}
-            ref={provided.innerRef}>
+            ref={provided.innerRef}
+          >
             <div className={classes.columnHeader} {...provided.dragHandleProps}>
               <Typography variant="h5" className={classes.columnTitle}>
                 {column.name}
@@ -92,7 +94,8 @@ function Column(props) {
             <Button
               variant="contained"
               className={classes.addButton}
-              onClick={() => setShowModal(true)}>
+              onClick={() => setShowModal(true)}
+            >
               <Typography variant="body1"> Add a card</Typography>
             </Button>
           </Grid>
