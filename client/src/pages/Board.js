@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import List from "./List";
 import {
   AppBar,
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Board(props) {
   const classes = useStyles();
+  const history = useHistory();
   const { boardList, currBoardId, setCurrBoardId, currBoard } = useContext(
     UserContext
   );
@@ -66,7 +67,7 @@ function Board(props) {
   }, [id, setCurrBoardId]);
   useEffect(() => {
     if (currBoardId) {
-      props.history.push(`/board/${currBoardId}`);
+      history.push(`/board/${currBoardId}`);
     }
   }, [currBoardId]);
   const Dropdown = () => {
