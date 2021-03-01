@@ -33,8 +33,8 @@ function Login(props) {
 
           const newSocket = io(window.location.origin);
           setSocket(newSocket);
-
-          history.push("/board");
+          const boardId = userData.boards[0];
+          history.push(`/board/${boardId}`);
         })
         .catch((err) => console.log(err));
     }
@@ -103,8 +103,7 @@ function Login(props) {
               type="submit"
               variant="contained"
               color="secondary"
-              onClick={handleSubmit}
-            >
+              onClick={handleSubmit}>
               Login
             </Button>
           </form>

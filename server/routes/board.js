@@ -9,8 +9,14 @@ const User = require("../models/User");
 router.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
-    const foundBoard = await Board.findBoard(id);
-    res.status(200).json({ data: foundBoard });
+    const { shallow } = req.query;
+    if (shallow) {
+      const foundBoard = await Board.findById(id);
+      res.status(200).json(foundBoard);
+    } else {
+      const foundBoard = await Board.findBoard(id);
+      res.status(200).json(foundBoard);
+    }
   } catch (err) {
     console.error(err);
   }
@@ -26,7 +32,7 @@ router.post("/", async (req, res, next) => {
       const foundUser = await User.findUser(userId);
       foundUser.boards = [...foundUser.boards, newBoard._id];
       foundUser.save();
-      res.status(201).json({ data: newBoard });
+      res.status(201).json(newBoard);
     }
   } catch (err) {
     console.error(err);
@@ -38,18 +44,15 @@ router.patch("/:id", async (req, res, next) => {
   try {
     if (req.body) {
       const data = req.body;
-      const { title } = data;
-      const newData = {
-        name: title,
-      };
-      const { id } = req.params;
-      const updatedBoard = await Board.findByIdAndUpdate(
-        id,
-        newData,
-        (err, board) => {
-          res.send(board);
-        }
-      );
+      const { movement } = data;
+      const boardId = req.params.id;
+      const foundBoard = await Board.findById(boardId);
+      if (movement === "column") {
+        foundBoard.moveColumn(data);
+      } else {
+        foundBoard.moveCard(data);
+      }
+      res.status(200).json(foundBoard);
     }
   } catch (err) {
     console.error(err);

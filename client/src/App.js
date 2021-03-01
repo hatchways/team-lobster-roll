@@ -7,6 +7,7 @@ import { theme } from "./themes/theme";
 import LandingPage from "./pages/Landing.jsx";
 import Board from "./pages/Board";
 import Navbar from "./pages/Navbar";
+import Upload from "./pages/Upload";
 import Calendar from "./pages/Calendar";
 import { UserContextProvider } from "./contexts/UserContext";
 import { SocketContextProvider } from "./contexts/SocketContext";
@@ -22,7 +23,7 @@ function App() {
           <Navbar />
           <BrowserRouter>
             <Switch>
-              <ProtectedRoute exact path="/board" component={Board} />
+              <ProtectedRoute path="/board/:id" component={Board} />
               <Route path="/" exact component={LandingPage} />
               <Route path="/login" component={Login} />
               <Route path="/signup" component={SignUp} />

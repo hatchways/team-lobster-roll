@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { Link, useParams, useHistory } from "react-router-dom";
 import List from "./List";
 import {
   AppBar,
@@ -6,6 +7,7 @@ import {
   Typography,
   IconButton,
   Button,
+  Paper,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
@@ -36,21 +38,61 @@ const useStyles = makeStyles((theme) => ({
       borderColor: "#ffffff",
     },
   },
+  dropdown: {
+    minWidth: "100px",
+    padding: "1rem",
+    background: "#ffffff",
+    zIndex: "1",
+    position: "absolute",
+    top: "160px",
+    right: "1rem",
+    boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.15)",
+    textAlign: "right",
+  },
 }));
 
-function Board() {
+function Board(props) {
   const classes = useStyles();
-  const { user } = useContext(UserContext);
+  const history = useHistory();
+  const { boardList, currBoardId, setCurrBoardId, currBoard } = useContext(
+    UserContext
+  );
   const { socket } = useContext(SocketContext);
   const [showModal, setShowModal] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [showMembers, setShowMembers] = useState(false);
+  const { id } = useParams();
 
-	// socket.io testing
+  useEffect(() => {
+    setCurrBoardId(id);
+  }, [id, setCurrBoardId]);
+  useEffect(() => {
+    if (currBoardId) {
+      history.push(`/board/${currBoardId}`);
+    }
+  }, [currBoardId, history]);
+  const Dropdown = () => {
+    const allBoards = boardList.map((board) => (
+      <Link to={`/board/${board._id}`} key={board._id}>
+        <Typography variant="subtitle1">{board.name}</Typography>
+      </Link>
+    ));
+
+    return (
+      <Grid item>
+        <Paper className={classes.dropdown}>
+          <Typography variant="body1">Select board</Typography>
+          {allBoards}
+        </Paper>
+      </Grid>
+    );
+  };
+
+  // socket.io testing
   useEffect(() => {
     if (socket) {
       socket.emit("testEmit", "testing emit");
-
       socket.on("confirmEmit", (message) => {
         console.log(message);
       });
@@ -73,8 +115,7 @@ function Board() {
             container
             direction="row"
             alignItems="center"
-            justify="space-between"
-          >
+            justify="space-between">
             <Grid item>
               <Typography variant="h6" className={classes.title}>
                 My School Board
@@ -85,8 +126,7 @@ function Board() {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowModal(true)}
-              >
+                onClick={() => setShowModal(true)}>
                 <AddIcon />
                 Create column
               </Button>
@@ -94,27 +134,28 @@ function Board() {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowUpload(true)}
-              >
+                onClick={() => setShowUpload(true)}>
                 Choose Profile Image
               </Button>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowMembers(true)}
-              >
+                onClick={() => setShowMembers(true)}>
                 Members
               </Button>
-              <IconButton color="inherit">
+              <IconButton
+                color="inherit"
+                onClick={() => setShowDropdown(!showDropdown)}>
                 <MenuIcon />
               </IconButton>
             </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
-      <List />
+      <List loadedData={currBoard} currBoardId={currBoardId} />
       {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
+      {showDropdown && <Dropdown />}
       {showUpload && <UploadImage setShowUpload={setShowUpload} />}
       {showMembers && <Members setShowMembers={setShowMembers} />}
     </div>
