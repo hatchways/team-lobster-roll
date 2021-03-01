@@ -41,17 +41,15 @@ export const UserContextProvider = (props) => {
           return null;
         });
         setBoardList(boardList);
-        setCurrBoardId(currBoardId || boardList[0]._id);
       }
     };
     getAllBoards();
-  }, [user, currBoardId]);
+  }, [user]);
 
   useEffect(() => {
     const getCurrBoard = async () => {
       if (currBoardId) {
         setCurrBoardId(currBoardId);
-
         const loadedData = { columns: {}, columnOrder: [] };
         const res = await getBoard(currBoardId);
         const loadedBoard = res.data;
@@ -66,10 +64,14 @@ export const UserContextProvider = (props) => {
         loadedData.columns = loadedColumns;
         loadedData.columnOrder = loadedOrder;
         setCurrBoard(loadedData);
+      } else {
+        if (boardList[0]) {
+          setCurrBoardId(boardList[0]._id);
+        }
       }
     };
     getCurrBoard();
-  }, [currBoardId, createCount]);
+  }, [currBoardId, createCount, boardList]);
 
   const providerValue = useMemo(
     () => ({
