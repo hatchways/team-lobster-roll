@@ -88,7 +88,7 @@ function Board(props) {
       </Grid>
     );
   };
-
+/*
   // socket.io testing
   useEffect(() => {
     if (socket) {
@@ -106,7 +106,7 @@ function Board(props) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+*/
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.blue}>
