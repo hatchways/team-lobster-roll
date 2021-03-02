@@ -38,6 +38,7 @@ BoardSchema.statics.createNewBoard = async function (name, userId) {
     name,
     columns: [inProgressCol._id, completedCol._id],
     creator: userId,
+    members: [userId],
   });
 
   await Promise.all([inProgressCol.save(), completedCol.save(), board.save()]);

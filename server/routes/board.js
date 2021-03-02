@@ -6,22 +6,17 @@ const Card = require("../models/Card");
 const User = require("../models/User");
 
 // GET
-router.get("/shallow/:id", async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    const foundBoard = await Board.findById(id);
-    res.status(200).json(foundBoard);
-  } catch (err) {
-    console.error(err);
-  }
-});
-
-// GET
 router.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
-    const foundBoard = await Board.findBoard(id);
-    res.status(200).json(foundBoard);
+    const { shallow } = req.query;
+    if (shallow) {
+      const foundBoard = await Board.findById(id);
+      res.status(200).json(foundBoard);
+    } else {
+      const foundBoard = await Board.findBoard(id);
+      res.status(200).json(foundBoard);
+    }
   } catch (err) {
     console.error(err);
   }
@@ -32,10 +27,9 @@ router.post("/", async (req, res, next) => {
   try {
     if (req.body) {
       const data = req.body;
-      const { title, userId } = data;
-      const newBoard = await Board.createNewBoard(title, userId);
-      const foundUser = await User.findUser(userId);
-
+      const { title, id } = data;
+      const newBoard = await Board.createNewBoard(title, id);
+      const foundUser = await User.findUser(id);
       foundUser.boards = [...foundUser.boards, newBoard._id];
       foundUser.save();
       res.status(201).json(newBoard);
@@ -72,6 +66,23 @@ router.delete("/", async (req, res, next) => {
     const deletedBoard = await Board.deleteBoard(boardId);
     const updateUser = await User.deleteBoard(userId, boardId);
     res.status(200).json({ msg: `Board ${boardId} deleted successfully` });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+// Add users to share with
+router.post("/share", async (req, res, next) => {
+  try {
+    if (req.body) {
+      const data = req.body;
+      const { boardId, id } = data;
+      const board = await Board.findBoard(boardId);
+      const rawShares = [...board.members, id];
+      board.members = [...new Set(rawShares)];
+      board.save();
+      res.status(201).json({ msg: `Shares added to ${board.name}.` });
+    }
   } catch (err) {
     console.error(err);
   }

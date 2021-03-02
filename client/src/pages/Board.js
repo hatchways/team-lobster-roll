@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import List from "./List";
 import {
   AppBar,
@@ -17,6 +17,7 @@ import { Grid } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
 import UploadImage from "./UploadImage";
+import Members from "./Members";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Board(props) {
   const classes = useStyles();
+  const history = useHistory();
   const { boardList, currBoardId, setCurrBoardId, currBoard } = useContext(
     UserContext
   );
@@ -59,6 +61,7 @@ function Board(props) {
   const [showModal, setShowModal] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showMembers, setShowMembers] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -66,9 +69,9 @@ function Board(props) {
   }, [id, setCurrBoardId]);
   useEffect(() => {
     if (currBoardId) {
-      props.history.push(`/board/${currBoardId}`);
+      history.push(`/board/${currBoardId}`);
     }
-  }, [currBoardId]);
+  }, [currBoardId, history]);
   const Dropdown = () => {
     const allBoards = boardList.map((board) => (
       <Link to={`/board/${board._id}`} key={board._id}>
@@ -127,15 +130,19 @@ function Board(props) {
                 <AddIcon />
                 Create column
               </Button>
-              <IconButton
-                color="inherit"
-                onClick={() => setShowDropdown(!showDropdown)}></IconButton>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
                 onClick={() => setShowUpload(true)}>
                 Choose Profile Image
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.buttonCreate}
+                onClick={() => setShowMembers(true)}>
+                Members
               </Button>
               <IconButton
                 color="inherit"
@@ -146,10 +153,11 @@ function Board(props) {
           </Grid>
         </Toolbar>
       </AppBar>
-      <List loadedData={currBoard} />
+      <List loadedData={currBoard} currBoardId={currBoardId} />
       {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
       {showDropdown && <Dropdown />}
       {showUpload && <UploadImage setShowUpload={setShowUpload} />}
+      {showMembers && <Members setShowMembers={setShowMembers} />}
     </div>
   );
 }

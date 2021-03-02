@@ -77,7 +77,7 @@ function CreateModal(props) {
     switch (type) {
       case "board": {
         const cleanedData = {
-          userId: data._id,
+          id: data._id,
           title: title,
         };
         async function getData() {
@@ -122,13 +122,15 @@ function CreateModal(props) {
       direction="column"
       justify="center"
       alignItems="center"
-      className={classes.backdrop}>
+      className={classes.backdrop}
+    >
       <Paper className={classes.modal}>
         <Grid
           container
           direction="column"
           justify="flex-start"
-          alignItems="center">
+          alignItems="center"
+        >
           <Grid item className={classes.close}>
             <IconButton onClick={() => setShowModal(false)}>
               <CloseIcon />
@@ -139,7 +141,8 @@ function CreateModal(props) {
             direction="column"
             justify="space-between"
             alignItems="center"
-            className={classes.modalMain}>
+            className={classes.modalMain}
+          >
             <Grid item>
               <Typography variant="h4" className={classes.title}>
                 Create a new {type}
@@ -150,7 +153,8 @@ function CreateModal(props) {
                 placeholder="Add Title"
                 variant="outlined"
                 className={classes.input}
-                onChange={(e) => setTitle(e.target.value)}></TextField>
+                onChange={(e) => setTitle(e.target.value)}
+              ></TextField>
             </Grid>
             <Grid item>
               <Button
@@ -158,7 +162,8 @@ function CreateModal(props) {
                 variant="contained"
                 color="primary"
                 className={classes.createButton}
-                onClick={handleClick}>
+                onClick={handleClick}
+              >
                 <Typography variant="body1">Create</Typography>
               </Button>
             </Grid>
