@@ -67,14 +67,55 @@ function Board(props) {
   useEffect(() => {
     setCurrBoardId(id);
   }, [id, setCurrBoardId]);
+
   useEffect(() => {
     if (currBoardId) {
       history.push(`/board/${currBoardId}`);
     }
   }, [currBoardId, history]);
+
+  useEffect(() => {
+    //for some reason this useEffect gets called when currBoardId is an empty string
+    if (socket && currBoardId) {
+      // removes duplicate socket listeners
+      socket.removeAllListeners("roomResponse");
+
+      socket.emit("joinRoom", currBoardId);
+      socket.on("roomResponse", (message) => {
+        console.log(message);
+      });
+    }
+  }, [socket, currBoardId]);
+
+  // componentWillUnmount
+  useEffect(() => {
+    return () => {
+      socket.emit("leaveRoom", currBoardId);
+      socket.removeAllListeners("roomResponse");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // joins socket room of the current selected board and leaves previous socket room
+  const handleBoardSelect = (boardId) => {
+    if (socket) {
+      socket.emit("leaveRoom", currBoardId);
+      socket.removeAllListeners("roomResponse");
+
+      socket.emit("joinRoom", boardId);
+      socket.on("roomResponse", (message) => {
+        console.log(message);
+      });
+    }
+  };
+
   const Dropdown = () => {
     const allBoards = boardList.map((board) => (
-      <Link to={`/board/${board._id}`} key={board._id}>
+      <Link
+        to={`/board/${board._id}`}
+        key={board._id}
+        onClick={() => handleBoardSelect(board._id)}
+      >
         <Typography variant="subtitle1">{board.name}</Typography>
       </Link>
     ));
@@ -89,24 +130,6 @@ function Board(props) {
     );
   };
 
-  // socket.io testing
-  useEffect(() => {
-    if (socket) {
-      socket.emit("testEmit", "testing emit");
-      socket.on("confirmEmit", (message) => {
-        console.log(message);
-      });
-    }
-  }, [socket]);
-
-  // componentWillUnmount
-  useEffect(() => {
-    return () => {
-      socket.removeAllListeners("confirmEmit");
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.blue}>
@@ -115,7 +138,8 @@ function Board(props) {
             container
             direction="row"
             alignItems="center"
-            justify="space-between">
+            justify="space-between"
+          >
             <Grid item>
               <Typography variant="h6" className={classes.title}>
                 My School Board
@@ -126,7 +150,8 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowModal(true)}>
+                onClick={() => setShowModal(true)}
+              >
                 <AddIcon />
                 Create column
               </Button>
@@ -134,19 +159,22 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowUpload(true)}>
+                onClick={() => setShowUpload(true)}
+              >
                 Choose Profile Image
               </Button>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowMembers(true)}>
+                onClick={() => setShowMembers(true)}
+              >
                 Members
               </Button>
               <IconButton
                 color="inherit"
-                onClick={() => setShowDropdown(!showDropdown)}>
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
                 <MenuIcon />
               </IconButton>
             </Grid>
