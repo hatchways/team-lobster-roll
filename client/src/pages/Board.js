@@ -88,7 +88,8 @@ function Board(props) {
       </Grid>
     );
   };
-/*
+
+  /*
   // socket.io testing
   useEffect(() => {
     if (socket) {
