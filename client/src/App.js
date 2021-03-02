@@ -7,7 +7,6 @@ import { theme } from "./themes/theme";
 import LandingPage from "./pages/Landing.jsx";
 import Board from "./pages/Board";
 import Navbar from "./pages/Navbar";
-import Upload from "./pages/Upload";
 import Calendar from "./pages/Calendar";
 import { UserContextProvider } from "./contexts/UserContext";
 import { SocketContextProvider } from "./contexts/SocketContext";
