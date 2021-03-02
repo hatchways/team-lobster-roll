@@ -33,19 +33,7 @@ router.post("/payment", async (req, res, next) => {
 router.post("/checkout", async (req, res, next) => {
   try {
     const data = req.body;
-    const dummyData = {
-      success_url: data.success_url,
-      cancel_url: data.cancel_url,
-      payment_method_types: ["card"],
-      mode: "payment",
-      line_items: [
-        {
-          price: "price_1IQI3XGWNZMUdr0uTnWJsJkI",
-          quantity: data.quantity,
-        },
-      ],
-    };
-    const session = await stripe.checkout.sessions.create(dummyData);
+    const session = await stripe.checkout.sessions.create(data);
     return res.json({
       id: session.id,
     });
