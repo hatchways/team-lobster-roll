@@ -18,16 +18,21 @@ function ColumnOptions({ closeOptions, columnName }) {
   useEffect(() => {
     setName(columnName);
   }, [columnName]);
-	
-	const handleSaveName = async () => {
-		const responseStatus = await updateColumnName(
-     "6036d61d0e37bad4baa5d692",
-		 name
-		);
-		if (responseStatus === 200) {
-			// update board context
-		}
-	}
+
+  const handleSaveName = async () => {
+    const responseStatus = await updateColumnName(
+      "6036d61d0e37bad4baa5d692",
+      name
+    );
+    if (responseStatus === 200) {
+      // update board context
+    }
+  };
+
+  const handleCancelEditName = () => {
+    setShowEditName(false);
+    setName(columnName);
+  };
 
   const handleDeleteColumn = async () => {
     // deleteColumn() is using test ObjectIds right now
@@ -40,7 +45,7 @@ function ColumnOptions({ closeOptions, columnName }) {
     }
   };
 
-	// conditional render function for the view
+  // conditional render function for the view
   const renderOptions = () => {
     if (!showEditName && !showDeleteMessage) {
       return (
@@ -69,10 +74,7 @@ function ColumnOptions({ closeOptions, columnName }) {
           <Button size="small" onClick={handleSaveName}>
             Save
           </Button>
-          <Button size="small" onClick={() => {
-						setShowEditName(false);
-						setName(columnName);
-					}}>
+          <Button size="small" onClick={handleCancelEditName}>
             Cancel
           </Button>
         </Grid>
