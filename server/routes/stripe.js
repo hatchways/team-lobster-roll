@@ -18,17 +18,6 @@ router.get("/success", async (req, res, next) => {
   }
 });
 
-// CREATE
-router.post("/payment", async (req, res, next) => {
-  try {
-    const data = req.body;
-    const paymentIntent = await stripe.paymentIntents.create(data);
-    return res.send(paymentIntent);
-  } catch (err) {
-    console.error(err);
-  }
-});
-
 // CREATE checkout session via Stripe
 router.post("/checkout", async (req, res, next) => {
   try {
