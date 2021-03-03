@@ -13,6 +13,9 @@ const CardSchema = new Schema(
     color: {
       type: String,
     },
+    comment: {
+      type: String,
+    },
     deadline: {
       type: String,
     },

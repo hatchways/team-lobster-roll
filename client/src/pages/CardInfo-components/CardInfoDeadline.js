@@ -4,7 +4,12 @@ import { AccessTime } from "@material-ui/icons";
 import { useStyles } from "../../themes/cardInfoStyles";
 import { updateCard } from "../../API/card";
 
-function CardInfoDeadline({ saveDeadline, showDeadline, deleteDeadline }) {
+function CardInfoDeadline({
+  saveDeadline,
+  showDeadline,
+  deleteDeadline,
+  cardId,
+}) {
   const [disabled, setDisabled] = useState(true);
   const [deadline, setDeadline] = useState("");
   const classes = useStyles();
@@ -15,7 +20,12 @@ function CardInfoDeadline({ saveDeadline, showDeadline, deleteDeadline }) {
   };
 
   const confirmSave = async () => {
-    const res = await updateCard("deadline", deadline);
+    const data = {
+      cardId: cardId,
+      property: "deadline",
+      newData: deadline,
+    };
+    const res = await updateCard(data);
     if (res.status === 200) {
       saveDeadline(deadline);
       setDisabled(true);
@@ -31,8 +41,7 @@ function CardInfoDeadline({ saveDeadline, showDeadline, deleteDeadline }) {
     <Box
       className={`${classes.section} ${
         showDeadline ? classes.dBlock : classes.dNone
-      }`}
-    >
+      }`}>
       <Typography className={classes.subHeader}>
         <AccessTime color="primary" style={{ marginRight: "4px" }} /> Deadline:
       </Typography>
@@ -50,16 +59,14 @@ function CardInfoDeadline({ saveDeadline, showDeadline, deleteDeadline }) {
           disabled={disabled}
           size="large"
           color="primary"
-          onClick={confirmSave}
-        >
+          onClick={confirmSave}>
           Save
         </Button>
         <Button
           size="small"
           color="primary"
           className={classes.cancel}
-          onClick={handleDeleteSection}
-        >
+          onClick={handleDeleteSection}>
           &times;
         </Button>
       </Box>

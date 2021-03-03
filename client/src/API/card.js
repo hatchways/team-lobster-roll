@@ -9,11 +9,11 @@ export const createCard = (data) => {
   }
 };
 
-export const updateCard = async (property, newData) => {
+export const updateCard = async (data) => {
   try {
-    // axios param id will eventually be data._id
+    const { cardId, property, newData } = data;
     const res = await axios.put(
-      `${window.location.origin}/api/card/update/6032f763e6dc8567d992b41a`,
+      `${window.location.origin}/api/card/update/${cardId}`,
       {
         property,
         newData,

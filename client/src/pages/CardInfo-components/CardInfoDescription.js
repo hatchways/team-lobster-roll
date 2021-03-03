@@ -8,6 +8,7 @@ function CardInfoDescription({
   saveDescription,
   showDescription,
   deleteDescription,
+  cardId,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [description, setDescription] = useState("");
@@ -19,7 +20,12 @@ function CardInfoDescription({
   };
 
   const confirmSave = async () => {
-    const res = await updateCard("description", description);
+    const data = {
+      cardId: cardId,
+      property: "description",
+      newData: description,
+    };
+    const res = await updateCard(data);
     if (res.status === 200) {
       saveDescription(description);
       setDisabled(true);
@@ -30,13 +36,11 @@ function CardInfoDescription({
   const handleDeleteSection = () => {
     deleteDescription();
   };
-
   return (
     <Box
       className={`${classes.section} ${
         showDescription ? classes.dBlock : classes.dNone
-      }`}
-    >
+      }`}>
       <Typography className={classes.subHeader}>
         <ImportContactsTwoTone color="primary" style={{ marginRight: "4px" }} />{" "}
         Description:
@@ -55,16 +59,14 @@ function CardInfoDescription({
           disabled={disabled}
           size="large"
           color="primary"
-          onClick={confirmSave}
-        >
+          onClick={confirmSave}>
           Save
         </Button>
         <Button
           size="small"
           color="primary"
           className={classes.cancel}
-          onClick={handleDeleteSection}
-        >
+          onClick={handleDeleteSection}>
           &times;
         </Button>
       </Box>

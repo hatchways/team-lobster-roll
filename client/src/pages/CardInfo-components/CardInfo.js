@@ -63,8 +63,7 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
   return (
     <Container
       maxWidth={false}
-      className={showCardInfo ? classes.dBlock : classes.dNone}
-    >
+      className={showCardInfo ? classes.dBlock : classes.dNone}>
       <Box className={classes.bg} onClick={() => closeCardInfo()} />
       <Card className={classes.cardContainer}>
         <CardContent className={classes.header}>
@@ -74,14 +73,12 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
               {task.title}
             </Typography>
             <Box
-              className={`${classes.cardStatus} ${classes.marginRight}`}
-            ></Box>
+              className={`${classes.cardStatus} ${classes.marginRight}`}></Box>
           </Box>
           <Typography
             variant="body1"
             style={{ color: "gray" }}
-            className={classes.marginLeft}
-          >
+            className={classes.marginLeft}>
             In List "Math"
           </Typography>
           <Button className={classes.closeCard} onClick={() => closeCardInfo()}>
@@ -94,16 +91,19 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
               saveDescription={handleSaveDescription}
               showDescription={showDescription}
               deleteDescription={handleDeleteDescription}
+              cardId={task._id}
             />
             <CardInfoDeadline
               saveDeadline={handleSaveDeadline}
               showDeadline={showDeadline}
               deleteDeadline={handleDeleteDeadline}
+              cardId={task._id}
             />
             <CardInfoComment
               saveComment={handleSaveComment}
               showComment={showComment}
               deleteComment={handleDeleteComment}
+              cardId={task._id}
             />
           </Box>
           <Box m={0} className={`${classes.cardBody} ${classes.right}`}>
@@ -115,24 +115,21 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
                 className={`${classes.add} ${
                   !showDescription ? classes.dBlock : classes.dNone
                 }`}
-                onClick={addDescription}
-              >
+                onClick={addDescription}>
                 Description
               </Button>
               <Button
                 className={`${classes.add} ${
                   !showDeadline ? classes.dBlock : classes.dNone
                 }`}
-                onClick={addDeadline}
-              >
+                onClick={addDeadline}>
                 Deadline
               </Button>
               <Button
                 className={`${classes.add} ${
                   !showComment ? classes.dBlock : classes.dNone
                 }`}
-                onClick={addComment}
-              >
+                onClick={addComment}>
                 Comment
               </Button>
             </Box>
