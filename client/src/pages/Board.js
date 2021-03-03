@@ -18,6 +18,7 @@ import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
 import UploadImage from "./UploadImage";
 import Members from "./Members";
+import Chat from "./Chat";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,14 +55,20 @@ const useStyles = makeStyles((theme) => ({
 function Board(props) {
   const classes = useStyles();
   const history = useHistory();
-  const { boardList, currBoardId, setCurrBoardId, currBoard } = useContext(
-    UserContext
-  );
+  const {
+    boardList,
+    currBoardId,
+    setCurrBoardId,
+    currBoard,
+    user,
+  } = useContext(UserContext);
   const { socket } = useContext(SocketContext);
   const [showModal, setShowModal] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showMembers, setShowMembers] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [socketMsg, setSocketMsg] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
@@ -80,12 +87,23 @@ function Board(props) {
       // removes duplicate socket listeners
       socket.removeAllListeners("roomResponse");
 
-      socket.emit("joinRoom", currBoardId);
+      socket.emit("joinRoom", currBoardId, user._id);
       socket.on("roomResponse", (message) => {
-        console.log(message);
+        console.log("roomresponse", message);
+        if (message.boardId === currBoardId) {
+          console.log("matching room boardid", message.boardId);
+          setSocketMsg(message.msg);
+        }
       });
     }
-  }, [socket, currBoardId]);
+  }, [socket, currBoardId, user._id]);
+
+  useEffect(() => {
+    if (msg.length) {
+      console.log("clicked", msg);
+      socket.emit("editBoard", currBoardId, user._id, msg);
+    }
+  }, [msg, user._id, currBoardId]);
 
   // componentWillUnmount
   useEffect(() => {
@@ -111,11 +129,7 @@ function Board(props) {
 
   const Dropdown = () => {
     const allBoards = boardList.map((board) => (
-      <Link
-        to={`/board/${board._id}`}
-        key={board._id}
-        onClick={() => handleBoardSelect(board._id)}
-      >
+      <Link to={`/board/${board._id}`} key={board._id}>
         <Typography variant="subtitle1">{board.name}</Typography>
       </Link>
     ));
@@ -124,6 +138,9 @@ function Board(props) {
       <Grid item>
         <Paper className={classes.dropdown}>
           <Typography variant="body1">Select board</Typography>
+          <Link to={`/board/603e839b13f92009308260dd`}>
+            603e839b13f92009308260dd
+          </Link>
           {allBoards}
         </Paper>
       </Grid>
@@ -138,8 +155,7 @@ function Board(props) {
             container
             direction="row"
             alignItems="center"
-            justify="space-between"
-          >
+            justify="space-between">
             <Grid item>
               <Typography variant="h6" className={classes.title}>
                 My School Board
@@ -150,8 +166,14 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowModal(true)}
-              >
+                onClick={() => setMsg("testing testing")}>
+                Test Msg
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.buttonCreate}
+                onClick={() => setShowModal(true)}>
                 <AddIcon />
                 Create column
               </Button>
@@ -159,22 +181,19 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowUpload(true)}
-              >
+                onClick={() => setShowUpload(true)}>
                 Choose Profile Image
               </Button>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowMembers(true)}
-              >
+                onClick={() => setShowMembers(true)}>
                 Members
               </Button>
               <IconButton
                 color="inherit"
-                onClick={() => setShowDropdown(!showDropdown)}
-              >
+                onClick={() => setShowDropdown(!showDropdown)}>
                 <MenuIcon />
               </IconButton>
             </Grid>
@@ -186,6 +205,7 @@ function Board(props) {
       {showDropdown && <Dropdown />}
       {showUpload && <UploadImage setShowUpload={setShowUpload} />}
       {showMembers && <Members setShowMembers={setShowMembers} />}
+      <Chat socketMsg={socketMsg} />
     </div>
   );
 }

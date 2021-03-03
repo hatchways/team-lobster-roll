@@ -4,10 +4,20 @@ function socketConnect(server) {
   io.on("connection", (socket) => {
     console.log("A user has connected");
 
-    socket.on("joinRoom", (boardId) => {
+    socket.on("joinRoom", (boardId, userId) => {
       socket.join(boardId);
-      console.log("a user has joined: ", boardId);
-      io.in(boardId).emit("roomResponse", `you have joined: ${boardId}`);
+      console.log(`a user ${userId} has joined: `, boardId);
+      io.in(boardId).emit("roomResponse", {
+        msg: `you have joined: ${boardId}`,
+      });
+    });
+
+    socket.on("editBoard", (boardId, userId, msg) => {
+      console.log(`a user ${userId} did to ${boardId}: ${msg}`);
+      io.in(boardId).emit("roomResponse", {
+        boardId: boardId,
+        msg: `${userId} has done to ${boardId}: ${msg}`,
+      });
     });
 
     socket.on("leaveRoom", (boardId) => {
