@@ -27,7 +27,9 @@ function SignUp(props) {
           const userData = data.data;
           setUser(userData);
           setLoggedIn(true);
-          history.push("/board");
+          
+          const boardId = userData.boards[0];
+          history.push(`/board/${boardId}`);
         })
         .catch((err) => console.log(err));
     }

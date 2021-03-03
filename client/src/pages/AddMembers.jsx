@@ -13,7 +13,7 @@ function AddMembers({ boardId }) {
     const email = e.target.value;
     email === "" && setMembers([]);
     axios
-      .get(`${window.location.origin}/user/filter-by-email?email=${email}`)
+      .get(`${window.location.origin}/user/filter-by-email/${email}`)
       .then((data) => setMembers(data.data))
       .catch((err) => console.log(err));
   }, 750);
