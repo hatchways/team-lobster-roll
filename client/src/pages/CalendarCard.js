@@ -3,12 +3,12 @@ import { Draggable } from "react-beautiful-dnd";
 import { useStyles } from "../themes/calendarCardStyles";
 import Card from "@material-ui/core/Card";
 import RootRef from "@material-ui/core/RootRef";
-import Typography from '@material-ui/core/Typography';
+import Typography from "@material-ui/core/Typography";
 
 function CalendarCard({ card, index }) {
   const classes = useStyles();
   return (
-    <Draggable draggableId={card.id} index={index}>
+    <Draggable draggableId={card._id} index={index}>
       {(provided) => (
         <RootRef rootRef={provided.innerRef}>
           <Card
@@ -17,7 +17,7 @@ function CalendarCard({ card, index }) {
             {...provided.dragHandleProps}
           >
             <span className={`${classes.cardStatus} ${classes.red}`}></span>
-            <Typography className={classes.p}>{card.title}</Typography>
+            <Typography className={classes.p}>{card.name}</Typography>
           </Card>
         </RootRef>
       )}
