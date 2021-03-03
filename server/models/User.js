@@ -60,6 +60,16 @@ UserSchema.statics.findByEmail = function (email) {
   return this.find({ email: email });
 };
 
+// Find users using an array
+UserSchema.statics.findByIdArray = function (ids) {
+  return this.find({ _id: { $in: ids } }, { email: 1, image: 1 });
+};
+
+// Find users with partial email
+UserSchema.statics.filterByEmail = function (email) {
+  return this.find({ email: { $regex: `${email}` } }, { email: 1, image: 1 });
+};
+
 // Add a profile image
 UserSchema.statics.addImage = function (id, image) {
   return this.updateOne(

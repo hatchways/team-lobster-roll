@@ -9,8 +9,14 @@ const User = require("../models/User");
 router.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
-    const foundBoard = await Board.findBoard(id);
-    res.status(200).json({ data: foundBoard });
+    const { shallow } = req.query;
+    if (shallow) {
+      const foundBoard = await Board.findById(id);
+      res.status(200).json(foundBoard);
+    } else {
+      const foundBoard = await Board.findBoard(id);
+      res.status(200).json(foundBoard);
+    }
   } catch (err) {
     console.error(err);
   }
@@ -21,13 +27,12 @@ router.post("/", async (req, res, next) => {
   try {
     if (req.body) {
       const data = req.body;
-      const { title, userId } = data;
-      const newBoard = await Board.createNewBoard(title, userId);
-      const foundUser = await User.findUser(userId);
-
+      const { title, id } = data;
+      const newBoard = await Board.createNewBoard(title, id);
+      const foundUser = await User.findUser(id);
       foundUser.boards = [...foundUser.boards, newBoard._id];
       foundUser.save();
-      res.status(201).json({ data: newBoard });
+      res.status(201).json(newBoard);
     }
   } catch (err) {
     console.error(err);
@@ -39,18 +44,15 @@ router.patch("/:id", async (req, res, next) => {
   try {
     if (req.body) {
       const data = req.body;
-      const { title } = data;
-      const newData = {
-        name: title,
-      };
-      const { id } = req.params;
-      const updatedBoard = await Board.findByIdAndUpdate(
-        id,
-        newData,
-        (err, board) => {
-          res.send(board);
-        }
-      );
+      const { movement } = data;
+      const boardId = req.params.id;
+      const foundBoard = await Board.findById(boardId);
+      if (movement === "column") {
+        foundBoard.moveColumn(data);
+      } else {
+        foundBoard.moveCard(data);
+      }
+      res.status(200).json(foundBoard);
     }
   } catch (err) {
     console.error(err);
@@ -64,6 +66,23 @@ router.delete("/", async (req, res, next) => {
     const deletedBoard = await Board.deleteBoard(boardId);
     const updateUser = await User.deleteBoard(userId, boardId);
     res.status(200).json({ msg: `Board ${boardId} deleted successfully` });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+// Add users to share with
+router.post("/share", async (req, res, next) => {
+  try {
+    if (req.body) {
+      const data = req.body;
+      const { boardId, id } = data;
+      const board = await Board.findBoard(boardId);
+      const rawShares = [...board.members, id];
+      board.members = [...new Set(rawShares)];
+      board.save();
+      res.status(201).json({ msg: `Shares added to ${board.name}.` });
+    }
   } catch (err) {
     console.error(err);
   }

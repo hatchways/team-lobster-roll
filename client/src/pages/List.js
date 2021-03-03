@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { editBoard } from "../API/board";
 
 import Column from "./Column";
 
@@ -21,52 +22,23 @@ const useStyles = makeStyles({
   },
 });
 
-const taskTypes = {
-  "task-1": { id: "task-1", title: "art", status: "red", note: "March 14" },
-  "task-2": { id: "task-2", title: "philosophy", status: "red" },
-  "task-3": { id: "task-3", title: "cooking", status: "red" },
-  "task-4": { id: "task-4", title: "gym", status: "red" },
-  "task-5": { id: "task-5", title: "math", status: "green" },
-  "task-6": { id: "task-6", title: "english", status: "green" },
-  "task-7": { id: "task-7", title: "science", status: "green" },
-  "task-8": { id: "task-8", title: "history", status: "green" },
-};
-
-const columnTypes = {
-  "col-1": {
-    id: "col-1",
-    name: "To do",
-    taskIds: [...Object.keys(taskTypes)],
-  },
-  "col-2": {
-    id: "col-2",
-    name: "In progress",
-    taskIds: [],
-  },
-  "col-3": {
-    id: "col-3",
-    name: "Review",
-    taskIds: [],
-  },
-  "col-4": {
-    id: "col-4",
-    name: "Completed",
-    taskIds: [],
-  },
-};
-
-const initialData = {
-  columns: columnTypes,
-  tasks: taskTypes,
-  columnOrder: [...Object.keys(columnTypes)],
-};
-
-function List() {
+function List(props) {
   const classes = useStyles();
-  const [data, setData] = useState(initialData);
+  const { loadedData, currBoardId } = props;
+  const [boardData, setBoardData] = useState(loadedData);
+  useEffect(() => {
+    setBoardData(loadedData);
+  }, [loadedData]);
+
+  function handleCardMove(data, movement, newState) {
+    data.movement = movement;
+    setBoardData(newState);
+    editBoard(currBoardId, data);
+  }
 
   function handleOnDragEnd(result) {
     const { source, destination, draggableId, type } = result;
+    // error handling
     if (!destination) {
       return;
     }
@@ -77,59 +49,95 @@ function List() {
       return;
     }
 
+    // DRAG COLUMN
     if (type === "column") {
-      const newColumnOrder = [...data.columnOrder];
+      // generate newState
+      const newColumnOrder = [...boardData.columnOrder];
       newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, draggableId);
       const newState = {
-        ...data,
+        ...boardData,
         columnOrder: newColumnOrder,
       };
-      setData(newState);
+      // generate data for API PATCH
+      const moveData = {
+        columnId: draggableId,
+        destinationIdx: destination.index,
+        sourceIdx: source.index,
+      };
+      handleCardMove(moveData, "column", newState);
       return;
     }
+    // select source & destination columns
+    const start = boardData.columns[source.droppableId];
+    const finish = boardData.columns[destination.droppableId];
 
-    const start = data.columns[source.droppableId];
-    const finish = data.columns[destination.droppableId];
-
+    // DRAG CARD SAME COLUMN
     if (start === finish) {
+      // generate newState
       const newTaskIds = [...start.taskIds];
       newTaskIds.splice(source.index, 1);
       newTaskIds.splice(destination.index, 0, draggableId);
-
-      const newColumn = { ...start, taskIds: newTaskIds };
+      const newCards = [...start.cards];
+      const removed = newCards.splice(source.index, 1);
+      newCards.splice(destination.index, 0, removed[0]);
+      const newColumn = { ...start, taskIds: newTaskIds, cards: newCards };
       const newState = {
-        ...data,
+        ...boardData,
         columns: {
-          ...data.columns,
+          ...boardData.columns,
           [newColumn.id]: newColumn,
         },
       };
-
-      setData(newState);
+      // generate data for API PATCH
+      const moveData = {
+        cardId: draggableId,
+        fromColumnId: source.droppableId,
+        toColumnId: destination.droppableId,
+        destinationIdx: destination.index,
+        sourceIdx: source.index,
+      };
+      handleCardMove(moveData, "same", newState);
       return;
     }
+
+    // DRAG CARD DIFFERENT COLUMN
+    // generate newState
     const startTaskIds = [...start.taskIds];
     startTaskIds.splice(source.index, 1);
+    const startCards = [...start.cards];
+    const removed = startCards.splice(source.index, 1);
     const newStart = {
       ...start,
       taskIds: startTaskIds,
+      cards: startCards,
     };
     const finishTaskIds = [...finish.taskIds];
     finishTaskIds.splice(destination.index, 0, draggableId);
+    const finishCards = [...finish.cards];
+    finishCards.splice(destination.index, 0, removed[0]);
     const newFinish = {
       ...finish,
       taskIds: finishTaskIds,
+      cards: finishCards,
     };
     const newState = {
-      ...data,
+      ...boardData,
       columns: {
-        ...data.columns,
+        ...boardData.columns,
         [newStart.id]: newStart,
         [newFinish.id]: newFinish,
       },
     };
-    setData(newState);
+    // generate data for API PATCH
+    const moveData = {
+      cardId: draggableId,
+      fromColumnId: source.droppableId,
+      toColumnId: destination.droppableId,
+      destinationIdx: destination.index,
+      sourceIdx: source.index,
+    };
+    handleCardMove(moveData, "different", newState);
   }
 
   return (
@@ -139,11 +147,10 @@ function List() {
           <div
             className={classes.columnsContainer}
             {...provided.droppableProps}
-            ref={provided.innerRef}
-          >
-            {data.columnOrder.map((columnId, idx) => {
-              const column = data.columns[columnId];
-              const tasks = column.taskIds.map((taskId) => data.tasks[taskId]);
+            ref={provided.innerRef}>
+            {boardData?.columnOrder.map((columnId, idx) => {
+              const column = boardData.columns[columnId];
+              const tasks = column.cards;
               return (
                 <Column
                   key={column.id}
@@ -153,6 +160,7 @@ function List() {
                 />
               );
             })}
+            <span>{provided.placeholder}</span>
           </div>
         )}
       </Droppable>

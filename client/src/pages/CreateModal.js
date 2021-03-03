@@ -63,7 +63,13 @@ const useStyles = makeStyles((theme) => ({
 function CreateModal(props) {
   const classes = useStyles();
   const { setShowModal, type } = props;
-  const { user } = useContext(UserContext);
+  const {
+    user,
+    createCount,
+    setCreateCount,
+    currBoardId,
+    setCurrBoardId,
+  } = useContext(UserContext);
 
   const [title, setTitle] = useState("");
 
@@ -71,26 +77,34 @@ function CreateModal(props) {
     switch (type) {
       case "board": {
         const cleanedData = {
-          userId: data._id,
+          id: data._id,
           title: title,
         };
-        createBoard(cleanedData);
+        async function getData() {
+          const res = await createBoard(cleanedData);
+          const boardId = res.data._id;
+          boardId && setCurrBoardId(boardId);
+          setCreateCount(createCount + 1);
+        }
+        getData();
         break;
       }
       case "column": {
         const cleanedData = {
-          boardId: data.boards[0], //TODO: make dynamic
+          boardId: currBoardId,
           title: title,
         };
         createColumn(cleanedData);
+        setCreateCount(createCount + 1);
         break;
       }
       case "card": {
         const cleanedData = {
-          columnId: "602f2b85e297d244f8f90d1c" || props.columnId, //PENDING: switch dummyData to DB
+          columnId: props.columnId,
           title: title,
         };
         createCard(cleanedData);
+        setCreateCount(createCount + 1);
         break;
       }
       default:
@@ -108,13 +122,15 @@ function CreateModal(props) {
       direction="column"
       justify="center"
       alignItems="center"
-      className={classes.backdrop}>
+      className={classes.backdrop}
+    >
       <Paper className={classes.modal}>
         <Grid
           container
           direction="column"
           justify="flex-start"
-          alignItems="center">
+          alignItems="center"
+        >
           <Grid item className={classes.close}>
             <IconButton onClick={() => setShowModal(false)}>
               <CloseIcon />
@@ -125,7 +141,8 @@ function CreateModal(props) {
             direction="column"
             justify="space-between"
             alignItems="center"
-            className={classes.modalMain}>
+            className={classes.modalMain}
+          >
             <Grid item>
               <Typography variant="h4" className={classes.title}>
                 Create a new {type}
@@ -136,7 +153,8 @@ function CreateModal(props) {
                 placeholder="Add Title"
                 variant="outlined"
                 className={classes.input}
-                onChange={(e) => setTitle(e.target.value)}></TextField>
+                onChange={(e) => setTitle(e.target.value)}
+              ></TextField>
             </Grid>
             <Grid item>
               <Button
@@ -144,7 +162,8 @@ function CreateModal(props) {
                 variant="contained"
                 color="primary"
                 className={classes.createButton}
-                onClick={handleClick}>
+                onClick={handleClick}
+              >
                 <Typography variant="body1">Create</Typography>
               </Button>
             </Grid>

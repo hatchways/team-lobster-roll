@@ -33,8 +33,8 @@ function Login(props) {
 
           const newSocket = io(window.location.origin);
           setSocket(newSocket);
-
-          history.push("/board");
+          const boardId = userData.boards[0];
+          history.push(`/board/${boardId}`);
         })
         .catch((err) => console.log(err));
     }
@@ -64,13 +64,7 @@ function Login(props) {
 
   return (
     <div className={classes.main}>
-      <div className={classes.contentBox}>
-        <img
-          className={classes.img}
-          src="/images/sign-up.png"
-          alt="women-computing"
-        />
-      </div>
+      <div className={`${classes.contentBox} ${classes.leftContent}`}></div>
       <div className={classes.contentBox}>
         <div className={classes.upperDetails}>
           <form className={classes.form}>
@@ -103,8 +97,7 @@ function Login(props) {
               type="submit"
               variant="contained"
               color="secondary"
-              onClick={handleSubmit}
-            >
+              onClick={handleSubmit}>
               Login
             </Button>
           </form>

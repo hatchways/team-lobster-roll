@@ -8,6 +8,8 @@ function CardInfoDescription({
   saveDescription,
   showDescription,
   deleteDescription,
+  cardId,
+  cardDescription,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [description, setDescription] = useState("");
@@ -19,26 +21,28 @@ function CardInfoDescription({
   };
 
   const confirmSave = async () => {
-    const res = await updateCard("description", description);
+    const data = {
+      cardId: cardId,
+      property: "description",
+      newData: description,
+    };
+    const res = await updateCard(data);
     if (res.status === 200) {
       saveDescription(description);
       setDisabled(true);
-      // todo: update card in board context with res.data
     }
   };
 
   const handleDeleteSection = () => {
     deleteDescription();
   };
-
   return (
     <Box
       className={`${classes.section} ${
         showDescription ? classes.dBlock : classes.dNone
-      }`}
-    >
+      }`}>
       <Typography className={classes.subHeader}>
-        <ImportContactsTwoTone color="primary" style={{ marginRight: "4px" }} />{" "}
+        <ImportContactsTwoTone color="primary" style={{ marginRight: "4px" }} />
         Description:
       </Typography>
       <TextField
@@ -49,22 +53,21 @@ function CardInfoDescription({
         placeholder="Write a description..."
         onChange={handleChange}
         className={classes.field}
+        value={description || cardDescription}
       />
       <Box className={classes.field}>
         <Button
           disabled={disabled}
           size="large"
           color="primary"
-          onClick={confirmSave}
-        >
+          onClick={confirmSave}>
           Save
         </Button>
         <Button
           size="small"
           color="primary"
           className={classes.cancel}
-          onClick={handleDeleteSection}
-        >
+          onClick={handleDeleteSection}>
           &times;
         </Button>
       </Box>
