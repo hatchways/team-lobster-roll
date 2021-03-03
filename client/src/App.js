@@ -23,8 +23,8 @@ function App() {
     <UserContextProvider>
       <SocketContextProvider>
         <MuiThemeProvider theme={theme}>
-          <Navbar />
           <BrowserRouter>
+            <Navbar />
             <Switch>
               <Route path="/" exact component={LandingPage} />
               <Route path="/login" component={Login} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useStyles } from "../themes/calendarStyles";
@@ -6,17 +6,36 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import buildCalendar from "../utils/buildCalendar";
 import CalendarCell from "./CalendarCell";
+import { UserContext } from "../contexts/UserContext";
+import { updateCard } from "../API/card";
+import { getBoard } from "../API/board";
 
 function Calendar() {
+  const { currBoardId } = useContext(UserContext);
   const [calendar, setCalendar] = useState([]);
-  const [value, setValue] = useState(moment());
+  const [currentDate, setCurrentDate] = useState(moment());
   const classes = useStyles();
 
-  useEffect(() => {
-    setCalendar(buildCalendar(value));
-  }, [value]);
+  const fetchBoardFromDb = async (boardId) => {
+    const res = await getBoard(boardId);
+    return res;
+  };
 
-  const onDragEnd = (result) => {
+  useEffect(() => {
+    fetchBoardFromDb(currBoardId).then((res) => {
+      const { columns } = res.data;
+      let cards = [];
+
+      // makes an array of all the Card objects in the current board
+      columns.forEach((column) => {
+        cards = [...cards, ...column.cards];
+      });
+
+      setCalendar(buildCalendar(currentDate, cards));
+    });
+  }, [currBoardId]);
+
+  const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
 
     if (!destination) return;
@@ -51,10 +70,10 @@ function Calendar() {
     }
 
     const draggedCard = sourceCards.filter(
-      (card) => card.id === draggableId
+      (card) => card._id === draggableId
     )[0];
 
-    // case for if card was dropped in the same column from where it originally was
+    // case for if card was re-arranged in the same column
     if (sourceWeek === destinationWeek && sourceDay === destinationDay) {
       sourceCards.splice(source.index, 1);
       sourceCards.splice(destination.index, 0, draggedCard);
@@ -62,6 +81,16 @@ function Calendar() {
       setCalendar(newCalendar);
       return;
     }
+
+    /*
+			if card was dropped to a different calendar day, the card's 
+			deadline will be changed to the date of the new calendar cell
+		*/
+    updateCard({
+      cardId: draggedCard._id,
+      property: "deadline",
+      newData: destination.droppableId,
+    });
 
     sourceCards.splice(source.index, 1);
     newCalendar[sourceWeek][sourceDay].cards = sourceCards;
@@ -71,12 +100,12 @@ function Calendar() {
   };
 
   return (
-    <div>
+    <>
       <h1 className={classes.h1}>
-        {value.format("MMMM") + " " + value.format("YYYY")}
+        {currentDate.format("MMMM") + " " + currentDate.format("YYYY")}
       </h1>
 
-      <Container>
+      <Container style={{ marginBottom: "50px" }}>
         <Grid container>
           <Grid item className={`${classes.day} ${classes.names}`}>
             Sun
@@ -109,7 +138,7 @@ function Calendar() {
           </Grid>
         </DragDropContext>
       </Container>
-    </div>
+    </>
   );
 }
 
