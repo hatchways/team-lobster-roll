@@ -4,7 +4,13 @@ import { ChatBubbleOutlineRounded } from "@material-ui/icons";
 import { useStyles } from "../../themes/cardInfoStyles";
 import { updateCard } from "../../API/card";
 
-function CardInfoComment({ saveComment, showComment, deleteComment, cardId }) {
+function CardInfoComment({
+  saveComment,
+  showComment,
+  deleteComment,
+  cardId,
+  cardComment,
+}) {
   const [disabled, setDisabled] = useState(true);
   const [comment, setComment] = useState("");
   const classes = useStyles();
@@ -24,7 +30,6 @@ function CardInfoComment({ saveComment, showComment, deleteComment, cardId }) {
     if (res.status === 200) {
       saveComment(comment);
       setDisabled(true);
-      // todo: update card in board context with res.data
     }
   };
 
@@ -41,7 +46,7 @@ function CardInfoComment({ saveComment, showComment, deleteComment, cardId }) {
         <ChatBubbleOutlineRounded
           color="primary"
           style={{ marginRight: "4px" }}
-        />{" "}
+        />
         Add Comment:
       </Typography>
       <TextField
@@ -53,6 +58,7 @@ function CardInfoComment({ saveComment, showComment, deleteComment, cardId }) {
         placeholder="Write a comment..."
         onChange={handleChange}
         className={classes.field}
+        value={comment || cardComment}
       />
       <Box className={classes.field}>
         <Button

@@ -9,6 +9,7 @@ function CardInfoDeadline({
   showDeadline,
   deleteDeadline,
   cardId,
+  cardDeadline,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [deadline, setDeadline] = useState("");
@@ -29,7 +30,6 @@ function CardInfoDeadline({
     if (res.status === 200) {
       saveDeadline(deadline);
       setDisabled(true);
-      // todo: update card in board context with res.data
     }
   };
 
@@ -50,9 +50,9 @@ function CardInfoDeadline({
         InputLabelProps={{
           shrink: true,
         }}
-        defaultValue={deadline}
         className={classes.marginLeft}
         onChange={handleChange}
+        value={deadline || cardDeadline}
       />
       <Box className={classes.field}>
         <Button

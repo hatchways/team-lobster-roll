@@ -59,7 +59,6 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
   const handleDeleteComment = () => {
     setShowComment(false);
   };
-
   return (
     <Container
       maxWidth={false}
@@ -92,18 +91,21 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
               showDescription={showDescription}
               deleteDescription={handleDeleteDescription}
               cardId={task._id}
+              cardDescription={task.description}
             />
             <CardInfoDeadline
               saveDeadline={handleSaveDeadline}
               showDeadline={showDeadline}
               deleteDeadline={handleDeleteDeadline}
               cardId={task._id}
+              cardDeadline={task.deadline}
             />
             <CardInfoComment
               saveComment={handleSaveComment}
               showComment={showComment}
               deleteComment={handleDeleteComment}
               cardId={task._id}
+              cardComment={task.comment}
             />
           </Box>
           <Box m={0} className={`${classes.cardBody} ${classes.right}`}>
