@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { editBoard } from "../API/board";
+import { SocketContext } from "../contexts/SocketContext";
 
 import Column from "./Column";
 
@@ -24,14 +25,24 @@ const useStyles = makeStyles({
 
 function List(props) {
   const classes = useStyles();
-  const { loadedData, currBoardId } = props;
+  const { socket } = useContext(SocketContext);
+
+  const { loadedData, currBoardId, setMsg, socketMsg } = props;
   const [boardData, setBoardData] = useState(loadedData);
+
   useEffect(() => {
     setBoardData(loadedData);
   }, [loadedData]);
 
+  useEffect(() => {
+    if (socketMsg.data && Object.keys(socketMsg.data).length) {
+      setBoardData(socketMsg.data);
+    }
+  }, [socket, socketMsg]);
+
   function handleCardMove(data, movement, newState) {
     data.movement = movement;
+    setMsg(newState);
     setBoardData(newState);
     editBoard(currBoardId, data);
   }

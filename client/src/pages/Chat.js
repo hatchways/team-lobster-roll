@@ -20,7 +20,7 @@ function Chat(props) {
       <div className={classes.chat}>
         Welcome to the chat
         <br />
-        {socketMsg}
+        <pre>{JSON.stringify(socketMsg, null, 2)}</pre>
       </div>
     </>
   );

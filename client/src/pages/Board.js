@@ -67,8 +67,8 @@ function Board(props) {
   const [showUpload, setShowUpload] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showMembers, setShowMembers] = useState(false);
-  const [msg, setMsg] = useState("");
-  const [socketMsg, setSocketMsg] = useState("");
+  const [msg, setMsg] = useState({});
+  const [socketMsg, setSocketMsg] = useState({});
   const { id } = useParams();
 
   useEffect(() => {
@@ -92,15 +92,14 @@ function Board(props) {
         console.log("roomresponse", message);
         if (message.boardId === currBoardId) {
           console.log("matching room boardid", message.boardId);
-          setSocketMsg(message.msg);
+          setSocketMsg(message);
         }
       });
     }
   }, [socket, currBoardId, user._id]);
 
   useEffect(() => {
-    if (msg.length) {
-      console.log("clicked", msg);
+    if (msg) {
       socket.emit("editBoard", currBoardId, user._id, msg);
     }
   }, [msg, user._id, currBoardId]);
@@ -166,13 +165,6 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setMsg("testing testing")}>
-                Test Msg
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                className={classes.buttonCreate}
                 onClick={() => setShowModal(true)}>
                 <AddIcon />
                 Create column
@@ -200,7 +192,12 @@ function Board(props) {
           </Grid>
         </Toolbar>
       </AppBar>
-      <List loadedData={currBoard} currBoardId={currBoardId} />
+      <List
+        loadedData={currBoard}
+        currBoardId={currBoardId}
+        setMsg={setMsg}
+        socketMsg={socketMsg}
+      />
       {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
       {showDropdown && <Dropdown />}
       {showUpload && <UploadImage setShowUpload={setShowUpload} />}

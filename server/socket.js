@@ -16,7 +16,8 @@ function socketConnect(server) {
       console.log(`a user ${userId} did to ${boardId}: ${msg}`);
       io.in(boardId).emit("roomResponse", {
         boardId: boardId,
-        msg: `${userId} has done to ${boardId}: ${msg}`,
+        msg: `User ${userId} has made a change to board ${boardId}`,
+        data: msg,
       });
     });
 
