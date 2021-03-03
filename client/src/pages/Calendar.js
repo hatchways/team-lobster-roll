@@ -7,23 +7,33 @@ import Container from "@material-ui/core/Container";
 import buildCalendar from "../utils/buildCalendar";
 import CalendarCell from "./CalendarCell";
 import { UserContext } from "../contexts/UserContext";
+import { updateCard } from "../API/card";
+import { getBoard } from "../API/board";
 
 function Calendar() {
-  const { currBoard } = useContext(UserContext);
+  const { currBoardId } = useContext(UserContext);
   const [calendar, setCalendar] = useState([]);
   const [currentDate, setCurrentDate] = useState(moment());
   const classes = useStyles();
 
-  useEffect(() => {
-    const { columns } = currBoard;
-    let cards = [];
-    // makes an array of all the Card objects in the current board
-    for (let key in columns) {
-      if (columns[key].cards) cards = [...cards, ...columns[key].cards];
-    }
+  const fetchBoardFromDb = async (boardId) => {
+    const res = await getBoard(boardId);
+    return res;
+  };
 
-    setCalendar(buildCalendar(currentDate, cards));
-  }, [currentDate, currBoard]);
+  useEffect(() => {
+    fetchBoardFromDb(currBoardId).then((res) => {
+      const { columns } = res.data;
+      let cards = [];
+
+      // makes an array of all the Card objects in the current board
+      columns.forEach((column) => {
+        cards = [...cards, ...column.cards];
+      });
+
+      setCalendar(buildCalendar(currentDate, cards));
+    });
+  }, [currBoardId]);
 
   const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
@@ -63,7 +73,7 @@ function Calendar() {
       (card) => card._id === draggableId
     )[0];
 
-    // case for if card was dropped in the same column from where it originally was
+    // case for if card was re-arranged in the same column
     if (sourceWeek === destinationWeek && sourceDay === destinationDay) {
       sourceCards.splice(source.index, 1);
       sourceCards.splice(destination.index, 0, draggedCard);
@@ -71,6 +81,16 @@ function Calendar() {
       setCalendar(newCalendar);
       return;
     }
+
+    /*
+			if card was dropped to a different calendar day, the card's 
+			deadline will be changed to the date of the new calendar cell
+		*/
+    updateCard({
+      cardId: draggedCard._id,
+      property: "deadline",
+      newData: destination.droppableId,
+    });
 
     sourceCards.splice(source.index, 1);
     newCalendar[sourceWeek][sourceDay].cards = sourceCards;

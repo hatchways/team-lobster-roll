@@ -9,7 +9,7 @@ export default function buildCalendar(value, cardsFromContext) {
       Array(7)
         .fill(0)
         .map(() => {
-          const dayClone = day.add(1, "day").clone();
+          const dayClone = day.add(1, "day").clone(); // increments "day" by one day
           let cards = [];
 
           cardsFromContext.forEach((card) => {
