@@ -38,9 +38,6 @@ function CardInfo({
   const addDescription = () => {
     setShowDescription(true);
   };
-  /* const handleSaveDescription = (description) => {
-    setCardInfo({ ...cardInfo, description });
-  }; */
   const handleDeleteDescription = () => {
     setShowDescription(false);
   };
@@ -49,9 +46,6 @@ function CardInfo({
   const addDeadline = () => {
     setShowDeadline(true);
   };
-  const handleSaveDeadline = (deadline) => {
-    setCardInfo({ ...cardInfo, deadline });
-  };
   const handleDeleteDeadline = () => {
     setShowDeadline(false);
   };
@@ -59,9 +53,6 @@ function CardInfo({
   // comment section handlers
   const addComment = () => {
     setShowComment(true);
-  };
-  const handleSaveComment = (comment) => {
-    setCardInfo({ ...cardInfo, comment });
   };
   const handleDeleteComment = () => {
     setShowComment(false);

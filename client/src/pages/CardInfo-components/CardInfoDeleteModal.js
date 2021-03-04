@@ -1,9 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Typography, Box, Button } from "@material-ui/core";
 import { useStyles } from "../../themes/cardInfoStyles";
-import CardInfoDescription from "./CardInfoDescription";
-import CardInfoDeadline from "./CardInfoDeadline";
-import CardInfoComment from "./CardInfoComment";
 import { UserContext } from "../../contexts/UserContext";
 import { deleteCard } from "../../API/card";
 

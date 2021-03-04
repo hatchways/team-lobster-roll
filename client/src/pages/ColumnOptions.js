@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";

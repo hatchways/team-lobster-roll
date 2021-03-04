@@ -3,13 +3,9 @@ import {
   Typography,
   Box,
   Button,
-  InputLabel,
   NativeSelect,
 } from "@material-ui/core";
 import { useStyles } from "../../themes/cardInfoStyles";
-import CardInfoDescription from "./CardInfoDescription";
-import CardInfoDeadline from "./CardInfoDeadline";
-import CardInfoComment from "./CardInfoComment";
 import { updateCard } from "../../API/card";
 
 function CardInfoColorModal({
