@@ -41,14 +41,22 @@ function Column(props) {
                 <MoreHoriz />
               </IconButton>
               {showColOptions && (
-                <ColumnOptions closeOptions={() => setShowOptions(false)} columnName={column.name} />
+                <ColumnOptions
+                  closeOptions={() => setShowOptions(false)}
+                  columnName={column.name}
+                />
               )}
             </div>
             <Droppable droppableId={column.id} type="task">
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {tasks.map((task, idx) => (
-                    <Task key={task._id} task={task} idx={idx} />
+                    <Task
+                      key={task._id}
+                      columnName={column.name}
+                      task={task}
+                      idx={idx}
+                    />
                   ))}
                   <span className={classes.placeholder}>
                     {provided.placeholder}

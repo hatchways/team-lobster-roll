@@ -24,3 +24,20 @@ export const updateCard = async (data) => {
     console.error(err);
   }
 };
+
+export const deleteCard = async (boardId, cardId) => {
+  try {
+    const res = await axios.delete(
+      `${window.location.origin}/api/card/delete/`,
+      {
+        data: {
+          boardId,
+          cardId,
+        },
+      }
+    );
+    return res.status;
+  } catch (err) {
+    console.error(err);
+  }
+};

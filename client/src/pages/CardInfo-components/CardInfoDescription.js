@@ -1,19 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Box, TextField, Button } from "@material-ui/core";
 import { ImportContactsTwoTone } from "@material-ui/icons";
 import { useStyles } from "../../themes/cardInfoStyles";
 import { updateCard } from "../../API/card";
 
 function CardInfoDescription({
-  saveDescription,
   showDescription,
   deleteDescription,
   cardId,
   cardDescription,
+  updateCardInfo,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [description, setDescription] = useState("");
   const classes = useStyles();
+
+  useEffect(() => {
+    if (cardDescription) setDescription(cardDescription);
+  }, [cardDescription]);
 
   const handleChange = (e) => {
     setDescription(e.target.value);
@@ -28,7 +32,7 @@ function CardInfoDescription({
     };
     const res = await updateCard(data);
     if (res.status === 200) {
-      saveDescription(description);
+      updateCardInfo("description", description);
       setDisabled(true);
     }
   };
@@ -36,11 +40,13 @@ function CardInfoDescription({
   const handleDeleteSection = () => {
     deleteDescription();
   };
+
   return (
     <Box
       className={`${classes.section} ${
         showDescription ? classes.dBlock : classes.dNone
-      }`}>
+      }`}
+    >
       <Typography className={classes.subHeader}>
         <ImportContactsTwoTone color="primary" style={{ marginRight: "4px" }} />
         Description:
@@ -53,21 +59,23 @@ function CardInfoDescription({
         placeholder="Write a description..."
         onChange={handleChange}
         className={classes.field}
-        value={description || cardDescription}
+        value={description}
       />
       <Box className={classes.field}>
         <Button
           disabled={disabled}
           size="large"
           color="primary"
-          onClick={confirmSave}>
+          onClick={confirmSave}
+        >
           Save
         </Button>
         <Button
           size="small"
           color="primary"
           className={classes.cancel}
-          onClick={handleDeleteSection}>
+          onClick={handleDeleteSection}
+        >
           &times;
         </Button>
       </Box>

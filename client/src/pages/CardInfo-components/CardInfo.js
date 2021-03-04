@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Container,
@@ -12,28 +12,35 @@ import { useStyles } from "../../themes/cardInfoStyles";
 import CardInfoDescription from "./CardInfoDescription";
 import CardInfoDeadline from "./CardInfoDeadline";
 import CardInfoComment from "./CardInfoComment";
+import CardInfoColorModal from "./CardInfoColorModal";
+import CardInfoDeleteModal from "./CardInfoDeleteModal";
 
-function CardInfo({ task, showCardInfo, closeCardInfo }) {
+function CardInfo({
+  task,
+  columnName,
+  showCardInfo,
+  closeCardInfo,
+  updateTaskInfo,
+}) {
   const classes = useStyles();
-  const [info, setInfo] = useState({
-    name: "",
-    description: "",
-    deadline: "",
-    comment: "",
-    tags: [],
-    attachments: [],
-  });
   const [showDescription, setShowDescription] = useState(true);
   const [showDeadline, setShowDeadline] = useState(true);
   const [showComment, setShowComment] = useState(true);
+  const [showColorModal, setShowColorModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [cardInfo, setCardInfo] = useState({});
+
+  useEffect(() => {
+    setCardInfo(task);
+  }, [task]);
 
   // description section handlers
   const addDescription = () => {
     setShowDescription(true);
   };
-  const handleSaveDescription = (description) => {
-    setInfo({ ...info, description });
-  };
+  /* const handleSaveDescription = (description) => {
+    setCardInfo({ ...cardInfo, description });
+  }; */
   const handleDeleteDescription = () => {
     setShowDescription(false);
   };
@@ -43,7 +50,7 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
     setShowDeadline(true);
   };
   const handleSaveDeadline = (deadline) => {
-    setInfo({ ...info, deadline });
+    setCardInfo({ ...cardInfo, deadline });
   };
   const handleDeleteDeadline = () => {
     setShowDeadline(false);
@@ -54,31 +61,54 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
     setShowComment(true);
   };
   const handleSaveComment = (comment) => {
-    setInfo({ ...info, comment });
+    setCardInfo({ ...cardInfo, comment });
   };
   const handleDeleteComment = () => {
     setShowComment(false);
   };
+
+  // close color modal handler
+  const handleCloseColorModal = () => {
+    setShowColorModal(false);
+  };
+
+  // close delete modal handler
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+  };
+
+  // updating card info handler
+  const handleUpdateCardInfo = (property, newInfo) => {
+    setCardInfo({
+      ...cardInfo,
+      [property]: newInfo,
+    });
+  };
+
   return (
     <Container
       maxWidth={false}
-      className={showCardInfo ? classes.dBlock : classes.dNone}>
+      className={showCardInfo ? classes.dBlock : classes.dNone}
+    >
       <Box className={classes.bg} onClick={() => closeCardInfo()} />
       <Card className={classes.cardContainer}>
         <CardContent className={classes.header}>
           <Box className={classes.titleContainer}>
             <Assignment color="primary" style={{ marginRight: "3px" }} />
             <Typography className={`${classes.marginRight} ${classes.title}`}>
-              {task.title}
+              {cardInfo.name}
             </Typography>
             <Box
-              className={`${classes.cardStatus} ${classes.marginRight}`}></Box>
+              className={`${classes.cardStatus} ${classes.marginRight} 
+								${cardInfo.color ? classes[cardInfo.color] : classes.noColor}`}
+            />
           </Box>
           <Typography
             variant="body1"
             style={{ color: "gray" }}
-            className={classes.marginLeft}>
-            In List "Math"
+            className={classes.marginLeft}
+          >
+            In column: {columnName}
           </Typography>
           <Button className={classes.closeCard} onClick={() => closeCardInfo()}>
             &times;
@@ -87,25 +117,26 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
         <CardContent className={classes.cardContent}>
           <Box m={0} className={`${classes.cardBody} ${classes.left}`}>
             <CardInfoDescription
-              saveDescription={handleSaveDescription}
               showDescription={showDescription}
               deleteDescription={handleDeleteDescription}
               cardId={task._id}
-              cardDescription={task.description}
+              cardDescription={cardInfo.description}
+              updateCardInfo={handleUpdateCardInfo}
             />
             <CardInfoDeadline
-              saveDeadline={handleSaveDeadline}
               showDeadline={showDeadline}
               deleteDeadline={handleDeleteDeadline}
               cardId={task._id}
-              cardDeadline={task.deadline}
+              cardDeadline={cardInfo.deadline}
+              updateCardInfo={handleUpdateCardInfo}
+              updateTaskInfo={updateTaskInfo}
             />
             <CardInfoComment
-              saveComment={handleSaveComment}
               showComment={showComment}
               deleteComment={handleDeleteComment}
               cardId={task._id}
-              cardComment={task.comment}
+              cardComment={cardInfo.comment}
+              updateCardInfo={handleUpdateCardInfo}
             />
           </Box>
           <Box m={0} className={`${classes.cardBody} ${classes.right}`}>
@@ -117,21 +148,24 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
                 className={`${classes.add} ${
                   !showDescription ? classes.dBlock : classes.dNone
                 }`}
-                onClick={addDescription}>
+                onClick={addDescription}
+              >
                 Description
               </Button>
               <Button
                 className={`${classes.add} ${
                   !showDeadline ? classes.dBlock : classes.dNone
                 }`}
-                onClick={addDeadline}>
+                onClick={addDeadline}
+              >
                 Deadline
               </Button>
               <Button
                 className={`${classes.add} ${
                   !showComment ? classes.dBlock : classes.dNone
                 }`}
-                onClick={addComment}>
+                onClick={addComment}
+              >
                 Comment
               </Button>
             </Box>
@@ -139,22 +173,37 @@ function CardInfo({ task, showCardInfo, closeCardInfo }) {
               <Typography variant="subtitle2" align="center">
                 ACTIONS:
               </Typography>
-              <Button className={`${classes.add} ${classes.dBlock}`}>
-                Move
+              <Button
+                className={`${classes.add} ${classes.dBlock}`}
+                onClick={() => setShowColorModal(true)}
+              >
+                Choose Color
               </Button>
-              <Button className={`${classes.add} ${classes.dBlock}`}>
-                Copy
-              </Button>
-              <Button className={`${classes.add} ${classes.dBlock}`}>
-                Share
-              </Button>
-              <Button className={`${classes.add} ${classes.dBlock}`}>
+              <Button
+                className={`${classes.add} ${classes.dBlock}`}
+                onClick={() => setShowDeleteModal(true)}
+              >
                 Delete
               </Button>
             </Box>
           </Box>
         </CardContent>
       </Card>
+      {showColorModal && (
+        <CardInfoColorModal
+          closeColorModal={handleCloseColorModal}
+          currentColor={cardInfo.color}
+          cardId={task._id}
+          updateCardInfo={handleUpdateCardInfo}
+          updateTaskInfo={updateTaskInfo}
+        />
+      )}
+      {showDeleteModal && (
+        <CardInfoDeleteModal
+          closeDeleteModal={handleCloseDeleteModal}
+          cardId={task._id}
+        />
+      )}
     </Container>
   );
 }

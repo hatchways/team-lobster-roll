@@ -1,19 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Box, TextField, Button } from "@material-ui/core";
 import { ChatBubbleOutlineRounded } from "@material-ui/icons";
 import { useStyles } from "../../themes/cardInfoStyles";
 import { updateCard } from "../../API/card";
 
 function CardInfoComment({
-  saveComment,
   showComment,
   deleteComment,
   cardId,
   cardComment,
+  updateCardInfo,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [comment, setComment] = useState("");
   const classes = useStyles();
+
+  useEffect(() => {
+    if (cardComment) setComment(cardComment);
+  }, [cardComment]);
 
   const handleChange = (e) => {
     setComment(e.target.value);
@@ -28,7 +32,7 @@ function CardInfoComment({
     };
     const res = await updateCard(data);
     if (res.status === 200) {
-      saveComment(comment);
+      updateCardInfo("comment", comment);
       setDisabled(true);
     }
   };
@@ -41,7 +45,8 @@ function CardInfoComment({
     <Box
       className={`${classes.section} ${
         showComment ? classes.dBlock : classes.dNone
-      }`}>
+      }`}
+    >
       <Typography className={classes.subHeader}>
         <ChatBubbleOutlineRounded
           color="primary"
@@ -58,21 +63,23 @@ function CardInfoComment({
         placeholder="Write a comment..."
         onChange={handleChange}
         className={classes.field}
-        value={comment || cardComment}
+        value={cardComment}
       />
       <Box className={classes.field}>
         <Button
           disabled={disabled}
           size="large"
           color="primary"
-          onClick={confirmSave}>
+          onClick={confirmSave}
+        >
           Save
         </Button>
         <Button
           size="small"
           color="primary"
           className={classes.cancel}
-          onClick={handleDeleteSection}>
+          onClick={handleDeleteSection}
+        >
           &times;
         </Button>
       </Box>
