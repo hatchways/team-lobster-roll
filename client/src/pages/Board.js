@@ -61,6 +61,8 @@ function Board(props) {
     setCurrBoardId,
     currBoard,
     user,
+    createCount,
+    setCreateCount,
   } = useContext(UserContext);
   const { socket } = useContext(SocketContext);
   const [showModal, setShowModal] = useState(false);
@@ -94,15 +96,22 @@ function Board(props) {
           console.log("matching room boardid", message.boardId);
           setSocketMsg(message);
         }
+        if (message.createCount > 0) {
+          setCreateCount(message.createCount);
+        }
       });
     }
   }, [socket, currBoardId, user._id]);
 
   useEffect(() => {
     if (msg) {
-      socket.emit("editBoard", currBoardId, user._id, msg);
+      if (createCount > 0) {
+        socket.emit("editBoard", currBoardId, user._id, msg, createCount);
+      } else {
+        socket.emit("editBoard", currBoardId, user._id, msg, 0);
+      }
     }
-  }, [msg, user._id, currBoardId]);
+  }, [msg, user._id, currBoardId, createCount]);
 
   // componentWillUnmount
   useEffect(() => {

@@ -12,12 +12,13 @@ function socketConnect(server) {
       });
     });
 
-    socket.on("editBoard", (boardId, userId, msg) => {
+    socket.on("editBoard", (boardId, userId, msg, createCount) => {
       console.log(`a user ${userId} did to ${boardId}: ${msg}`);
       io.in(boardId).emit("roomResponse", {
         boardId: boardId,
         msg: `User ${userId} has made a change to board ${boardId}`,
         data: msg,
+        createCount: createCount,
       });
     });
 
