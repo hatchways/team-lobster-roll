@@ -123,5 +123,15 @@ BoardSchema.methods.removeCard = async function (cardId) {
   await column.removeCard(cardId);
 };
 
+// gets all Boards matching memberId
+BoardSchema.statics.findSharedBoard = async function (memberEmail) {
+  const foundBoards = await this.find({
+    members: {
+      $elemMatch: { $eq: memberEmail },
+    },
+  });
+  return foundBoards;
+};
+
 const Board = mongoose.model("Board", BoardSchema);
 module.exports = Board;

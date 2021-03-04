@@ -1,5 +1,5 @@
 import React, { createContext, useState, useMemo, useEffect } from "react";
-import { getBoardShallow, getBoard } from "../API/board";
+import { getBoardShallow, getBoard, getSharedBoards } from "../API/board";
 import { getUser } from "../API/user";
 
 export const UserContext = createContext({});
@@ -12,7 +12,7 @@ export const UserContextProvider = (props) => {
   const [currBoardId, setCurrBoardId] = useState("");
   const [currBoard, setCurrBoard] = useState(null);
   const [createCount, setCreateCount] = useState(0);
-
+  const [sharedBoards, setSharedBoards] = useState([]);
   useEffect(() => {
     if (userId && createCount > 0) {
       async function getData() {
@@ -41,6 +41,8 @@ export const UserContextProvider = (props) => {
           return null;
         });
         setBoardList(boardList);
+        const foundSharedBoards = await getSharedBoards(user.email);
+        setSharedBoards(foundSharedBoards.data);
       }
     };
     getAllBoards();
@@ -86,6 +88,7 @@ export const UserContextProvider = (props) => {
       setCurrBoard,
       createCount,
       setCreateCount,
+      sharedBoards,
     }),
     [
       user,
@@ -99,6 +102,7 @@ export const UserContextProvider = (props) => {
       setCurrBoard,
       createCount,
       setCreateCount,
+      sharedBoards,
     ]
   );
 

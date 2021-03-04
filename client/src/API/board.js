@@ -35,3 +35,12 @@ export const editBoard = async (boardId, data) => {
     console.error(err);
   }
 };
+
+export const getSharedBoards = async (email) => {
+  try {
+    const URL = `${window.location.origin}/api/board/member/${email}`;
+    return await axios.get(URL);
+  } catch (err) {
+    console.error(err);
+  }
+};

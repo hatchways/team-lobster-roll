@@ -22,6 +22,17 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+// GET all boards where user is a member
+router.get("/member/:email", async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    const foundBoards = await Board.findSharedBoard(email);
+    res.status(200).json(foundBoards);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 // CREATE
 router.post("/", async (req, res, next) => {
   try {

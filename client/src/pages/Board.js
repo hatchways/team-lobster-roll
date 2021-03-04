@@ -7,18 +7,18 @@ import {
   Typography,
   IconButton,
   Button,
-  Paper,
+  Grid,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../contexts/UserContext";
 import { SocketContext } from "../contexts/SocketContext";
-import { Grid } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
 import UploadImage from "./UploadImage";
 import Members from "./Members";
 import Chat from "./Chat";
+import Dropdown from "./Dropdown";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,17 +39,6 @@ const useStyles = makeStyles((theme) => ({
       borderColor: "#ffffff",
     },
   },
-  dropdown: {
-    minWidth: "100px",
-    padding: "1rem",
-    background: "#ffffff",
-    zIndex: "1",
-    position: "absolute",
-    top: "160px",
-    right: "1rem",
-    boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.15)",
-    textAlign: "right",
-  },
 }));
 
 function Board(props) {
@@ -63,6 +52,7 @@ function Board(props) {
     user,
     createCount,
     setCreateCount,
+    sharedBoards,
   } = useContext(UserContext);
   const { socket } = useContext(SocketContext);
   const [showModal, setShowModal] = useState(false);
@@ -72,7 +62,6 @@ function Board(props) {
   const [msg, setMsg] = useState({});
   const [socketMsg, setSocketMsg] = useState({});
   const { id } = useParams();
-
   useEffect(() => {
     setCurrBoardId(id);
   }, [id, setCurrBoardId]);
@@ -101,7 +90,7 @@ function Board(props) {
         }
       });
     }
-  }, [socket, currBoardId, user._id]);
+  }, [socket, currBoardId, user._id, setCreateCount]);
 
   useEffect(() => {
     if (msg) {
@@ -111,7 +100,7 @@ function Board(props) {
         socket.emit("editBoard", currBoardId, user._id, msg, 0);
       }
     }
-  }, [msg, user._id, currBoardId, createCount]);
+  }, [msg, user._id, currBoardId, createCount, socket]);
 
   // componentWillUnmount
   useEffect(() => {
@@ -133,26 +122,6 @@ function Board(props) {
         console.log(message);
       });
     }
-  };
-
-  const Dropdown = () => {
-    const allBoards = boardList.map((board) => (
-      <Link to={`/board/${board._id}`} key={board._id}>
-        <Typography variant="subtitle1">{board.name}</Typography>
-      </Link>
-    ));
-
-    return (
-      <Grid item>
-        <Paper className={classes.dropdown}>
-          <Typography variant="body1">Select board</Typography>
-          <Link to={`/board/603e839b13f92009308260dd`}>
-            603e839b13f92009308260dd
-          </Link>
-          {allBoards}
-        </Paper>
-      </Grid>
-    );
   };
 
   return (
@@ -208,7 +177,9 @@ function Board(props) {
         socketMsg={socketMsg}
       />
       {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
-      {showDropdown && <Dropdown />}
+      {showDropdown && (
+        <Dropdown boardList={boardList} sharedBoards={sharedBoards} />
+      )}
       {showUpload && <UploadImage setShowUpload={setShowUpload} />}
       {showMembers && <Members setShowMembers={setShowMembers} />}
       <Chat socketMsg={socketMsg} />
