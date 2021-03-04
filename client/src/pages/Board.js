@@ -17,7 +17,6 @@ import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
 import UploadImage from "./UploadImage";
 import Members from "./Members";
-import Chat from "./Chat";
 import Dropdown from "./Dropdown";
 
 const useStyles = makeStyles((theme) => ({
@@ -63,6 +62,7 @@ function Board(props) {
   const [socketMsg, setSocketMsg] = useState({});
   const { id } = useParams();
   useEffect(() => {
+    handleBoardSelect(id);
     setCurrBoardId(id);
   }, [id, setCurrBoardId]);
 
@@ -80,9 +80,7 @@ function Board(props) {
 
       socket.emit("joinRoom", currBoardId, user._id);
       socket.on("roomResponse", (message) => {
-        console.log("roomresponse", message);
         if (message.boardId === currBoardId) {
-          console.log("matching room boardid", message.boardId);
           setSocketMsg(message);
         }
         if (message.createCount > 0) {
@@ -182,7 +180,6 @@ function Board(props) {
       )}
       {showUpload && <UploadImage setShowUpload={setShowUpload} />}
       {showMembers && <Members setShowMembers={setShowMembers} />}
-      <Chat socketMsg={socketMsg} />
     </div>
   );
 }
