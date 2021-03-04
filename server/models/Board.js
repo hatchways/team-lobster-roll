@@ -116,10 +116,14 @@ BoardSchema.methods.moveColumn = async function (data) {
 };
 
 // removes specific card from existing column
-BoardSchema.methods.removeCard = async function (cardId) {
-  const column = await Column.findOne({
-    "cards._id": mongoose.Types.ObjectId(cardId),
-  });
+BoardSchema.methods.removeCard = async function (cardId) {	
+	const column = await Column.findOne(
+		{'cards': 
+			{$elemMatch: 
+				{$eq: mongoose.Types.ObjectId(cardId)}
+			}
+		}
+	);
   await column.removeCard(cardId);
 };
 
