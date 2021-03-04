@@ -3,6 +3,8 @@ import { Link, useHistory } from "react-router-dom";
 import { useStyles } from "../themes/loginSignup";
 import { Button, Typography, TextField } from "@material-ui/core";
 import axios from "axios";
+import io from "socket.io-client";
+import { SocketContext } from "../contexts/SocketContext";
 import { UserContext } from "../contexts/UserContext";
 
 function SignUp(props) {
@@ -12,6 +14,7 @@ function SignUp(props) {
   const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const { setSocket } = useContext(SocketContext);
   const { setUser, setLoggedIn } = useContext(UserContext);
   const emailVerify = new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g);
 
@@ -22,12 +25,14 @@ function SignUp(props) {
         .post(`${window.location.origin}/signup/`, {
           email: email,
           password: password,
+          premium: false,
         })
         .then((data) => {
           const userData = data.data;
           setUser(userData);
           setLoggedIn(true);
-          
+          const newSocket = io(window.location.origin);
+          setSocket(newSocket);
           const boardId = userData.boards[0];
           history.push(`/board/${boardId}`);
         })
@@ -91,7 +96,7 @@ function SignUp(props) {
               className={classes.button}
               type="submit"
               variant="contained"
-              color="secondary"
+              color="primary"
               onClick={handleSubmit}
             >
               Sign Up

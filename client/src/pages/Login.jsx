@@ -27,12 +27,13 @@ function Login(props) {
           password: password,
         })
         .then((data) => {
-          const userData = data.data[0];
+          const userData = data.data;
           setUser(userData);
           setLoggedIn(true);
 
           const newSocket = io(window.location.origin);
           setSocket(newSocket);
+
           const boardId = userData.boards[0];
           history.push(`/board/${boardId}`);
         })
@@ -96,8 +97,9 @@ function Login(props) {
               className={classes.button}
               type="submit"
               variant="contained"
-              color="secondary"
-              onClick={handleSubmit}>
+              color="primary"
+              onClick={handleSubmit}
+            >
               Login
             </Button>
           </form>
