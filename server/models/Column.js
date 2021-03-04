@@ -36,6 +36,14 @@ ColumnSchema.statics.deleteColumn = async function (columnId) {
   await this.deleteOne({ _id: mongoose.Types.ObjectId(columnId) });
 };
 
+// updates a single Column's name
+ColumnSchema.statics.updateName = async function (columnId, newName) {
+  await this.updateOne(
+    { _id: mongoose.Types.ObjectId(columnId) },
+    { name: newName }
+  );
+};
+
 // adds a Card model into the Column's cards array
 ColumnSchema.methods.addCard = async function (cardId) {
   this.cards.push(cardId);

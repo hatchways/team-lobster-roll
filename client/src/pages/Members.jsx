@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Typography,
   Grid,
@@ -15,19 +15,19 @@ import { useStyles } from "../themes/membersTheme";
 import CloseIcon from "@material-ui/icons/Close";
 import AddMembers from "../pages/AddMembers";
 import axios from "axios";
+import { UserContext } from "../contexts/UserContext";
 
 function Members({ setShowMembers }) {
   const classes = useStyles();
   const [showSearch, setShowSearch] = useState(false);
   const [members, setMembers] = useState([]);
-  // Static boardId for testing purposes
-  const boardId = "6038ecca4d73560f74a88ea3";
+  const { currBoardId } = useContext(UserContext);
 
   useEffect(() => {
     axios
-      .get(`${window.location.origin}/api/board/${boardId}`)
+      .get(`${window.location.origin}/api/board/${currBoardId}`)
       .then((data) => {
-        const ids = data.data.data.members;
+        const ids = data.data.members;
         axios
           .get(`${window.location.origin}/user/board-members/${ids}`)
           .then((data) => setMembers(data.data))
@@ -86,7 +86,7 @@ function Members({ setShowMembers }) {
             <Typography>Add members ...</Typography>
           </Button>
           <hr className={classes.hr} />
-          {showSearch && <AddMembers boardId={boardId} />}
+          {showSearch && <AddMembers boardId={currBoardId} />}
         </Grid>
       </Paper>
     </Box>

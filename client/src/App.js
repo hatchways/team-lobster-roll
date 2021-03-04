@@ -7,7 +7,6 @@ import { theme } from "./themes/theme";
 import LandingPage from "./pages/Landing.jsx";
 import Board from "./pages/Board";
 import Navbar from "./pages/Navbar";
-import Upload from "./pages/Upload";
 import Calendar from "./pages/Calendar";
 import StripeMain from "./pages/Stripe/StripeMain";
 import Success from "./pages/Stripe/Success";
@@ -23,8 +22,8 @@ function App() {
     <UserContextProvider>
       <SocketContextProvider>
         <MuiThemeProvider theme={theme}>
-          <Navbar />
           <BrowserRouter>
+            <Navbar />
             <Switch>
               <Route path="/" exact component={LandingPage} />
               <Route path="/login" component={Login} />

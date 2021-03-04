@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
@@ -8,56 +7,14 @@ import MoreHoriz from "@material-ui/icons/MoreHoriz";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Task from "./Task";
 import CreateModal from "./CreateModal";
-
-const useStyles = makeStyles({
-  column: {
-    margin: "1rem 0.75rem",
-    padding: 0,
-    backgroundColor: "#F4F6FF",
-    borderRadius: "8px",
-    width: 320,
-    minWidth: 320,
-    "&:hover": {
-      boxShadow: "0px 0px 10px 1px rgba(208,213,223,0.8)",
-    },
-  },
-  placeholder: {
-    listStyle: "none",
-  },
-  columnHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    margin: ".75rem 1.5rem",
-    marginBottom: "0.25rem",
-  },
-  columnTitle: {
-    fontSize: "1.3rem",
-    fontWeight: "500",
-  },
-  lightGray: {
-    color: "#D5DBF7",
-  },
-  addButton: {
-    backgroundColor: "#759CFC",
-    color: "#FFFFFF",
-    width: "120px",
-    boxShadow: "0px 0px 0px rgba(0,0,0,0)",
-    margin: "1.5rem",
-    borderRadius: "8px",
-    "&:hover": {
-      backgroundColor: "#759CFC",
-    },
-    "&:active": {
-      backgroundColor: "#759CFC",
-    },
-  },
-});
+import { useStyles } from "../themes/columnStyles";
+import ColumnOptions from "./ColumnOptions";
 
 function Column(props) {
   const { column, tasks, idx } = props;
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
+  const [showColOptions, setShowOptions] = useState(false);
 
   return (
     <>
@@ -75,9 +32,17 @@ function Column(props) {
               <Typography variant="h5" className={classes.columnTitle}>
                 {column.name}
               </Typography>
-              <IconButton className={classes.lightGray}>
+              <IconButton
+                onClick={() => {
+                  setShowOptions(true);
+                }}
+                className={classes.lightGray}
+              >
                 <MoreHoriz />
               </IconButton>
+              {showColOptions && (
+                <ColumnOptions closeOptions={() => setShowOptions(false)} columnName={column.name} />
+              )}
             </div>
             <Droppable droppableId={column.id} type="task">
               {(provided) => (

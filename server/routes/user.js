@@ -25,10 +25,10 @@ router.get("/email/:email", async (req, res, next) => {
 });
 
 // Filter users to share with
-router.get("/filter-by-email", async (req, res, next) => {
+router.get("/filter-by-email/:email", async (req, res, next) => {
   try {
-    if (req.query) {
-      const { email } = req.query;
+    if (req.params) {
+      const { email } = req.params;
       if (email !== "") {
         const users = await User.filterByEmail(email);
         res.status(201).send(users);
