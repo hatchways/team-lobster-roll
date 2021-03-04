@@ -10,6 +10,7 @@ function CardInfoComment({
   cardId,
   cardComment,
   updateCardInfo,
+  resetInfo,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [comment, setComment] = useState("");
@@ -18,6 +19,10 @@ function CardInfoComment({
   useEffect(() => {
     if (cardComment) setComment(cardComment);
   }, [cardComment]);
+
+  useEffect(() => {
+    if (resetInfo) setComment(cardComment);
+  }, [resetInfo]);
 
   const handleChange = (e) => {
     setComment(e.target.value);
@@ -37,8 +42,27 @@ function CardInfoComment({
     }
   };
 
-  const handleDeleteSection = () => {
-    deleteComment();
+  const handleDeleteSection = async () => {
+    // if the comment exists in DB then update it with an empty string in DB
+    if (cardComment) {
+      const data = {
+        cardId: cardId,
+        property: "comment",
+        newData: "",
+      };
+      const res = await updateCard(data);
+      if (res.status === 200) {
+        setComment("");
+        setDisabled(true);
+        updateCardInfo("comment", "");
+        deleteComment();
+      }
+    } else {
+      setComment("");
+      setDisabled(true);
+      updateCardInfo("comment", "");
+      deleteComment();
+    }
   };
 
   return (
@@ -63,7 +87,7 @@ function CardInfoComment({
         placeholder="Write a comment..."
         onChange={handleChange}
         className={classes.field}
-        value={cardComment}
+        value={comment}
       />
       <Box className={classes.field}>
         <Button

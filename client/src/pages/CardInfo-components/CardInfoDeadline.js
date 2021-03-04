@@ -11,6 +11,7 @@ function CardInfoDeadline({
   cardDeadline,
   updateCardInfo,
   updateTaskInfo,
+  resetInfo,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [deadline, setDeadline] = useState("");
@@ -19,6 +20,10 @@ function CardInfoDeadline({
   useEffect(() => {
     if (cardDeadline) setDeadline(cardDeadline);
   }, [cardDeadline]);
+
+  useEffect(() => {
+    if (resetInfo) setDeadline(cardDeadline);
+  }, [resetInfo]);
 
   const handleChange = (e) => {
     setDeadline(e.target.value);
@@ -39,8 +44,29 @@ function CardInfoDeadline({
     }
   };
 
-  const handleDeleteSection = () => {
-    deleteDeadline();
+  const handleDeleteSection = async () => {
+    // if the deadline exists in DB then update it with an empty string in DB
+    if (cardDeadline) {
+      const data = {
+        cardId: cardId,
+        property: "deadline",
+        newData: "",
+      };
+      const res = await updateCard(data);
+      if (res.status === 200) {
+        setDeadline("");
+        setDisabled(true);
+        updateCardInfo("deadline", "");
+        updateTaskInfo("deadline", "");
+        deleteDeadline();
+      }
+    } else {
+      setDeadline("");
+      setDisabled(true);
+      updateCardInfo("deadline", "");
+      updateTaskInfo("deadline", "");
+      deleteDeadline();
+    }
   };
 
   return (

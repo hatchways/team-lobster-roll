@@ -4,16 +4,13 @@ import { useStyles } from "../../themes/cardInfoStyles";
 import { UserContext } from "../../contexts/UserContext";
 import { deleteCard } from "../../API/card";
 
-function CardInfoDeleteModal({ closeDeleteModal, cardId }) {
+function CardInfoDeleteModal({ closeDeleteModal, cardId, removeCard }) {
   const classes = useStyles();
   const { currBoardId } = useContext(UserContext);
 
   const handleDeleteCard = async () => {
     const responseStatus = await deleteCard(currBoardId, cardId);
-    if (responseStatus === 200) {
-      console.log(200);
-      // todo: update context
-    }
+    if (responseStatus === 200) removeCard(cardId);
   };
 
   return (

@@ -63,12 +63,10 @@ CardSchema.statics.updateCard = async function (cardId, property, newData) {
 	- if the property does not exist, a new one will be created with "newData" as its data
 	- note: "newData" must match the data structure of the schema property
   */
-  const updatedCard = await this.findOneAndUpdate(
+  await this.findOneAndUpdate(
     { _id: mongoose.Types.ObjectId(cardId) },
-    { [property]: newData },
-    { new: true }
+    { [property]: newData }
   );
-  return updatedCard;
 };
 
 const Card = mongoose.model("Card", CardSchema);

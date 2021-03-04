@@ -62,11 +62,10 @@ function Task(props) {
   const [showCardInfo, setShowCardInfo] = useState(false);
   const [taskInfo, setTaskInfo] = useState({});
   const classes = useStyles(props);
-  const { task, idx, columnName } = props;
+  const { task, idx, columnName, removeTask } = props;
 
   useEffect(() => {
     setTaskInfo(task);
-    console.log(task);
   }, [task]);
 
   const handleShowCardInfo = () => {
@@ -117,6 +116,7 @@ function Task(props) {
         showCardInfo={showCardInfo}
         closeCardInfo={handleCloseCardInfo}
         updateTaskInfo={handleUpdateTaskInfo}
+        removeCard={removeTask}
       />
     </React.Fragment>
   );

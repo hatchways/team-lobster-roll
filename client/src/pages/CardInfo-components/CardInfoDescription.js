@@ -10,6 +10,7 @@ function CardInfoDescription({
   cardId,
   cardDescription,
   updateCardInfo,
+  resetInfo,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [description, setDescription] = useState("");
@@ -18,6 +19,10 @@ function CardInfoDescription({
   useEffect(() => {
     if (cardDescription) setDescription(cardDescription);
   }, [cardDescription]);
+
+  useEffect(() => {
+    if (resetInfo) setDescription(cardDescription);
+  }, [resetInfo]);
 
   const handleChange = (e) => {
     setDescription(e.target.value);
@@ -37,8 +42,27 @@ function CardInfoDescription({
     }
   };
 
-  const handleDeleteSection = () => {
-    deleteDescription();
+  const handleDeleteSection = async () => {
+    // if the description exists in DB then update it with an empty string in DB
+    if (cardDescription) {
+      const data = {
+        cardId: cardId,
+        property: "description",
+        newData: "",
+      };
+      const res = await updateCard(data);
+      if (res.status === 200) {
+        setDescription("");
+        setDisabled(true);
+        updateCardInfo("description", "");
+        deleteDescription();
+      }
+    } else {
+      setDescription("");
+      setDisabled(true);
+      updateCardInfo("description", "");
+      deleteDescription();
+    }
   };
 
   return (

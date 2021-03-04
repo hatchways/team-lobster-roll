@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
@@ -13,8 +13,18 @@ import ColumnOptions from "./ColumnOptions";
 function Column(props) {
   const { column, tasks, idx } = props;
   const classes = useStyles();
+  const [taskList, setTaskList] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showColOptions, setShowOptions] = useState(false);
+
+  useEffect(() => {
+    if (tasks.length) setTaskList(tasks);
+  }, [tasks]);
+
+  const handleRemoveTask = (taskId) => {
+    const updatedTaskList = taskList.filter((task) => task._id !== taskId);
+    setTaskList(updatedTaskList);
+  };
 
   return (
     <>
@@ -50,12 +60,13 @@ function Column(props) {
             <Droppable droppableId={column.id} type="task">
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {tasks.map((task, idx) => (
+                  {taskList.map((task, idx) => (
                     <Task
                       key={task._id}
                       columnName={column.name}
                       task={task}
                       idx={idx}
+                      removeTask={handleRemoveTask}
                     />
                   ))}
                   <span className={classes.placeholder}>

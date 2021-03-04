@@ -21,6 +21,8 @@ function CardInfo({
   showCardInfo,
   closeCardInfo,
   updateTaskInfo,
+  resetTaskInfo,
+  removeCard,
 }) {
   const classes = useStyles();
   const [showDescription, setShowDescription] = useState(true);
@@ -28,6 +30,7 @@ function CardInfo({
   const [showComment, setShowComment] = useState(true);
   const [showColorModal, setShowColorModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [resetInfo, setResetInfo] = useState(false);
   const [cardInfo, setCardInfo] = useState({});
 
   useEffect(() => {
@@ -76,12 +79,20 @@ function CardInfo({
     });
   };
 
+  // close card info modal
+  const handleCloseCardInfo = async () => {
+    // resets all the card info back to its info from the DB
+    await setResetInfo(true);
+    closeCardInfo();
+    await setResetInfo(false);
+  };
+
   return (
     <Container
       maxWidth={false}
       className={showCardInfo ? classes.dBlock : classes.dNone}
     >
-      <Box className={classes.bg} onClick={() => closeCardInfo()} />
+      <Box className={classes.bg} onClick={handleCloseCardInfo} />
       <Card className={classes.cardContainer}>
         <CardContent className={classes.header}>
           <Box className={classes.titleContainer}>
@@ -101,7 +112,7 @@ function CardInfo({
           >
             In column: {columnName}
           </Typography>
-          <Button className={classes.closeCard} onClick={() => closeCardInfo()}>
+          <Button className={classes.closeCard} onClick={handleCloseCardInfo}>
             &times;
           </Button>
         </CardContent>
@@ -113,6 +124,7 @@ function CardInfo({
               cardId={task._id}
               cardDescription={cardInfo.description}
               updateCardInfo={handleUpdateCardInfo}
+              resetInfo={resetInfo}
             />
             <CardInfoDeadline
               showDeadline={showDeadline}
@@ -121,6 +133,7 @@ function CardInfo({
               cardDeadline={cardInfo.deadline}
               updateCardInfo={handleUpdateCardInfo}
               updateTaskInfo={updateTaskInfo}
+              resetInfo={resetInfo}
             />
             <CardInfoComment
               showComment={showComment}
@@ -128,6 +141,7 @@ function CardInfo({
               cardId={task._id}
               cardComment={cardInfo.comment}
               updateCardInfo={handleUpdateCardInfo}
+              resetInfo={resetInfo}
             />
           </Box>
           <Box m={0} className={`${classes.cardBody} ${classes.right}`}>
@@ -187,12 +201,14 @@ function CardInfo({
           cardId={task._id}
           updateCardInfo={handleUpdateCardInfo}
           updateTaskInfo={updateTaskInfo}
+          resetInfo={resetInfo}
         />
       )}
       {showDeleteModal && (
         <CardInfoDeleteModal
           closeDeleteModal={handleCloseDeleteModal}
           cardId={task._id}
+          removeCard={removeCard}
         />
       )}
     </Container>

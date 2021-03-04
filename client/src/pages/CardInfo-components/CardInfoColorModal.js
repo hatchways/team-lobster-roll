@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Box,
-  Button,
-  NativeSelect,
-} from "@material-ui/core";
+import { Typography, Box, Button, NativeSelect } from "@material-ui/core";
 import { useStyles } from "../../themes/cardInfoStyles";
 import { updateCard } from "../../API/card";
 
@@ -32,10 +27,10 @@ function CardInfoColorModal({
       property: "color",
       newData: color,
     });
-    await console.log(res.status);
     if (res.status === 200) {
       updateCardInfo("color", color);
       updateTaskInfo("color", color);
+      closeColorModal();
     } else setColor(currentColor);
   };
 
