@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import {
   Toolbar,
   Typography,
@@ -90,6 +90,30 @@ function Navbar(props) {
   const [showModal, setShowModal] = useState(false);
   const history = useHistory();
 
+  const ref = useRef();
+  const exceptionRef = useRef();
+
+  function handleClick(e) {
+    if (
+      ref?.current?.contains(e.target) ||
+      exceptionRef?.current?.contains(e.target)
+    ) {
+      return;
+    }
+    setShowUserCard(false);
+  }
+
+  useEffect(() => {
+    if (showUserCard) {
+      document.addEventListener("mousedown", handleClick);
+    } else {
+      document.removeEventListener("mousedown", handleClick);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, [showUserCard]);
+
   function handleLogout() {
     setUser({});
     setLoggedIn(false);
@@ -98,15 +122,21 @@ function Navbar(props) {
 
   const UserCard = () => {
     return (
-      <Grid item>
-        <Paper className={classes.userCard}>
-          <Typography variant="body1">{email}</Typography>
-          <Typography variant="body1">Joined: {joinDate}</Typography>
-          <Button size="small" onClick={handleLogout}>
-            Logout
-          </Button>
-        </Paper>
-      </Grid>
+      <Paper className={classes.userCard} ref={ref}>
+        <Grid container direction="column" spacing={2}>
+          <Grid item>
+            <Typography variant="body1">{email}</Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="body1">Joined: {joinDate}</Typography>
+          </Grid>
+          <Grid item>
+            <Button size="small" variant="outlined" onClick={handleLogout}>
+              Logout
+            </Button>
+          </Grid>
+        </Grid>
+      </Paper>
     );
   };
 
@@ -171,6 +201,7 @@ function Navbar(props) {
               className={classes.profileIcon}
               alt="profile-icon"
               onClick={() => setShowUserCard(!showUserCard)}
+              ref={exceptionRef}
             />
           </Grid>
         </Toolbar>
