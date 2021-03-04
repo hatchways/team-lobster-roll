@@ -16,9 +16,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "right",
   },
 }));
-function Dropdown(props) {
+const Dropdown = (props) => {
   const classes = useStyles();
-  const { boardList, sharedBoards } = props;
+  const { boardList, sharedBoards, passedRef } = props;
   const [viewCreator, setViewCreator] = useState(true);
   const [viewMember, setViewMember] = useState(true);
 
@@ -35,8 +35,8 @@ function Dropdown(props) {
   ));
 
   return (
-    <Grid container direction="column">
-      <Paper className={classes.dropdown}>
+    <Paper className={classes.dropdown} ref={passedRef}>
+      <Grid container direction="column" spacing={1}>
         <Grid item>
           <Typography variant="h6">Select board</Typography>
         </Grid>
@@ -54,9 +54,9 @@ function Dropdown(props) {
         <Grid item>
           {viewMember ? allSharedBoards : sharedBoards.length ? "..." : ""}
         </Grid>
-      </Paper>
-    </Grid>
+      </Grid>
+    </Paper>
   );
-}
+};
 
 export default Dropdown;

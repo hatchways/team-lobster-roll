@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import List from "./List";
 import {
@@ -61,6 +61,10 @@ function Board(props) {
   const [msg, setMsg] = useState({});
   const [socketMsg, setSocketMsg] = useState({});
   const { id } = useParams();
+
+  const ref = useRef();
+  const exceptionRef = useRef();
+
   useEffect(() => {
     handleBoardSelect(id);
     setCurrBoardId(id);
@@ -108,6 +112,27 @@ function Board(props) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function handleClick(e) {
+    if (
+      ref?.current?.contains(e.target) ||
+      exceptionRef?.current?.contains(e.target)
+    ) {
+      return;
+    }
+    setShowDropdown(false);
+  }
+
+  useEffect(() => {
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClick);
+    } else {
+      document.removeEventListener("mousedown", handleClick);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, [showDropdown]);
 
   // joins socket room of the current selected board and leaves previous socket room
   const handleBoardSelect = (boardId) => {
@@ -162,7 +187,7 @@ function Board(props) {
               <IconButton
                 color="inherit"
                 onClick={() => setShowDropdown(!showDropdown)}>
-                <MenuIcon />
+                <MenuIcon ref={exceptionRef} />
               </IconButton>
             </Grid>
           </Grid>
@@ -176,7 +201,11 @@ function Board(props) {
       />
       {showModal && <CreateModal setShowModal={setShowModal} type="column" />}
       {showDropdown && (
-        <Dropdown boardList={boardList} sharedBoards={sharedBoards} />
+        <Dropdown
+          boardList={boardList}
+          sharedBoards={sharedBoards}
+          passedRef={ref}
+        />
       )}
       {showUpload && <UploadImage setShowUpload={setShowUpload} />}
       {showMembers && <Members setShowMembers={setShowMembers} />}
