@@ -81,12 +81,20 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar(props) {
   const classes = useStyles();
-  const { loggedIn, user, currBoardId } = useContext(UserContext);
+  const { loggedIn, user, currBoardId, setUser, setLoggedIn } = useContext(
+    UserContext
+  );
   const { email } = user;
   const joinDate = user?.joinDate?.slice(0, 10);
   const [showUserCard, setShowUserCard] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const history = useHistory();
+
+  function handleLogout() {
+    setUser({});
+    setLoggedIn(false);
+    history.push(`/`);
+  }
 
   const UserCard = () => {
     return (
@@ -94,6 +102,9 @@ function Navbar(props) {
         <Paper className={classes.userCard}>
           <Typography variant="body1">{email}</Typography>
           <Typography variant="body1">Joined: {joinDate}</Typography>
+          <Button size="small" onClick={handleLogout}>
+            Logout
+          </Button>
         </Paper>
       </Grid>
     );
@@ -109,8 +120,7 @@ function Navbar(props) {
             container
             direction="row"
             alignItems="center"
-            justify="space-between"
-          >
+            justify="space-between">
             <Grid item>
               <Grid
                 className={`${classes.click}`}
@@ -118,8 +128,7 @@ function Navbar(props) {
                 direction="row"
                 alignItems="center"
                 justify="space-between"
-                onClick={() => history.push(`/board/${currBoardId}`)}
-              >
+                onClick={() => history.push(`/board/${currBoardId}`)}>
                 <Grid item>
                   <DashboardIcon className={classes.visualIcon} />
                 </Grid>
@@ -135,8 +144,7 @@ function Navbar(props) {
                 direction="row"
                 alignItems="center"
                 justify="space-between"
-                onClick={() => history.push("/calendar")}
-              >
+                onClick={() => history.push("/calendar")}>
                 <Grid item>
                   <CalendarTodayIcon className={classes.visualIcon} />
                 </Grid>
@@ -152,8 +160,7 @@ function Navbar(props) {
               type="submit"
               variant="contained"
               color="primary"
-              onClick={() => setShowModal(true)}
-            >
+              onClick={() => setShowModal(true)}>
               <AddIcon className={classes.fixRightMargin} />
               <Typography variant="body1" className={classes.fixRightMargin}>
                 Create board
