@@ -54,9 +54,13 @@ const useStyles = makeStyles((theme) => ({
 function Board(props) {
   const classes = useStyles();
   const history = useHistory();
-  const { boardList, currBoardId, setCurrBoardId, currBoard } = useContext(
-    UserContext
-  );
+  const {
+    boardList,
+    currBoardId,
+    setCurrBoardId,
+    currBoard,
+    setLoggedIn,
+  } = useContext(UserContext);
   const { socket } = useContext(SocketContext);
   const [showModal, setShowModal] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
@@ -67,11 +71,13 @@ function Board(props) {
   useEffect(() => {
     setCurrBoardId(id);
   }, [id, setCurrBoardId]);
+
   useEffect(() => {
     if (currBoardId) {
       history.push(`/board/${currBoardId}`);
     }
   }, [currBoardId, history]);
+
   const Dropdown = () => {
     const allBoards = boardList.map((board) => (
       <Link to={`/board/${board._id}`} key={board._id}>
@@ -88,8 +94,7 @@ function Board(props) {
       </Grid>
     );
   };
-
-
+  /*
   // socket.io testing
   useEffect(() => {
     if (socket) {
@@ -107,7 +112,11 @@ function Board(props) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+*/
+  const handlePackages = () => {
+    setLoggedIn(false);
+    history.push("/packages");
+  };
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.blue}>
@@ -116,7 +125,8 @@ function Board(props) {
             container
             direction="row"
             alignItems="center"
-            justify="space-between">
+            justify="space-between"
+          >
             <Grid item>
               <Typography variant="h6" className={classes.title}>
                 My School Board
@@ -127,7 +137,8 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowModal(true)}>
+                onClick={() => setShowModal(true)}
+              >
                 <AddIcon />
                 Create column
               </Button>
@@ -135,19 +146,30 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowUpload(true)}>
+                onClick={() => setShowUpload(true)}
+              >
                 Choose Profile Image
               </Button>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowMembers(true)}>
+                onClick={() => setShowMembers(true)}
+              >
                 Members
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.buttonCreate}
+                onClick={() => handlePackages()}
+              >
+                Upgrade
               </Button>
               <IconButton
                 color="inherit"
-                onClick={() => setShowDropdown(!showDropdown)}>
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
                 <MenuIcon />
               </IconButton>
             </Grid>
