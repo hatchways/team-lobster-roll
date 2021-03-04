@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   AppBar,
@@ -7,38 +7,57 @@ import {
   Paper,
   Grid,
   Container,
-  TextField,
   InputLabel,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-
 import { createCheckout } from "../../API/stripe";
-require("dotenv").config();
+import Logo from "../../assets/logo.png";
+
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_TEST_KEY);
 
 const useStyles = makeStyles((theme) => ({
   header: {
-    paddingTop: "2rem",
+    padding: "1rem",
+    background: "white",
   },
   container: {
-    margin: "4rem auto",
+    display: "grid",
+    placeItems: "center",
     width: "90%",
+    height: "90vh",
+    textAlign: "center",
   },
   card: {
     padding: "2rem",
     margin: "2rem",
+    width: 450,
+    borderTop: "1.5px lightgray solid",
   },
   title: {
-    color: "#000000",
-    margin: "0 0 2rem 0",
+    color: "#759CFC",
+    margin: 0,
     fontWeight: "bold",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  dollar: {
+    fontSize: 28,
+    verticalAlign: "super",
+  },
+  price: {
+    fontSize: 50,
   },
   button: {
     margin: "1rem 0",
     padding: "1rem",
-    width: "100%",
+    width: "50%",
     color: "#FFFFFF",
     fontSize: "1rem",
+  },
+  inputGrid: {
+    margin: "20px auto 0px",
+    fontSize: 30,
   },
   input: {
     marginBottom: "1.5rem",
@@ -47,13 +66,8 @@ const useStyles = makeStyles((theme) => ({
 
 function StripeMain(props) {
   const classes = useStyles();
-  const [quantity, setQuantity] = useState(1);
   async function handleCheckout(mode) {
     const URL = `${window.location.origin}/stripe`;
-    const priceVal =
-      mode === "payment"
-        ? "price_1IQI3XGWNZMUdr0uTnWJsJkI"
-        : "price_1IQN7GGWNZMUdr0u72YLX4I8";
     const dummyData = {
       success_url: `${URL}/success?id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${URL}/cancel`,
@@ -61,24 +75,24 @@ function StripeMain(props) {
       payment_method_types: ["card"],
       line_items: [
         {
-          price: priceVal,
-          quantity: mode === "payment" ? quantity : 1,
+          price: "price_1IR3dzGWNZMUdr0ukK6lIfgI",
+          quantity: 1,
         },
       ],
     };
     const res = await createCheckout(dummyData);
     const data = res.data;
     const stripe = await stripePromise;
-
     stripe.redirectToCheckout({ sessionId: data.id });
   }
+
   return (
     <div>
       <AppBar position="static" className={classes.header}>
         <Grid container alignItems="center" justify="center">
           <Grid item>
             <Typography variant="h4" className={classes.title}>
-              Stripe Main Page!
+              <img src={Logo} alt="kanban-logo" /> Premium Subscriptions
             </Typography>
           </Grid>
         </Grid>
@@ -89,46 +103,27 @@ function StripeMain(props) {
           direction="row"
           alignItems="flex-start"
           justify="center"
-          spacing={4}>
-          <Grid item>
-            <Paper className={classes.card}>
-              <Grid container item direction="column">
-                <Grid container item direction="column" alignItems="center">
-                  <Grid item>
-                    <InputLabel>
-                      <Typography variant="h4" className={classes.title}>
-                        Select how many months
-                      </Typography>
-                    </InputLabel>
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      className={classes.input}
-                      type="number"
-                      variant="outlined"
-                      label="Enter quantity"
-                      value={quantity}
-                      onChange={(e) => setQuantity(e.target.value)}></TextField>
-                  </Grid>
-                </Grid>
-                <Grid item>
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color="primary"
-                    onClick={(e) => handleCheckout("payment")}>
-                    Checkout
-                  </Button>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
+          spacing={4}
+        >
           <Grid item>
             <Paper className={classes.card}>
               <Grid container item direction="column">
                 <Grid item>
-                  <Typography variant="h4" className={classes.title}>
-                    Buy monthly subscription!
+                  <InputLabel>
+                    <Typography variant="h4" className={classes.title}>
+                      Confirmation
+                    </Typography>
+                    <h4>
+                      * The first month is free and your card will be charged
+                      monthly after that.
+                    </h4>
+                  </InputLabel>
+                </Grid>
+                <Grid item className={classes.inputGrid}>
+                  <Typography>
+                    <span className={classes.dollar}>$</span>
+                    <span className={classes.price}>10</span>
+                    <span>/month</span>
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -136,8 +131,9 @@ function StripeMain(props) {
                     className={classes.button}
                     variant="contained"
                     color="primary"
-                    onClick={(e) => handleCheckout("subscription")}>
-                    Subscribe
+                    onClick={() => handleCheckout("subscription")}
+                  >
+                    Checkout
                   </Button>
                 </Grid>
               </Grid>

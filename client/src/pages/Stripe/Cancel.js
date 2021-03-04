@@ -1,13 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  AppBar,
-  Typography,
-  Button,
-  Paper,
-  Grid,
-  Container,
-} from "@material-ui/core";
+import { AppBar, Typography, Grid, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +31,8 @@ function Cancel(props) {
           direction="column"
           alignItems="center"
           justify="center"
-          spacing={5}>
+          spacing={5}
+        >
           <Grid item>
             <Typography variant="h4">Transaction was not completed.</Typography>
           </Grid>
