@@ -6,7 +6,7 @@ export const useStyles = makeStyles({
     padding: 0,
     backgroundColor: "#F4F6FF",
     borderRadius: "8px",
-    width: "320px",
+    minWidth: "320px",
     "&:hover": {
       boxShadow: "0px 0px 10px 1px rgba(208,213,223,0.8)",
     },
@@ -58,10 +58,10 @@ export const useStyles = makeStyles({
     left: "80px",
     width: "50px",
   },
-	deleteColumnMessage: {
-		marginBottom: '10px'
-	},
-	editNameInput: {
-		margin: '0 5px 5px 5px'
-	}
+  deleteColumnMessage: {
+    marginBottom: "10px",
+  },
+  editNameInput: {
+    margin: "0 5px 5px 5px",
+  },
 });

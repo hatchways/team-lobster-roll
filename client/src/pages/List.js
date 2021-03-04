@@ -17,8 +17,31 @@ const useStyles = makeStyles({
   columnsContainer: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "start",
     alignItems: "flex-start",
+    maxWidth: "95%",
+    minHeight: "calc(100vh - 160px)",
+    height: "100%",
+    overflow: "auto",
+    margin: "auto",
+    position: "relative",
+  },
+  columnsOuterContainer: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: "0.8em",
+      height: "0.8em",
+    },
+    "*::-webkit-scrollbar-track": {
+      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.15)",
+    },
+    "*::-webkit-scrollbar-thumb": {
+      backgroundColor: "rgba(117,156,252,1)",
+      outline: "1px solid #ADC5FF",
+    },
   },
 });
 
@@ -144,23 +167,25 @@ function List(props) {
     <DragDropContext onDragEnd={(result) => handleOnDragEnd(result)}>
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
         {(provided) => (
-          <div
-            className={classes.columnsContainer}
-            {...provided.droppableProps}
-            ref={provided.innerRef}>
-            {boardData?.columnOrder.map((columnId, idx) => {
-              const column = boardData.columns[columnId];
-              const tasks = column.cards;
-              return (
-                <Column
-                  key={column.id}
-                  column={column}
-                  tasks={tasks}
-                  idx={idx}
-                />
-              );
-            })}
-            <span>{provided.placeholder}</span>
+          <div className={classes.columnsOuterContainer}>
+            <div
+              className={classes.columnsContainer}
+              {...provided.droppableProps}
+              ref={provided.innerRef}>
+              {boardData?.columnOrder.map((columnId, idx) => {
+                const column = boardData.columns[columnId];
+                const tasks = column.cards;
+                return (
+                  <Column
+                    key={column.id}
+                    column={column}
+                    tasks={tasks}
+                    idx={idx}
+                  />
+                );
+              })}
+              <span>{provided.placeholder}</span>
+            </div>
           </div>
         )}
       </Droppable>
