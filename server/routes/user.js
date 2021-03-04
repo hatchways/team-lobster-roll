@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
+const auth = require("../middleware/auth");
 
 // Find user
 router.get("/:id", async (req, res, next) => {
@@ -62,6 +63,18 @@ router.delete("/", async (req, res, next) => {
     res.status(201).json({ msg: "User deleted." });
   } catch (err) {
     res.status(404).send({ msg: err });
+  }
+});
+
+// Add premium to user
+router.post("/premiumAdd", auth, async (userId, req, res, next) => {
+  if (req.body) {
+    try {
+      let id = userId;
+      await User.addPremium(id);
+      const user = await User.findUser(id);
+      res.status(201).send(user);
+    } catch (error) {}
   }
 });
 

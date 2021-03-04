@@ -41,6 +41,10 @@ const UserSchema = new Schema(
         ref: "Board",
       },
     ],
+    premium: {
+      type: Boolean,
+      default: false,
+    },
   },
   { collection: "User" }
 );
@@ -57,7 +61,7 @@ UserSchema.statics.findUser = function (id) {
 
 // Find a user by email
 UserSchema.statics.findByEmail = function (email) {
-  return this.find({ email: email });
+  return this.findOne({ email: email });
 };
 
 // Find users using an array
@@ -91,10 +95,13 @@ UserSchema.statics.deleteBoard = function (userId, boardId) {
 };
 
 // Creates a user
-UserSchema.statics.createUser = async function (email, hash) {
+UserSchema.statics.createUser = async function (email, hash, premium) {
+  let premMember;
+  premMember = premium ? true : false;
   const newUser = new User({
     email: email,
     password: hash,
+    premium: premMember,
   });
 
   const newBoard = await Board.createNewBoard("untitled", newUser._id);
@@ -102,6 +109,16 @@ UserSchema.statics.createUser = async function (email, hash) {
   newUser.boards = [newBoard._id];
 
   return newUser;
+};
+
+// Add premium
+UserSchema.statics.addPremium = function (id) {
+  return this.updateOne(
+    { _id: id },
+    {
+      $set: { premium: true },
+    }
+  );
 };
 
 const User = mongoose.model("User", UserSchema);
