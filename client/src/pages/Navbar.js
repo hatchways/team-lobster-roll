@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import {
   Toolbar,
   Typography,
@@ -83,13 +83,17 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar(props) {
   const classes = useStyles();
-  const { loggedIn, user, currBoardId } = useContext(UserContext);
+  const { loggedIn, user, currBoardId, setUser, setLoggedIn } = useContext(
+    UserContext
+  );
   const { email } = user;
   const joinDate = user?.joinDate?.slice(0, 10);
   const [showUserCard, setShowUserCard] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [limitError, setLimitError] = useState(false);
   const history = useHistory();
+  const ref = useRef();
+  const exceptionRef = useRef();
 
   const handleCreate = async () => {
     let boardCount = 0;
@@ -105,15 +109,51 @@ function Navbar(props) {
     setLimitError(boardCount < 10 || premium ? false : true);
     setShowModal(true);
   };
+  
+  function handleClick(e) {
+    if (
+      ref?.current?.contains(e.target) ||
+      exceptionRef?.current?.contains(e.target)
+    ) {
+      return;
+    }
+    setShowUserCard(false);
+  }
+
+  useEffect(() => {
+    if (showUserCard) {
+      document.addEventListener("mousedown", handleClick);
+    } else {
+      document.removeEventListener("mousedown", handleClick);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, [showUserCard]);
+
+  function handleLogout() {
+    setUser({});
+    setLoggedIn(false);
+    history.push(`/`);
+  }
 
   const UserCard = () => {
     return (
-      <Grid item>
-        <Paper className={classes.userCard}>
-          <Typography variant="body1">{email}</Typography>
-          <Typography variant="body1">Joined: {joinDate}</Typography>
-        </Paper>
-      </Grid>
+      <Paper className={classes.userCard} ref={ref}>
+        <Grid container direction="column" spacing={2}>
+          <Grid item>
+            <Typography variant="body1">{email}</Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="body1">Joined: {joinDate}</Typography>
+          </Grid>
+          <Grid item>
+            <Button size="small" variant="outlined" onClick={handleLogout}>
+              Logout
+            </Button>
+          </Grid>
+        </Grid>
+      </Paper>
     );
   };
 
@@ -127,8 +167,7 @@ function Navbar(props) {
             container
             direction="row"
             alignItems="center"
-            justify="space-between"
-          >
+            justify="space-between">
             <Grid item>
               <Grid
                 className={`${classes.click}`}
@@ -136,8 +175,7 @@ function Navbar(props) {
                 direction="row"
                 alignItems="center"
                 justify="space-between"
-                onClick={() => history.push(`/board/${currBoardId}`)}
-              >
+                onClick={() => history.push(`/board/${currBoardId}`)}>
                 <Grid item>
                   <DashboardIcon className={classes.visualIcon} />
                 </Grid>
@@ -153,8 +191,7 @@ function Navbar(props) {
                 direction="row"
                 alignItems="center"
                 justify="space-between"
-                onClick={() => history.push("/calendar")}
-              >
+                onClick={() => history.push("/calendar")}>
                 <Grid item>
                   <CalendarTodayIcon className={classes.visualIcon} />
                 </Grid>
@@ -182,6 +219,7 @@ function Navbar(props) {
               className={classes.profileIcon}
               alt="profile-icon"
               onClick={() => setShowUserCard(!showUserCard)}
+              ref={exceptionRef}
             />
           </Grid>
         </Toolbar>

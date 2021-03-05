@@ -1,5 +1,5 @@
 import React, { createContext, useState, useMemo, useEffect } from "react";
-import { getBoardShallow, getBoard } from "../API/board";
+import { getBoardShallow, getBoard, getSharedBoards } from "../API/board";
 import { getUser } from "../API/user";
 
 export const UserContext = createContext({});
@@ -10,9 +10,10 @@ export const UserContextProvider = (props) => {
   const [userId, setUserId] = useState("");
   const [boardList, setBoardList] = useState([]);
   const [currBoardId, setCurrBoardId] = useState("");
+  const [currBoardName, setCurrBoardName] = useState("");
   const [currBoard, setCurrBoard] = useState(null);
   const [createCount, setCreateCount] = useState(0);
-
+  const [sharedBoards, setSharedBoards] = useState([]);
   useEffect(() => {
     if (userId && createCount > 0) {
       async function getData() {
@@ -41,6 +42,8 @@ export const UserContextProvider = (props) => {
           return null;
         });
         setBoardList(boardList);
+        const foundSharedBoards = await getSharedBoards(user.email);
+        setSharedBoards(foundSharedBoards.data);
       }
     };
     getAllBoards();
@@ -53,6 +56,7 @@ export const UserContextProvider = (props) => {
         const loadedData = { columns: {}, columnOrder: [] };
         const res = await getBoard(currBoardId);
         const loadedBoard = res.data;
+        setCurrBoardName(loadedBoard.name);
         const loadedColumns = {};
         const loadedOrder = [];
         loadedBoard.columns.forEach((col) => {
@@ -80,18 +84,21 @@ export const UserContextProvider = (props) => {
       loggedIn,
       setLoggedIn,
       boardList,
+      currBoardName,
       currBoardId,
       setCurrBoardId,
       currBoard,
       setCurrBoard,
       createCount,
       setCreateCount,
+      sharedBoards,
     }),
     [
       user,
       setUser,
       loggedIn,
       setLoggedIn,
+      currBoardName,
       boardList,
       currBoardId,
       setCurrBoardId,
@@ -99,6 +106,7 @@ export const UserContextProvider = (props) => {
       setCurrBoard,
       createCount,
       setCreateCount,
+      sharedBoards,
     ]
   );
 
