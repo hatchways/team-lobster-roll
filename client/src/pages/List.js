@@ -55,13 +55,10 @@ function List(props) {
 
   useEffect(() => {
     setBoardData(loadedData);
-  }, [loadedData]);
-
-  useEffect(() => {
     if (socketMsg.data && Object.keys(socketMsg.data).length) {
       setBoardData(socketMsg.data);
     }
-  }, [socket, socketMsg]);
+  }, [socket, socketMsg, loadedData]);
 
   function handleCardMove(data, movement, newState) {
     data.movement = movement;

@@ -74,6 +74,7 @@ function Board(props) {
 
   useEffect(() => {
     if (currBoardId) {
+      setSocketMsg({ data: currBoard });
       history.push(`/board/${currBoardId}`);
     }
   }, [currBoardId, history]);
@@ -153,7 +154,7 @@ function Board(props) {
       });
     }
   };
-      
+
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.blue}>
@@ -162,8 +163,7 @@ function Board(props) {
             container
             direction="row"
             alignItems="center"
-            justify="space-between"
-          >
+            justify="space-between">
             <Grid item>
               <Typography variant="h6" className={classes.title}>
                 Board: {currBoardName}
@@ -174,8 +174,7 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowModal(true)}
-              >
+                onClick={() => setShowModal(true)}>
                 <AddIcon />
                 Create column
               </Button>
@@ -183,30 +182,26 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowUpload(true)}
-              >
+                onClick={() => setShowUpload(true)}>
                 Choose Profile Image
               </Button>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowMembers(true)}
-              >
+                onClick={() => setShowMembers(true)}>
                 Members
               </Button>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => handlePackages()}
-              >
+                onClick={() => handlePackages()}>
                 Upgrade
               </Button>
               <IconButton
                 color="inherit"
-                onClick={() => setShowDropdown(!showDropdown)}
-              >
+                onClick={() => setShowDropdown(!showDropdown)}>
                 <MenuIcon ref={exceptionRef} />
               </IconButton>
             </Grid>
