@@ -63,7 +63,6 @@ function Board(props) {
   const [msg, setMsg] = useState({});
   const [socketMsg, setSocketMsg] = useState({});
   const { id } = useParams();
-
   const ref = useRef();
   const exceptionRef = useRef();
 
@@ -74,6 +73,8 @@ function Board(props) {
 
   useEffect(() => {
     if (currBoardId) {
+      setSocketMsg({ data: currBoard });
+      setMsg({});
       history.push(`/board/${currBoardId}`);
     }
   }, [currBoardId, history]);
@@ -85,7 +86,7 @@ function Board(props) {
 
   useEffect(() => {
     //for some reason this useEffect gets called when currBoardId is an empty string
-    if (socket && currBoardId) {
+    if (socket && currBoardId?.length) {
       // removes duplicate socket listeners
       socket.removeAllListeners("roomResponse");
 			
@@ -153,7 +154,6 @@ function Board(props) {
       });
     }
   };
-      
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.blue}>
@@ -162,8 +162,7 @@ function Board(props) {
             container
             direction="row"
             alignItems="center"
-            justify="space-between"
-          >
+            justify="space-between">
             <Grid item>
               <Typography variant="h6" className={classes.title}>
                 Board: {currBoardName}
@@ -174,8 +173,7 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowModal(true)}
-              >
+                onClick={() => setShowModal(true)}>
                 <AddIcon />
                 Create column
               </Button>
@@ -183,30 +181,26 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowUpload(true)}
-              >
+                onClick={() => setShowUpload(true)}>
                 Choose Profile Image
               </Button>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowMembers(true)}
-              >
+                onClick={() => setShowMembers(true)}>
                 Members
               </Button>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => handlePackages()}
-              >
+                onClick={() => handlePackages()}>
                 Upgrade
               </Button>
               <IconButton
                 color="inherit"
-                onClick={() => setShowDropdown(!showDropdown)}
-              >
+                onClick={() => setShowDropdown(!showDropdown)}>
                 <MenuIcon ref={exceptionRef} />
               </IconButton>
             </Grid>
