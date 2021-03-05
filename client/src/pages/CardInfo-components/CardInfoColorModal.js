@@ -7,8 +7,7 @@ function CardInfoColorModal({
   closeColorModal,
   currentColor,
   cardId,
-  updateCardInfo,
-  updateTaskInfo,
+  updateBoardInfo,
 }) {
   const classes = useStyles();
   const [color, setColor] = useState("");
@@ -28,8 +27,7 @@ function CardInfoColorModal({
       newData: color,
     });
     if (res.status === 200) {
-      updateCardInfo("color", color);
-      updateTaskInfo("color", color);
+      updateBoardInfo("color", color);
       closeColorModal();
     } else setColor(currentColor);
   };

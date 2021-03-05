@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Container,
@@ -20,8 +20,7 @@ function CardInfo({
   columnName,
   showCardInfo,
   closeCardInfo,
-  updateTaskInfo,
-  resetTaskInfo,
+  updateBoardInfo,
   removeCard,
 }) {
   const classes = useStyles();
@@ -31,11 +30,6 @@ function CardInfo({
   const [showColorModal, setShowColorModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [resetInfo, setResetInfo] = useState(false);
-  const [cardInfo, setCardInfo] = useState({});
-
-  useEffect(() => {
-    setCardInfo(task);
-  }, [task]);
 
   // description section handlers
   const addDescription = () => {
@@ -71,14 +65,6 @@ function CardInfo({
     setShowDeleteModal(false);
   };
 
-  // updating card info handler
-  const handleUpdateCardInfo = (property, newInfo) => {
-    setCardInfo({
-      ...cardInfo,
-      [property]: newInfo,
-    });
-  };
-
   // close card info modal
   const handleCloseCardInfo = async () => {
     // resets all the card info back to its info from the DB
@@ -98,11 +84,11 @@ function CardInfo({
           <Box className={classes.titleContainer}>
             <Assignment color="primary" style={{ marginRight: "3px" }} />
             <Typography className={`${classes.marginRight} ${classes.title}`}>
-              {cardInfo.name}
+              {task.name}
             </Typography>
             <Box
               className={`${classes.cardStatus} ${classes.marginRight} 
-								${cardInfo.color ? classes[cardInfo.color] : classes.noColor}`}
+								${task.color ? classes[task.color] : classes.noColor}`}
             />
           </Box>
           <Typography
@@ -122,25 +108,24 @@ function CardInfo({
               showDescription={showDescription}
               deleteDescription={handleDeleteDescription}
               cardId={task._id}
-              cardDescription={cardInfo.description}
-              updateCardInfo={handleUpdateCardInfo}
+              cardDescription={task.description}
+              updateBoardInfo={updateBoardInfo}
               resetInfo={resetInfo}
             />
             <CardInfoDeadline
               showDeadline={showDeadline}
               deleteDeadline={handleDeleteDeadline}
               cardId={task._id}
-              cardDeadline={cardInfo.deadline}
-              updateCardInfo={handleUpdateCardInfo}
-              updateTaskInfo={updateTaskInfo}
+              cardDeadline={task.deadline}
+              updateBoardInfo={updateBoardInfo}
               resetInfo={resetInfo}
             />
             <CardInfoComment
               showComment={showComment}
               deleteComment={handleDeleteComment}
               cardId={task._id}
-              cardComment={cardInfo.comment}
-              updateCardInfo={handleUpdateCardInfo}
+              cardComment={task.comment}
+              updateBoardInfo={updateBoardInfo}
               resetInfo={resetInfo}
             />
           </Box>
@@ -197,10 +182,9 @@ function CardInfo({
       {showColorModal && (
         <CardInfoColorModal
           closeColorModal={handleCloseColorModal}
-          currentColor={cardInfo.color}
+          currentColor={task.color}
           cardId={task._id}
-          updateCardInfo={handleUpdateCardInfo}
-          updateTaskInfo={updateTaskInfo}
+          updateBoardInfo={updateBoardInfo}
           resetInfo={resetInfo}
         />
       )}

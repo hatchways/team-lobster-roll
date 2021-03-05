@@ -11,19 +11,18 @@ import { useStyles } from "../themes/columnStyles";
 import ColumnOptions from "./ColumnOptions";
 
 function Column(props) {
-  const { column, tasks, idx } = props;
+  const { column, tasks, idx, updateBoardInfo, removeTask } = props;
   const classes = useStyles();
-  const [taskList, setTaskList] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showColOptions, setShowOptions] = useState(false);
 
-  useEffect(() => {
-    if (tasks.length) setTaskList(tasks);
-  }, [tasks]);
+  const handleUpdateBoardInfo = (type, componentId, property, newData) => {
+    if (type === "task")
+      updateBoardInfo("task", column._id, componentId, property, newData);
+  };
 
   const handleRemoveTask = (taskId) => {
-    const updatedTaskList = taskList.filter((task) => task._id !== taskId);
-    setTaskList(updatedTaskList);
+    removeTask(column._id, taskId);
   };
 
   return (
@@ -60,13 +59,14 @@ function Column(props) {
             <Droppable droppableId={column.id} type="task">
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {taskList.map((task, idx) => (
+                  {tasks.map((task, idx) => (
                     <Task
                       key={task._id}
                       columnName={column.name}
                       task={task}
                       idx={idx}
                       removeTask={handleRemoveTask}
+                      updateBoardInfo={handleUpdateBoardInfo}
                     />
                   ))}
                   <span className={classes.placeholder}>

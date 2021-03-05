@@ -9,7 +9,7 @@ function CardInfoDescription({
   deleteDescription,
   cardId,
   cardDescription,
-  updateCardInfo,
+  updateBoardInfo,
   resetInfo,
 }) {
   const [disabled, setDisabled] = useState(true);
@@ -37,7 +37,7 @@ function CardInfoDescription({
     };
     const res = await updateCard(data);
     if (res.status === 200) {
-      updateCardInfo("description", description);
+      updateBoardInfo("description", description);
       setDisabled(true);
     }
   };
@@ -54,13 +54,13 @@ function CardInfoDescription({
       if (res.status === 200) {
         setDescription("");
         setDisabled(true);
-        updateCardInfo("description", "");
+        updateBoardInfo("description", "");
         deleteDescription();
       }
     } else {
       setDescription("");
       setDisabled(true);
-      updateCardInfo("description", "");
+      updateBoardInfo("description", "");
       deleteDescription();
     }
   };

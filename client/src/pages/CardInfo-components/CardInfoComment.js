@@ -9,7 +9,7 @@ function CardInfoComment({
   deleteComment,
   cardId,
   cardComment,
-  updateCardInfo,
+  updateBoardInfo,
   resetInfo,
 }) {
   const [disabled, setDisabled] = useState(true);
@@ -37,7 +37,7 @@ function CardInfoComment({
     };
     const res = await updateCard(data);
     if (res.status === 200) {
-      updateCardInfo("comment", comment);
+      updateBoardInfo("comment", comment);
       setDisabled(true);
     }
   };
@@ -54,13 +54,13 @@ function CardInfoComment({
       if (res.status === 200) {
         setComment("");
         setDisabled(true);
-        updateCardInfo("comment", "");
+        updateBoardInfo("comment", "");
         deleteComment();
       }
     } else {
       setComment("");
       setDisabled(true);
-      updateCardInfo("comment", "");
+      updateBoardInfo("comment", "");
       deleteComment();
     }
   };

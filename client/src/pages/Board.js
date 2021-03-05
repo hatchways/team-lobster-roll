@@ -67,11 +67,13 @@ function Board(props) {
   useEffect(() => {
     setCurrBoardId(id);
   }, [id, setCurrBoardId]);
+
   useEffect(() => {
     if (currBoardId) {
       history.push(`/board/${currBoardId}`);
     }
   }, [currBoardId, history]);
+
   const Dropdown = () => {
     const allBoards = boardList.map((board) => (
       <Link to={`/board/${board._id}`} key={board._id}>
@@ -88,7 +90,6 @@ function Board(props) {
       </Grid>
     );
   };
-
 
   // socket.io testing
   useEffect(() => {
@@ -116,7 +117,8 @@ function Board(props) {
             container
             direction="row"
             alignItems="center"
-            justify="space-between">
+            justify="space-between"
+          >
             <Grid item>
               <Typography variant="h6" className={classes.title}>
                 My School Board
@@ -127,7 +129,8 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowModal(true)}>
+                onClick={() => setShowModal(true)}
+              >
                 <AddIcon />
                 Create column
               </Button>
@@ -135,19 +138,22 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowUpload(true)}>
+                onClick={() => setShowUpload(true)}
+              >
                 Choose Profile Image
               </Button>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowMembers(true)}>
+                onClick={() => setShowMembers(true)}
+              >
                 Members
               </Button>
               <IconButton
                 color="inherit"
-                onClick={() => setShowDropdown(!showDropdown)}>
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
                 <MenuIcon />
               </IconButton>
             </Grid>

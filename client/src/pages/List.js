@@ -26,6 +26,7 @@ function List(props) {
   const classes = useStyles();
   const { loadedData, currBoardId } = props;
   const [boardData, setBoardData] = useState(loadedData);
+
   useEffect(() => {
     setBoardData(loadedData);
   }, [loadedData]);
@@ -140,6 +141,55 @@ function List(props) {
     handleCardMove(moveData, "different", newState);
   }
 
+  /*
+		handles any board changes regarding card edits, 
+		column name edits, or column/card deletions
+	*/
+  const handleUpdateBoardInfo = (type, columnId, cardId, property, newData) => {
+    const cols = boardData.columns;
+    if (type === "task") {
+      let col = cols[columnId];
+      let cardsList = col.cards;
+      cardsList.forEach((card, index) => {
+        if (card._id === cardId) {
+          const updatedCard = {
+            ...card,
+            [property]: newData,
+          };
+          cardsList[index] = updatedCard;
+
+          setBoardData({
+            ...boardData,
+            columns: {
+              ...cols,
+              [columnId]: {
+                ...col,
+                cards: cardsList,
+              },
+            },
+          });
+        }
+      });
+    }
+  };
+
+  // handles removing a task
+  const handleRemoveTask = (columnId, taskId) => {
+    const cols = boardData.columns;
+    let col = cols[columnId];
+    let cardsList = col.cards.filter((card) => card._id !== taskId);
+    setBoardData({
+      ...boardData,
+      columns: {
+        ...cols,
+        [columnId]: {
+          ...col,
+          cards: cardsList,
+        },
+      },
+    });
+  };
+
   return (
     <DragDropContext onDragEnd={(result) => handleOnDragEnd(result)}>
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
@@ -147,7 +197,8 @@ function List(props) {
           <div
             className={classes.columnsContainer}
             {...provided.droppableProps}
-            ref={provided.innerRef}>
+            ref={provided.innerRef}
+          >
             {boardData?.columnOrder.map((columnId, idx) => {
               const column = boardData.columns[columnId];
               const tasks = column.cards;
@@ -157,6 +208,8 @@ function List(props) {
                   column={column}
                   tasks={tasks}
                   idx={idx}
+                  updateBoardInfo={handleUpdateBoardInfo}
+                  removeTask={handleRemoveTask}
                 />
               );
             })}

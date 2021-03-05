@@ -9,8 +9,7 @@ function CardInfoDeadline({
   deleteDeadline,
   cardId,
   cardDeadline,
-  updateCardInfo,
-  updateTaskInfo,
+  updateBoardInfo,
   resetInfo,
 }) {
   const [disabled, setDisabled] = useState(true);
@@ -38,8 +37,7 @@ function CardInfoDeadline({
     };
     const res = await updateCard(data);
     if (res.status === 200) {
-      updateCardInfo("deadline", deadline);
-      updateTaskInfo("deadline", deadline);
+      updateBoardInfo("deadline", deadline);
       setDisabled(true);
     }
   };
@@ -56,15 +54,13 @@ function CardInfoDeadline({
       if (res.status === 200) {
         setDeadline("");
         setDisabled(true);
-        updateCardInfo("deadline", "");
-        updateTaskInfo("deadline", "");
+        updateBoardInfo("deadline", "");
         deleteDeadline();
       }
     } else {
       setDeadline("");
       setDisabled(true);
-      updateCardInfo("deadline", "");
-      updateTaskInfo("deadline", "");
+      updateBoardInfo("deadline", "");
       deleteDeadline();
     }
   };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import { Typography } from "@material-ui/core";
@@ -60,13 +60,8 @@ const useStyles = makeStyles({
 
 function Task(props) {
   const [showCardInfo, setShowCardInfo] = useState(false);
-  const [taskInfo, setTaskInfo] = useState({});
   const classes = useStyles(props);
-  const { task, idx, columnName, removeTask } = props;
-
-  useEffect(() => {
-    setTaskInfo(task);
-  }, [task]);
+  const { task, idx, columnName, removeTask, updateBoardInfo } = props;
 
   const handleShowCardInfo = () => {
     setShowCardInfo(true);
@@ -76,11 +71,8 @@ function Task(props) {
     setShowCardInfo(false);
   };
 
-  const handleUpdateTaskInfo = (property, newInfo) => {
-    setTaskInfo({
-      ...taskInfo,
-      [property]: newInfo,
-    });
+  const handleUpdateBoardInfo = (property, newInfo) => {
+    updateBoardInfo("task", task._id, property, newInfo);
   };
 
   return (
@@ -96,13 +88,13 @@ function Task(props) {
           >
             <span
               className={`${classes.cardStatus} ${
-                taskInfo.color ? classes[taskInfo.color] : classes.noColor
+                task.color ? classes[task.color] : classes.noColor
               }`}
             ></span>
-            <Typography variant="h6">{taskInfo.name}</Typography>
-            {taskInfo.deadline ? (
+            <Typography variant="h6">{task.name}</Typography>
+            {task.deadline ? (
               <Typography variant="body1" className={classes.note}>
-                {taskInfo.deadline}
+                {task.deadline}
               </Typography>
             ) : (
               ""
@@ -111,11 +103,11 @@ function Task(props) {
         )}
       </Draggable>
       <CardInfo
-        task={taskInfo}
+        task={task}
         columnName={columnName}
         showCardInfo={showCardInfo}
         closeCardInfo={handleCloseCardInfo}
-        updateTaskInfo={handleUpdateTaskInfo}
+        updateBoardInfo={handleUpdateBoardInfo}
         removeCard={removeTask}
       />
     </React.Fragment>
