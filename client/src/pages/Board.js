@@ -94,25 +94,31 @@ function Board(props) {
       </Grid>
     );
   };
-  /*
-  // socket.io testing
+  
   useEffect(() => {
+  try {
     if (socket) {
       socket.emit("testEmit", "testing emit");
       socket.on("confirmEmit", (message) => {
         console.log(message);
       });
     }
+  } catch (error) {
+    console.log(error)
+  }
   }, [socket]);
 
   // componentWillUnmount
   useEffect(() => {
-    return () => {
-      socket.removeAllListeners("confirmEmit");
-    };
+   
+    if(socket && socket.length > 1){
+      return ()=>{
+        socket.removeAllListeners("confirmEmit");
+    }  
+  }    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-*/
+
   const handlePackages = () => {
     setLoggedIn(false);
     history.push("/packages");
