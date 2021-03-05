@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
@@ -11,10 +11,28 @@ import { useStyles } from "../themes/columnStyles";
 import ColumnOptions from "./ColumnOptions";
 
 function Column(props) {
-  const { column, tasks, idx } = props;
+  const {
+    column,
+    tasks,
+    idx,
+    updateBoardInfo,
+    removeTask,
+    removeColumn,
+  } = props;
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
   const [showColOptions, setShowOptions] = useState(false);
+
+  const handleUpdateBoardInfo = (type, componentId, property, newData) => {
+    if (type === "task")
+      updateBoardInfo(type, column._id, componentId, property, newData);
+    if (type === "column")
+      updateBoardInfo(type, componentId, null, property, newData);
+  };
+
+  const handleRemoveTask = (taskId) => {
+    removeTask(column._id, taskId);
+  };
 
   return (
     <>
@@ -26,7 +44,8 @@ function Column(props) {
             direction="column"
             justify="flex-start"
             {...provided.draggableProps}
-            ref={provided.innerRef}>
+            ref={provided.innerRef}
+          >
             <div className={classes.columnHeader} {...provided.dragHandleProps}>
               <Typography variant="h5" className={classes.columnTitle}>
                 {column.name}
@@ -35,21 +54,36 @@ function Column(props) {
                 onClick={() => {
                   setShowOptions(true);
                 }}
-                className={classes.lightGray}>
+                className={classes.lightGray}
+              >
                 <MoreHoriz />
               </IconButton>
               {showColOptions && (
                 <ColumnOptions
                   closeOptions={() => setShowOptions(false)}
+                  columnId={column._id}
                   columnName={column.name}
+                  updateBoardInfo={handleUpdateBoardInfo}
+                  removeColumn={removeColumn}
                 />
               )}
             </div>
             <Droppable droppableId={column.id} type="task">
               {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
+                <div
+                  style={{ minHeight: "10px" }}
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
                   {tasks.map((task, idx) => (
-                    <Task key={task._id} task={task} idx={idx} />
+                    <Task
+                      key={task._id}
+                      columnName={column.name}
+                      task={task}
+                      idx={idx}
+                      removeTask={handleRemoveTask}
+                      updateBoardInfo={handleUpdateBoardInfo}
+                    />
                   ))}
                   <span className={classes.placeholder}>
                     {provided.placeholder}
@@ -60,7 +94,8 @@ function Column(props) {
             <Button
               variant="contained"
               className={classes.addButton}
-              onClick={() => setShowModal(true)}>
+              onClick={() => setShowModal(true)}
+            >
               <Typography variant="body1"> Add a card</Typography>
             </Button>
           </Grid>

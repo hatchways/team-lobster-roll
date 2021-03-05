@@ -1,19 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Box, TextField, Button } from "@material-ui/core";
 import { ImportContactsTwoTone } from "@material-ui/icons";
 import { useStyles } from "../../themes/cardInfoStyles";
 import { updateCard } from "../../API/card";
 
 function CardInfoDescription({
-  saveDescription,
   showDescription,
   deleteDescription,
   cardId,
   cardDescription,
+  updateBoardInfo,
+  resetInfo,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [description, setDescription] = useState("");
   const classes = useStyles();
+
+  useEffect(() => {
+    if (cardDescription) setDescription(cardDescription);
+  }, [cardDescription]);
+
+  useEffect(() => {
+    if (resetInfo) setDescription(cardDescription);
+  }, [resetInfo]);
 
   const handleChange = (e) => {
     setDescription(e.target.value);
@@ -28,19 +37,40 @@ function CardInfoDescription({
     };
     const res = await updateCard(data);
     if (res.status === 200) {
-      saveDescription(description);
+      updateBoardInfo("description", description);
       setDisabled(true);
     }
   };
 
-  const handleDeleteSection = () => {
-    deleteDescription();
+  const handleDeleteSection = async () => {
+    // if the description exists in DB then update it with an empty string in DB
+    if (cardDescription) {
+      const data = {
+        cardId: cardId,
+        property: "description",
+        newData: "",
+      };
+      const res = await updateCard(data);
+      if (res.status === 200) {
+        setDescription("");
+        setDisabled(true);
+        updateBoardInfo("description", "");
+        deleteDescription();
+      }
+    } else {
+      setDescription("");
+      setDisabled(true);
+      updateBoardInfo("description", "");
+      deleteDescription();
+    }
   };
+
   return (
     <Box
       className={`${classes.section} ${
         showDescription ? classes.dBlock : classes.dNone
-      }`}>
+      }`}
+    >
       <Typography className={classes.subHeader}>
         <ImportContactsTwoTone color="primary" style={{ marginRight: "4px" }} />
         Description:
@@ -53,21 +83,23 @@ function CardInfoDescription({
         placeholder="Write a description..."
         onChange={handleChange}
         className={classes.field}
-        value={description || cardDescription}
+        value={description}
       />
       <Box className={classes.field}>
         <Button
           disabled={disabled}
           size="large"
           color="primary"
-          onClick={confirmSave}>
+          onClick={confirmSave}
+        >
           Save
         </Button>
         <Button
           size="small"
           color="primary"
           className={classes.cancel}
-          onClick={handleDeleteSection}>
+          onClick={handleDeleteSection}
+        >
           &times;
         </Button>
       </Box>

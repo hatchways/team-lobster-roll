@@ -20,7 +20,7 @@ const ColumnSchema = new Schema(
 
 // gets a Column by _id
 ColumnSchema.statics.findColumn = async function (columnId) {
-  const foundColumn = await Column.findById(columnId);
+  const foundColumn = await this.findById(columnId);
   return foundColumn;
 };
 

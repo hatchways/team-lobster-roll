@@ -56,7 +56,24 @@ export const useStyles = makeStyles({
     borderRadius: "8px",
     padding: "4px",
     margin: "0.5rem 0",
-    backgroundColor: "red",
+  },
+  red: {
+    backgroundColor: "#FF5D48",
+  },
+  green: {
+    backgroundColor: "#5ACD76",
+  },
+  blue: {
+    backgroundColor: "#59B0FF",
+  },
+  yellow: {
+    backgroundColor: "#EDAB1D",
+  },
+  purple: {
+    backgroundColor: "#D460F7",
+  },
+  noColor: {
+    backgroundColor: "transparent",
   },
   closeCard: {
     fontSize: "24px",
@@ -121,5 +138,43 @@ export const useStyles = makeStyles({
     marginBottom: "10px",
     backgroundColor: "#F4F6FF",
     color: "gray",
+  },
+  chooseColorModal: {
+    display: "block",
+    position: "fixed",
+    width: "250px",
+    height: "100px",
+    zIndex: "7",
+    top: "0",
+    right: "0",
+    bottom: "0",
+    left: "0",
+    margin: "auto",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    boxShadow: "0 5px 20px 1px gainsboro",
+    padding: "20px",
+  },
+  modalBg: {
+    position: "absolute",
+    top: "0",
+    right: "0",
+    bottom: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
+    zIndex: "6",
+  },
+  colorInput: {
+    display: "block",
+    width: "100px",
+    margin: "auto",
+    marginBottom: "10px",
+  },
+  buttonContainer: {
+    width: "140px",
+    margin: "auto",
+    display: "flex",
+    justifyContent: "space-between",
   },
 });

@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import { Typography } from "@material-ui/core";
 import CardInfo from "./CardInfo-components/CardInfo";
-
 import { Draggable } from "react-beautiful-dnd";
 
 const useStyles = makeStyles({
@@ -62,7 +61,7 @@ const useStyles = makeStyles({
 function Task(props) {
   const [showCardInfo, setShowCardInfo] = useState(false);
   const classes = useStyles(props);
-  const { task, idx } = props;
+  const { task, idx, columnName, removeTask, updateBoardInfo } = props;
 
   const handleShowCardInfo = () => {
     setShowCardInfo(true);
@@ -71,6 +70,11 @@ function Task(props) {
   const handleCloseCardInfo = () => {
     setShowCardInfo(false);
   };
+
+  const handleUpdateBoardInfo = (property, newInfo) => {
+    updateBoardInfo("task", task._id, property, newInfo);
+  };
+
   return (
     <React.Fragment>
       <Draggable draggableId={task._id} index={idx}>
@@ -80,15 +84,17 @@ function Task(props) {
             className={classes.card}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            ref={provided.innerRef}>
+            ref={provided.innerRef}
+          >
             <span
               className={`${classes.cardStatus} ${
-                task.status ? classes[task.status] : classes.noColor
-              }`}></span>
-            <Typography variant="h6">{task.title || task.name}</Typography>
-            {task.note ? (
+                task.color ? classes[task.color] : classes.noColor
+              }`}
+            ></span>
+            <Typography variant="h6">{task.name}</Typography>
+            {task.deadline ? (
               <Typography variant="body1" className={classes.note}>
-                {task.note}
+                {task.deadline}
               </Typography>
             ) : (
               ""
@@ -98,8 +104,11 @@ function Task(props) {
       </Draggable>
       <CardInfo
         task={task}
+        columnName={columnName}
         showCardInfo={showCardInfo}
         closeCardInfo={handleCloseCardInfo}
+        updateBoardInfo={handleUpdateBoardInfo}
+        removeCard={removeTask}
       />
     </React.Fragment>
   );

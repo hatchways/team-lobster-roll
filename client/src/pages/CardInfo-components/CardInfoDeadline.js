@@ -1,19 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Box, TextField, Button } from "@material-ui/core";
 import { AccessTime } from "@material-ui/icons";
 import { useStyles } from "../../themes/cardInfoStyles";
 import { updateCard } from "../../API/card";
 
 function CardInfoDeadline({
-  saveDeadline,
   showDeadline,
   deleteDeadline,
   cardId,
   cardDeadline,
+  updateBoardInfo,
+  resetInfo,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [deadline, setDeadline] = useState("");
   const classes = useStyles();
+
+  useEffect(() => {
+    if (cardDeadline) setDeadline(cardDeadline);
+  }, [cardDeadline]);
+
+  useEffect(() => {
+    if (resetInfo) setDeadline(cardDeadline);
+  }, [resetInfo]);
 
   const handleChange = (e) => {
     setDeadline(e.target.value);
@@ -28,20 +37,40 @@ function CardInfoDeadline({
     };
     const res = await updateCard(data);
     if (res.status === 200) {
-      saveDeadline(deadline);
+      updateBoardInfo("deadline", deadline);
       setDisabled(true);
     }
   };
 
-  const handleDeleteSection = () => {
-    deleteDeadline();
+  const handleDeleteSection = async () => {
+    // if the deadline exists in DB then update it with an empty string in DB
+    if (cardDeadline) {
+      const data = {
+        cardId: cardId,
+        property: "deadline",
+        newData: "",
+      };
+      const res = await updateCard(data);
+      if (res.status === 200) {
+        setDeadline("");
+        setDisabled(true);
+        updateBoardInfo("deadline", "");
+        deleteDeadline();
+      }
+    } else {
+      setDeadline("");
+      setDisabled(true);
+      updateBoardInfo("deadline", "");
+      deleteDeadline();
+    }
   };
 
   return (
     <Box
       className={`${classes.section} ${
         showDeadline ? classes.dBlock : classes.dNone
-      }`}>
+      }`}
+    >
       <Typography className={classes.subHeader}>
         <AccessTime color="primary" style={{ marginRight: "4px" }} /> Deadline:
       </Typography>
@@ -52,21 +81,23 @@ function CardInfoDeadline({
         }}
         className={classes.marginLeft}
         onChange={handleChange}
-        value={deadline || cardDeadline}
+        value={deadline}
       />
       <Box className={classes.field}>
         <Button
           disabled={disabled}
           size="large"
           color="primary"
-          onClick={confirmSave}>
+          onClick={confirmSave}
+        >
           Save
         </Button>
         <Button
           size="small"
           color="primary"
           className={classes.cancel}
-          onClick={handleDeleteSection}>
+          onClick={handleDeleteSection}
+        >
           &times;
         </Button>
       </Box>

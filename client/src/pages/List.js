@@ -174,6 +174,92 @@ function List(props) {
     handleCardMove(moveData, "different", newState);
   }
 
+  // handles any board changes regarding card edits or column name edits
+  const handleUpdateBoardInfo = (type, columnId, cardId, property, newData) => {
+    const cols = boardData.columns;
+    if (type === "task") {
+      let col = cols[columnId];
+      let cardList = col.cards;
+      cardList.forEach((card, index) => {
+        if (card._id === cardId) {
+          const updatedCard = {
+            ...card,
+            [property]: newData,
+          };
+          cardList[index] = updatedCard;
+          const newState = {
+            ...boardData,
+            columns: {
+              ...cols,
+              [columnId]: {
+                ...col,
+                cards: cardList,
+              },
+            },
+          };
+
+          setBoardData(newState);
+          setMsg(newState);
+        }
+      });
+    }
+    if (type === "column") {
+      let col = cols[columnId];
+      const newState = {
+        ...boardData,
+        columns: {
+          ...cols,
+          [columnId]: {
+            ...col,
+            [property]: newData,
+          },
+        },
+      };
+
+      setBoardData(newState);
+      setMsg(newState);
+    }
+  };
+
+  // handles deleting a column or card
+  const handleRemoveComponent = (columnId, taskId) => {
+    const cols = boardData.columns;
+    // case for deleting a card
+    if (taskId) {
+      let col = cols[columnId];
+      let cardList = col.cards.filter((card) => card._id !== taskId);
+      const newState = {
+        ...boardData,
+        columns: {
+          ...cols,
+          [columnId]: {
+            ...col,
+            cards: cardList,
+          },
+        },
+      };
+
+      setBoardData(newState);
+      setMsg(newState);
+    }
+    // case for deleting a column
+    else {
+      delete cols[columnId];
+      let updatedColumnOrder = boardData.columnOrder.filter(
+        (columnid) => columnid !== columnId
+      );
+      const newState = {
+        columnOrder: updatedColumnOrder,
+        columns: {
+          ...cols,
+        },
+      };
+
+      setBoardData(newState);
+      setMsg(newState);
+    }
+  };
+
   return (
     <DragDropContext onDragEnd={(result) => handleOnDragEnd(result)}>
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
@@ -182,7 +268,8 @@ function List(props) {
             <div
               className={classes.columnsContainer}
               {...provided.droppableProps}
-              ref={provided.innerRef}>
+              ref={provided.innerRef}
+            >
               {boardData?.columnOrder.map((columnId, idx) => {
                 const column = boardData.columns[columnId];
                 const tasks = column.cards;
@@ -192,6 +279,9 @@ function List(props) {
                     column={column}
                     tasks={tasks}
                     idx={idx}
+                    updateBoardInfo={handleUpdateBoardInfo}
+                    removeTask={handleRemoveComponent}
+                    removeColumn={handleRemoveComponent}
                   />
                 );
               })}

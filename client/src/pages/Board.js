@@ -88,7 +88,7 @@ function Board(props) {
     if (socket && currBoardId) {
       // removes duplicate socket listeners
       socket.removeAllListeners("roomResponse");
-
+			
       socket.emit("joinRoom", currBoardId, user._id);
       socket.on("roomResponse", (message) => {
         if (message.boardId === currBoardId) {

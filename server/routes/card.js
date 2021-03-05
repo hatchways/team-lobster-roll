@@ -27,16 +27,26 @@ router.post("/", async (req, res, next) => {
 router.put("/update/:id", async (req, res) => {
   try {
     if (req.body) {
-      const card = await Card.updateCard(
-        req.params.id,
-        req.body.property,
-        req.body.newData
-      );
-      res.status(200).send(card);
+      await Card.updateCard(req.params.id, req.body.property, req.body.newData);
+      res.status(200).end();
     }
   } catch (err) {
     console.error(err);
     res.status(400).send({ msg: "Update Unsuccessful." });
+  }
+});
+
+// DELETE
+router.delete("/delete", async (req, res) => {
+  try {
+    if (req.body) {
+      const foundBoard = await Board.findBoard(req.body.boardId);
+      await foundBoard.removeCard(req.body.cardId);
+      res.status(200).end();
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(400).send({ msg: "Could not delete card." });
   }
 });
 
