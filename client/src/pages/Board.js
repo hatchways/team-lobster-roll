@@ -63,7 +63,6 @@ function Board(props) {
   const [msg, setMsg] = useState({});
   const [socketMsg, setSocketMsg] = useState({});
   const { id } = useParams();
-
   const ref = useRef();
   const exceptionRef = useRef();
 
@@ -75,6 +74,7 @@ function Board(props) {
   useEffect(() => {
     if (currBoardId) {
       setSocketMsg({ data: currBoard });
+      setMsg({});
       history.push(`/board/${currBoardId}`);
     }
   }, [currBoardId, history]);
@@ -86,7 +86,7 @@ function Board(props) {
 
   useEffect(() => {
     //for some reason this useEffect gets called when currBoardId is an empty string
-    if (socket && currBoardId) {
+    if (socket && currBoardId?.length) {
       // removes duplicate socket listeners
       socket.removeAllListeners("roomResponse");
 
@@ -154,7 +154,6 @@ function Board(props) {
       });
     }
   };
-
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.blue}>
