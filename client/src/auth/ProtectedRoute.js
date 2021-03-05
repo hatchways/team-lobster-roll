@@ -13,7 +13,7 @@ export const ProtectedRoute = ({ component: Component, ...rest }) => {
       axios
         .get(`${window.location.origin}/api/authCheck/`)
         .then((data) => {
-          setUser(data.data[0]);
+          setUser(data.data);
           setLoggedIn(true);
           setAuthCheck(true);
         })

@@ -59,10 +59,19 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
     color: "#ccc",
   },
+  warning: {
+    color: "red",
+    width: "100%",
+    height: 200,
+    padding: 0,
+    display: "flex",
+    alignItems: "center",
+  },
 }));
+
 function CreateModal(props) {
   const classes = useStyles();
-  const { setShowModal, type } = props;
+  const { setShowModal, limitError, type } = props;
   const {
     user,
     createCount,
@@ -136,38 +145,48 @@ function CreateModal(props) {
               <CloseIcon />
             </IconButton>
           </Grid>
-          <Grid
-            container
-            direction="column"
-            justify="space-between"
-            alignItems="center"
-            className={classes.modalMain}
-          >
-            <Grid item>
-              <Typography variant="h4" className={classes.title}>
-                Create a new {type}
+          {!limitError && (
+            <Grid
+              container
+              direction="column"
+              justify="space-between"
+              alignItems="center"
+              className={classes.modalMain}
+            >
+              <Grid item>
+                <Typography variant="h4" className={classes.title}>
+                  Create a new {type}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <TextField
+                  placeholder="Add Title"
+                  variant="outlined"
+                  className={classes.input}
+                  onChange={(e) => setTitle(e.target.value)}
+                ></TextField>
+              </Grid>
+              <Grid item>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  className={classes.createButton}
+                  onClick={handleClick}
+                >
+                  <Typography variant="body1">Create</Typography>
+                </Button>
+              </Grid>
+            </Grid>
+          )}
+          {limitError && (
+            <Grid className={classes.warning}>
+              <Typography>
+                "Board limit of 10 reached. Delete boards or upgrade to
+                premium."
               </Typography>
             </Grid>
-            <Grid item>
-              <TextField
-                placeholder="Add Title"
-                variant="outlined"
-                className={classes.input}
-                onChange={(e) => setTitle(e.target.value)}
-              ></TextField>
-            </Grid>
-            <Grid item>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className={classes.createButton}
-                onClick={handleClick}
-              >
-                <Typography variant="body1">Create</Typography>
-              </Button>
-            </Grid>
-          </Grid>
+          )}
         </Grid>
       </Paper>
     </Grid>

@@ -31,6 +31,7 @@ export const useStyles = makeStyles({
   button: {
     marginTop: 25,
     background: "rgb(41, 140, 238)",
+    color: "#FFFFFF",
   },
   upperDetails: {
     height: "85%",

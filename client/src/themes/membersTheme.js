@@ -89,4 +89,12 @@ export const useStyles = makeStyles({
     display: "block",
     color: "green",
   },
+  warning: {
+    color: "red",
+    width: "100%",
+    height: 200,
+    padding: 0,
+    display: "flex",
+    alignItems: "center",
+  },
 });

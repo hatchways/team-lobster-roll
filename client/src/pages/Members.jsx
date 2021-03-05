@@ -21,13 +21,16 @@ function Members({ setShowMembers }) {
   const classes = useStyles();
   const [showSearch, setShowSearch] = useState(false);
   const [members, setMembers] = useState([]);
-  const { currBoardId } = useContext(UserContext);
+  const { currBoardId, user } = useContext(UserContext);
+  const [memberLength, setMemberLength] = useState();
+  const premium = user.premium;
 
   useEffect(() => {
     axios
       .get(`${window.location.origin}/api/board/${currBoardId}`)
       .then((data) => {
         const ids = data.data.members;
+        setMemberLength(ids.length);
         axios
           .get(`${window.location.origin}/user/board-members/${ids}`)
           .then((data) => setMembers(data.data))
@@ -86,7 +89,14 @@ function Members({ setShowMembers }) {
             <Typography>Add members ...</Typography>
           </Button>
           <hr className={classes.hr} />
-          {showSearch && <AddMembers boardId={currBoardId} />}
+          {showSearch && (
+            <AddMembers
+              boardId={currBoardId}
+              memberLength={memberLength}
+              setMemberLength={setMemberLength}
+              premium={premium}
+            />
+          )}
         </Grid>
       </Paper>
     </Box>

@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { useStyles } from "../themes/membersTheme";
-import { TextField, Container, Avatar, Button } from "@material-ui/core";
+import {
+  TextField,
+  Container,
+  Avatar,
+  Button,
+  Typography,
+} from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { debounce } from "lodash";
 import axios from "axios";
 
-function AddMembers({ boardId }) {
+function AddMembers({ boardId, memberLength, setMemberLength, premium }) {
   const classes = useStyles();
   const [members, setMembers] = useState([]);
 
@@ -40,38 +46,54 @@ function AddMembers({ boardId }) {
   };
 
   return (
-    <Container className={classes.container}>
-      <TextField
-        className={classes.textField}
-        variant="outlined"
-        size="small"
-        fullWidth={true}
-        label="Search for members by email"
-        name="memberSearch"
-        onChange={(e) => handleFilter(e)}
-      />
-      {members.length > 0 && <h4 className={classes.select}>Click to add.</h4>}
-      <Container className={`${classes.scrollContainer} ${classes.container}`}>
-        {members.length > 0 &&
-          members.map((member, index) => (
-            <Button
-              className={classes.memberList}
-              fullWidth={true}
-              key={index}
-              name="button"
-              color="primary"
-              variant="contained"
-              size="small"
-              display=""
-              onClick={(e) => handleMemberButton(e, member._id)}
-            >
-              <Avatar src={member.image} alt="member" />
-              <p>{member.email}</p>
-              <AddCircleOutlineIcon />
-            </Button>
-          ))}
-      </Container>
-    </Container>
+    <>
+      {(memberLength < 10 || premium) && (
+        <Container className={classes.container}>
+          <TextField
+            className={classes.textField}
+            variant="outlined"
+            size="small"
+            fullWidth={true}
+            label="Search for members by email"
+            name="memberSearch"
+            onChange={(e) => handleFilter(e)}
+          />
+          {members.length > 0 && (
+            <h4 className={classes.select}>Click to add.</h4>
+          )}
+          <Container
+            className={`${classes.scrollContainer} ${classes.container}`}
+          >
+            {members.length > 0 &&
+              members.map((member, index) => (
+                <Button
+                  className={classes.memberList}
+                  fullWidth={true}
+                  key={index}
+                  name="button"
+                  color="primary"
+                  variant="contained"
+                  size="small"
+                  display=""
+                  onClick={(e) => handleMemberButton(e, member._id)}
+                >
+                  <Avatar src={member.image} alt="member" />
+                  <p>{member.email}</p>
+                  <AddCircleOutlineIcon />
+                </Button>
+              ))}
+          </Container>
+        </Container>
+      )}
+      {memberLength > 9 && !premium && (
+        <Container className={classes.warning}>
+          <Typography>
+            The limit of 10 members has been reached. Remove some members or
+            upgrade to premium.
+          </Typography>
+        </Container>
+      )}
+    </>
   );
 }
 

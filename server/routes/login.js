@@ -8,10 +8,10 @@ router.post("/", async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const user = await User.findByEmail(email);
-    bcrypt.compare(password, user[0].password, (err, result) => {
+    bcrypt.compare(password, user.password, (err, result) => {
       if (result) {
         const token = jwt.sign(
-          { userId: user[0]._id },
+          { userId: user._id },
           process.env.COOKIE_SECRET_KEY || "ShH_SeCrEt_StUfF",
           { expiresIn: "24h" }
         );

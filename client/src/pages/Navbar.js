@@ -15,6 +15,7 @@ import { UserContext } from "../contexts/UserContext";
 import CreateModal from "./CreateModal";
 import { useHistory } from "react-router-dom";
 import logo from "../assets/logo.png";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   visualIcon: {
@@ -37,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "8px",
     backgroundColor: "#759CFC",
     textTransform: "capitalize",
+    color: "#FFFFFF",
     "&:hover": {
       backgroundColor: "#759CFC",
     },
@@ -88,11 +90,26 @@ function Navbar(props) {
   const joinDate = user?.joinDate?.slice(0, 10);
   const [showUserCard, setShowUserCard] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [limitError, setLimitError] = useState(false);
   const history = useHistory();
-
   const ref = useRef();
   const exceptionRef = useRef();
 
+  const handleCreate = async () => {
+    let boardCount = 0;
+    let premium = false;
+    const id = user._id;
+    await axios
+      .get(`${window.location.origin}/user/${id}`)
+      .then((data) => {
+        boardCount = data.data.boards.length;
+        premium = data.data.premium;
+      })
+      .catch((err) => console.log);
+    setLimitError(boardCount < 10 || premium ? false : true);
+    setShowModal(true);
+  };
+  
   function handleClick(e) {
     if (
       ref?.current?.contains(e.target) ||
@@ -190,7 +207,8 @@ function Navbar(props) {
               type="submit"
               variant="contained"
               color="primary"
-              onClick={() => setShowModal(true)}>
+              onClick={() => handleCreate()}
+            >
               <AddIcon className={classes.fixRightMargin} />
               <Typography variant="body1" className={classes.fixRightMargin}>
                 Create board
@@ -206,7 +224,13 @@ function Navbar(props) {
           </Grid>
         </Toolbar>
         {showUserCard && <UserCard />}
-        {showModal && <CreateModal setShowModal={setShowModal} type="board" />}
+        {showModal && (
+          <CreateModal
+            setShowModal={setShowModal}
+            limitError={limitError}
+            type="board"
+          />
+        )}
       </>
     )
   );
