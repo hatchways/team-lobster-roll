@@ -16,7 +16,11 @@ function CalendarCard({ card, index }) {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <span className={`${classes.cardStatus} ${classes.red}`}></span>
+            <span
+              className={`${classes.cardStatus} ${
+                card.color ? classes[card.color] : classes.noColor
+              }`}
+            />
             <Typography className={classes.p}>{card.name}</Typography>
           </Card>
         </RootRef>

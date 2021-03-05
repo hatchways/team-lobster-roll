@@ -35,7 +35,7 @@ function Calendar() {
     });
   }, [currBoardId]);
 
-  const onDragEnd = async (result) => {
+  const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
 
     if (!destination) return;
@@ -73,7 +73,7 @@ function Calendar() {
       (card) => card._id === draggableId
     )[0];
 
-    // case for if card was re-arranged in the same column
+    // case for if card was re-arranged in the same calendar cell
     if (sourceWeek === destinationWeek && sourceDay === destinationDay) {
       sourceCards.splice(source.index, 1);
       sourceCards.splice(destination.index, 0, draggedCard);
@@ -82,16 +82,18 @@ function Calendar() {
       return;
     }
 
+    // case for if card was dropped in a different calendar cell
     /*
-			if card was dropped to a different calendar day, the card's 
+			- if card was dropped to a different calendar day, the card's 
 			deadline will be changed to the date of the new calendar cell
+			- awaiting the updateCard function will cause a long delay in 
+			the calendar's drag and drop animation
 		*/
     updateCard({
       cardId: draggedCard._id,
       property: "deadline",
       newData: destination.droppableId,
     });
-
     sourceCards.splice(source.index, 1);
     newCalendar[sourceWeek][sourceDay].cards = sourceCards;
     destinationCards.splice(destination.index, 0, draggedCard);
