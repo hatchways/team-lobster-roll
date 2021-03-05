@@ -11,14 +11,23 @@ import { useStyles } from "../themes/columnStyles";
 import ColumnOptions from "./ColumnOptions";
 
 function Column(props) {
-  const { column, tasks, idx, updateBoardInfo, removeTask } = props;
+  const {
+    column,
+    tasks,
+    idx,
+    updateBoardInfo,
+    removeTask,
+    removeColumn,
+  } = props;
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
   const [showColOptions, setShowOptions] = useState(false);
 
   const handleUpdateBoardInfo = (type, componentId, property, newData) => {
     if (type === "task")
-      updateBoardInfo("task", column._id, componentId, property, newData);
+      updateBoardInfo(type, column._id, componentId, property, newData);
+    if (type === "column")
+      updateBoardInfo(type, componentId, null, property, newData);
   };
 
   const handleRemoveTask = (taskId) => {
@@ -52,7 +61,10 @@ function Column(props) {
               {showColOptions && (
                 <ColumnOptions
                   closeOptions={() => setShowOptions(false)}
+                  columnId={column._id}
                   columnName={column.name}
+                  updateBoardInfo={handleUpdateBoardInfo}
+                  removeColumn={removeColumn}
                 />
               )}
             </div>

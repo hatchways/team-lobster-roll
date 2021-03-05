@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
@@ -7,9 +7,17 @@ import TextField from "@material-ui/core/TextField";
 import CloseIcon from "@material-ui/icons/Close";
 import { updateColumnName, deleteColumn } from "../API/column";
 import { useStyles } from "../themes/columnStyles";
+import { UserContext } from "../contexts/UserContext";
 
-function ColumnOptions({ closeOptions, columnName }) {
+function ColumnOptions({
+  closeOptions,
+  columnId,
+  columnName,
+  updateBoardInfo,
+  removeColumn,
+}) {
   const classes = useStyles();
+  const { currBoardId } = useContext(UserContext);
   const [name, setName] = useState("");
   const [showEditName, setShowEditName] = useState(false);
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);
@@ -19,12 +27,10 @@ function ColumnOptions({ closeOptions, columnName }) {
   }, [columnName]);
 
   const handleSaveName = async () => {
-    const responseStatus = await updateColumnName(
-      "6036d61d0e37bad4baa5d692",
-      name
-    );
+    const responseStatus = await updateColumnName(columnId, name);
     if (responseStatus === 200) {
-      // update board context
+      updateBoardInfo("column", columnId, "name", name);
+      closeOptions();
     }
   };
 
@@ -34,13 +40,10 @@ function ColumnOptions({ closeOptions, columnName }) {
   };
 
   const handleDeleteColumn = async () => {
-    // deleteColumn() is using test ObjectIds right now
-    const responseStatus = await deleteColumn(
-      "6036d5190e37bad4baa5d691",
-      "6036d61d0e37bad4baa5d692"
-    );
+    const responseStatus = await deleteColumn(currBoardId, columnId);
     if (responseStatus === 200) {
-      // update board context
+      removeColumn(columnId);
+      closeOptions();
     }
   };
 
