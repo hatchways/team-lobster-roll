@@ -187,8 +187,7 @@ function List(props) {
             [property]: newData,
           };
           cardList[index] = updatedCard;
-
-          setBoardData({
+          const newState = {
             ...boardData,
             columns: {
               ...cols,
@@ -197,13 +196,16 @@ function List(props) {
                 cards: cardList,
               },
             },
-          });
+          };
+
+          setBoardData(newState);
+          setMsg(newState);
         }
       });
     }
     if (type === "column") {
       let col = cols[columnId];
-      setBoardData({
+      const newState = {
         ...boardData,
         columns: {
           ...cols,
@@ -212,7 +214,10 @@ function List(props) {
             [property]: newData,
           },
         },
-      });
+      };
+
+      setBoardData(newState);
+      setMsg(newState);
     }
   };
 
@@ -223,7 +228,7 @@ function List(props) {
     if (taskId) {
       let col = cols[columnId];
       let cardList = col.cards.filter((card) => card._id !== taskId);
-      setBoardData({
+      const newState = {
         ...boardData,
         columns: {
           ...cols,
@@ -232,7 +237,10 @@ function List(props) {
             cards: cardList,
           },
         },
-      });
+      };
+
+      setBoardData(newState);
+      setMsg(newState);
     }
     // case for deleting a column
     else {
@@ -240,12 +248,15 @@ function List(props) {
       let updatedColumnOrder = boardData.columnOrder.filter(
         (columnid) => columnid !== columnId
       );
-      setBoardData({
+      const newState = {
         columnOrder: updatedColumnOrder,
         columns: {
           ...cols,
         },
-      });
+      };
+
+      setBoardData(newState);
+      setMsg(newState);
     }
   };
 
@@ -257,19 +268,20 @@ function List(props) {
             <div
               className={classes.columnsContainer}
               {...provided.droppableProps}
-              ref={provided.innerRef}>
+              ref={provided.innerRef}
+            >
               {boardData?.columnOrder.map((columnId, idx) => {
                 const column = boardData.columns[columnId];
                 const tasks = column.cards;
                 return (
                   <Column
-										key={column.id}
-										column={column}
-										tasks={tasks}
-										idx={idx}
-										updateBoardInfo={handleUpdateBoardInfo}
-										removeTask={handleRemoveComponent}
-										removeColumn={handleRemoveComponent}
+                    key={column.id}
+                    column={column}
+                    tasks={tasks}
+                    idx={idx}
+                    updateBoardInfo={handleUpdateBoardInfo}
+                    removeTask={handleRemoveComponent}
+                    removeColumn={handleRemoveComponent}
                   />
                 );
               })}

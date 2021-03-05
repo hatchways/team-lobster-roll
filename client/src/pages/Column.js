@@ -44,7 +44,8 @@ function Column(props) {
             direction="column"
             justify="flex-start"
             {...provided.draggableProps}
-            ref={provided.innerRef}>
+            ref={provided.innerRef}
+          >
             <div className={classes.columnHeader} {...provided.dragHandleProps}>
               <Typography variant="h5" className={classes.columnTitle}>
                 {column.name}
@@ -53,7 +54,8 @@ function Column(props) {
                 onClick={() => {
                   setShowOptions(true);
                 }}
-                className={classes.lightGray}>
+                className={classes.lightGray}
+              >
                 <MoreHoriz />
               </IconButton>
               {showColOptions && (
@@ -68,7 +70,11 @@ function Column(props) {
             </div>
             <Droppable droppableId={column.id} type="task">
               {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
+                <div
+                  style={{ minHeight: "10px" }}
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
                   {tasks.map((task, idx) => (
                     <Task
                       key={task._id}
@@ -88,7 +94,8 @@ function Column(props) {
             <Button
               variant="contained"
               className={classes.addButton}
-              onClick={() => setShowModal(true)}>
+              onClick={() => setShowModal(true)}
+            >
               <Typography variant="body1"> Add a card</Typography>
             </Button>
           </Grid>
