@@ -10,6 +10,7 @@ export const UserContextProvider = (props) => {
   const [userId, setUserId] = useState("");
   const [boardList, setBoardList] = useState([]);
   const [currBoardId, setCurrBoardId] = useState("");
+  const [currBoardName, setCurrBoardName] = useState("");
   const [currBoard, setCurrBoard] = useState(null);
   const [createCount, setCreateCount] = useState(0);
   const [sharedBoards, setSharedBoards] = useState([]);
@@ -55,6 +56,7 @@ export const UserContextProvider = (props) => {
         const loadedData = { columns: {}, columnOrder: [] };
         const res = await getBoard(currBoardId);
         const loadedBoard = res.data;
+        setCurrBoardName(loadedBoard.name);
         const loadedColumns = {};
         const loadedOrder = [];
         loadedBoard.columns.forEach((col) => {
@@ -82,6 +84,7 @@ export const UserContextProvider = (props) => {
       loggedIn,
       setLoggedIn,
       boardList,
+      currBoardName,
       currBoardId,
       setCurrBoardId,
       currBoard,
@@ -95,6 +98,7 @@ export const UserContextProvider = (props) => {
       setUser,
       loggedIn,
       setLoggedIn,
+      currBoardName,
       boardList,
       currBoardId,
       setCurrBoardId,

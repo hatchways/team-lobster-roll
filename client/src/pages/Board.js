@@ -46,6 +46,7 @@ function Board(props) {
   const {
     boardList,
     currBoardId,
+    currBoardName,
     setCurrBoardId,
     currBoard,
     user,
@@ -158,7 +159,7 @@ function Board(props) {
             justify="space-between">
             <Grid item>
               <Typography variant="h6" className={classes.title}>
-                My School Board
+                Board: {currBoardName}
               </Typography>
             </Grid>
             <Grid item>
