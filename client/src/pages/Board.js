@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import List from "./List";
 import {
   AppBar,
@@ -85,38 +85,48 @@ function Board(props) {
 
   useEffect(() => {
     //for some reason this useEffect gets called when currBoardId is an empty string
-    if (socket && currBoardId) {
-      // removes duplicate socket listeners
-      socket.removeAllListeners("roomResponse");
+    try {
+      if (socket && currBoardId) {
+        // removes duplicate socket listeners
+        socket.removeAllListeners("roomResponse");
 
-      socket.emit("joinRoom", currBoardId, user._id);
-      socket.on("roomResponse", (message) => {
-        if (message.boardId === currBoardId) {
-          setSocketMsg(message);
-        }
-        if (message.createCount > 0) {
-          setCreateCount(message.createCount);
-        }
-      });
+        socket.emit("joinRoom", currBoardId, user._id);
+        socket.on("roomResponse", (message) => {
+          if (message.boardId === currBoardId) {
+            setSocketMsg(message);
+          }
+          if (message.createCount > 0) {
+            setCreateCount(message.createCount);
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   }, [socket, currBoardId, user._id, setCreateCount]);
 
   useEffect(() => {
-    if (msg) {
-      if (createCount > 0) {
-        socket.emit("editBoard", currBoardId, user._id, msg, createCount);
-      } else {
-        socket.emit("editBoard", currBoardId, user._id, msg, 0);
+    try {
+      if (msg) {
+        if (createCount > 0) {
+          socket.emit("editBoard", currBoardId, user._id, msg, createCount);
+        } else {
+          socket.emit("editBoard", currBoardId, user._id, msg, 0);
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
   }, [msg, user._id, currBoardId, createCount, socket]);
 
   // componentWillUnmount
   useEffect(() => {
-    return () => {
-      socket.emit("leaveRoom", currBoardId);
-      socket.removeAllListeners("roomResponse");
-    };
+    if (socket && socket.length > 1) {
+      return () => {
+        socket.emit("leaveRoom", currBoardId);
+        socket.removeAllListeners("roomResponse");
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -143,17 +153,21 @@ function Board(props) {
 
   // joins socket room of the current selected board and leaves previous socket room
   const handleBoardSelect = (boardId) => {
-    if (socket) {
-      socket.emit("leaveRoom", currBoardId);
-      socket.removeAllListeners("roomResponse");
+    try {
+      if (socket) {
+        socket.emit("leaveRoom", currBoardId);
+        socket.removeAllListeners("roomResponse");
 
-      socket.emit("joinRoom", boardId);
-      socket.on("roomResponse", (message) => {
-        console.log(message);
-      });
+        socket.emit("joinRoom", boardId);
+        socket.on("roomResponse", (message) => {
+          console.log(message);
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
-      
+
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.blue}>
