@@ -174,6 +174,81 @@ function List(props) {
     handleCardMove(moveData, "different", newState);
   }
 
+  // handles any board changes regarding card edits or column name edits
+  const handleUpdateBoardInfo = (type, columnId, cardId, property, newData) => {
+    const cols = boardData.columns;
+    if (type === "task") {
+      let col = cols[columnId];
+      let cardList = col.cards;
+      cardList.forEach((card, index) => {
+        if (card._id === cardId) {
+          const updatedCard = {
+            ...card,
+            [property]: newData,
+          };
+          cardList[index] = updatedCard;
+
+          setBoardData({
+            ...boardData,
+            columns: {
+              ...cols,
+              [columnId]: {
+                ...col,
+                cards: cardList,
+              },
+            },
+          });
+        }
+      });
+    }
+    if (type === "column") {
+      let col = cols[columnId];
+      setBoardData({
+        ...boardData,
+        columns: {
+          ...cols,
+          [columnId]: {
+            ...col,
+            [property]: newData,
+          },
+        },
+      });
+    }
+  };
+
+  // handles deleting a column or card
+  const handleRemoveComponent = (columnId, taskId) => {
+    const cols = boardData.columns;
+    // case for deleting a card
+    if (taskId) {
+      let col = cols[columnId];
+      let cardList = col.cards.filter((card) => card._id !== taskId);
+      setBoardData({
+        ...boardData,
+        columns: {
+          ...cols,
+          [columnId]: {
+            ...col,
+            cards: cardList,
+          },
+        },
+      });
+    }
+    // case for deleting a column
+    else {
+      delete cols[columnId];
+      let updatedColumnOrder = boardData.columnOrder.filter(
+        (columnid) => columnid !== columnId
+      );
+      setBoardData({
+        columnOrder: updatedColumnOrder,
+        columns: {
+          ...cols,
+        },
+      });
+    }
+  };
+
   return (
     <DragDropContext onDragEnd={(result) => handleOnDragEnd(result)}>
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
@@ -188,10 +263,13 @@ function List(props) {
                 const tasks = column.cards;
                 return (
                   <Column
-                    key={column.id}
-                    column={column}
-                    tasks={tasks}
-                    idx={idx}
+										key={column.id}
+										column={column}
+										tasks={tasks}
+										idx={idx}
+										updateBoardInfo={handleUpdateBoardInfo}
+										removeTask={handleRemoveComponent}
+										removeColumn={handleRemoveComponent}
                   />
                 );
               })}

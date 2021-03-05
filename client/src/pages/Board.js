@@ -82,7 +82,7 @@ function Board(props) {
     if (socket && currBoardId) {
       // removes duplicate socket listeners
       socket.removeAllListeners("roomResponse");
-
+			
       socket.emit("joinRoom", currBoardId, user._id);
       socket.on("roomResponse", (message) => {
         if (message.boardId === currBoardId) {
@@ -156,7 +156,8 @@ function Board(props) {
             container
             direction="row"
             alignItems="center"
-            justify="space-between">
+            justify="space-between"
+          >
             <Grid item>
               <Typography variant="h6" className={classes.title}>
                 Board: {currBoardName}
@@ -167,7 +168,8 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowModal(true)}>
+                onClick={() => setShowModal(true)}
+              >
                 <AddIcon />
                 Create column
               </Button>
@@ -175,14 +177,16 @@ function Board(props) {
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowUpload(true)}>
+                onClick={() => setShowUpload(true)}
+              >
                 Choose Profile Image
               </Button>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.buttonCreate}
-                onClick={() => setShowMembers(true)}>
+                onClick={() => setShowMembers(true)}
+              >
                 Members
               </Button>
               <IconButton
